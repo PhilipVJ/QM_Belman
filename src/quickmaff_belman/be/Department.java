@@ -9,22 +9,14 @@ package quickmaff_belman.be;
  *
  * @author Philip
  */
-public class Order
-{
+public class Department {
 private String type;
-private String orderNumber;
+private String name;
 
-    public Order(String type, String orderNumber) {
+    public Department(String type, String name) {
         this.type = type;
-        this.orderNumber = orderNumber;
+        this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return "Order{" + "type=" + type + ", orderNumber=" + orderNumber + '}';
-    }
-
-
 
     public String getType() {
         return type;
@@ -34,14 +26,19 @@ private String orderNumber;
         this.type = type;
     }
 
-    public String getOrderNumber() {
-        return orderNumber;
+    public String getName() {
+        return name;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Department{" + "type=" + type + ", name=" + name + '}';
     }
 
 
-
+    
 }

@@ -5,11 +5,14 @@
  */
 package quickmaff_belman.dal;
 
+
 /**
  *
  * @author Philip
  */
-public class DbDAO
-{
+public class DbDAO {
     
-}
+ 
+
+
+    }
