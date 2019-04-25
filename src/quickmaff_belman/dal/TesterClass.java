@@ -8,6 +8,7 @@ package quickmaff_belman.dal;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.DataContainer;
 
 /**
  *
@@ -20,7 +21,8 @@ public class TesterClass {
      */
     public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
       FileDAO fD = new FileDAO();
-      fD.readFromJSON();
+      DataContainer con = fD.getDataFromJSON();
+      con.printData();
     }
     
 }

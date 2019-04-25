@@ -16,6 +16,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.Customer;
+import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.Delivery;
 import quickmaff_belman.be.Department;
 import quickmaff_belman.be.DepartmentTask;
@@ -29,7 +30,7 @@ import quickmaff_belman.be.Worker;
  */
 public class FileDAO {
 
-    public void readFromJSON() throws FileNotFoundException, IOException, ParseException {
+    public DataContainer getDataFromJSON() throws FileNotFoundException, IOException, ParseException {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
@@ -48,12 +49,10 @@ public class FileDAO {
         }
         // Get all ProductionOrders
         JSONArray pOrder = (JSONArray) jObj.get("ProductionOrders");
-        System.out.println("" + pOrder.size());
+
         for (Object object : pOrder) {
             JSONObject pObj = (JSONObject) object;
             String type = (String) pObj.get("__type");
-            System.out.println("" + type);
-
             JSONObject cObj = (JSONObject) pObj.get("Customer");
             String cName = (String) cObj.get("Name");
             String cType = (String) cObj.get("__type");
@@ -64,9 +63,8 @@ public class FileDAO {
             String dDate = (String) dObj.get("DeliveryTime");
             Date date = makeDateObject(dDate);
             Delivery delivery = new Delivery(dType, date);
-
+            // Get all department tasks
             JSONArray dTaskObj = (JSONArray) pObj.get("DepartmentTasks");
-            System.out.println("" + dTaskObj.size());
             ArrayList<DepartmentTask> allDepartmentTasks = new ArrayList<>();
             for (Object obj2 : dTaskObj) {
                 JSONObject dTask = (JSONObject) obj2;
@@ -78,24 +76,21 @@ public class FileDAO {
                 String endDate = (String) dTask.get("EndDate");
                 Date endDateObj = makeDateObject(endDate);
                 boolean finished = (boolean) dTask.get("FinishedOrder");
-                String startDate =  (String) dTask.get("StartDate");
+                String startDate = (String) dTask.get("StartDate");
                 Date startDateObj = makeDateObject(startDate);
                 DepartmentTask taskToAdd = new DepartmentTask(tTaskType, department, startDateObj, endDateObj, finished);
-                allDepartmentTasks.add(taskToAdd);                   
+                allDepartmentTasks.add(taskToAdd);
             }
-            
+
             JSONObject order = (JSONObject) pObj.get("Order");
             String oType = (String) order.get("__type");
             String oNumber = (String) order.get("OrderNumber");
             Order orderObj = new Order(oType, oNumber);
             ProductionOrder productionOrder = new ProductionOrder(type, customer, delivery, allDepartmentTasks, orderObj);
             allProductionOrders.add(productionOrder);
-            System.out.println(""+orderObj.getOrderNumber());
-
         }
-        
-        System.out.println(""+allProductionOrders.size());
-
+        DataContainer dCon = new DataContainer(allWorkers, allProductionOrders);
+        return dCon;
     }
 
     private Date makeDateObject(String dDate) {
