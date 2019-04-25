@@ -19,6 +19,7 @@ import quickmaff_belman.be.Customer;
 import quickmaff_belman.be.Delivery;
 import quickmaff_belman.be.Department;
 import quickmaff_belman.be.DepartmentTask;
+import quickmaff_belman.be.Order;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 
@@ -83,10 +84,17 @@ public class FileDAO {
                 allDepartmentTasks.add(taskToAdd);                   
             }
             
-            
+            JSONObject order = (JSONObject) pObj.get("Order");
+            String oType = (String) order.get("__type");
+            String oNumber = (String) order.get("OrderNumber");
+            Order orderObj = new Order(oType, oNumber);
+            ProductionOrder productionOrder = new ProductionOrder(type, customer, delivery, allDepartmentTasks, orderObj);
+            allProductionOrders.add(productionOrder);
+            System.out.println(""+orderObj.getOrderNumber());
 
-//            allProductionOrders.add(worker);
         }
+        
+        System.out.println(""+allProductionOrders.size());
 
     }
 
