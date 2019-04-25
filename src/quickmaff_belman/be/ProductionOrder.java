@@ -13,49 +13,40 @@ import java.util.Date;
  * @author Philip
  */
 public class ProductionOrder {
-    private String type;
-    private Customer customer;
-    private Delivery delivery;
+    private String customerName;
+    private Date deliveryTime;
+    private String orderNumber;
     private ArrayList<DepartmentTask> dTasks;
-    private Order order;
 
-    public ProductionOrder(String type, Customer customer, Delivery delivery, ArrayList<DepartmentTask> dTasks, Order order) {
-        this.type = type;
-        this.customer = customer;
-        this.delivery = delivery;
+    public ProductionOrder(String customerName, Date deliveryTime, String orderNumber, ArrayList<DepartmentTask> dTasks) {
+        this.customerName = customerName;
+        this.deliveryTime = deliveryTime;
+        this.orderNumber = orderNumber;
         this.dTasks = dTasks;
-        this.order = order;
     }
 
-    @Override
-    public String toString() {
-        return "ProductionOrder{" + "type=" + type + ", customer=" + customer + ", delivery=" + delivery + ", dTasks=" + dTasks + ", order=" + order + '}';
-    }
-    
-    
-
-    public String getType() {
-        return type;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Date getDeliveryTime() {
+        return deliveryTime;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setDeliveryTime(Date deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
-    public Delivery getDelivery() {
-        return delivery;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setDelivery(Delivery delivery) {
-        this.delivery = delivery;
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public ArrayList<DepartmentTask> getdTasks() {
@@ -66,13 +57,19 @@ public class ProductionOrder {
         this.dTasks = dTasks;
     }
 
-    public Order getOrder() {
-        return order;
+    @Override
+    public String toString() {
+        return "ProductionOrder{" + "customerName=" + customerName + ", deliveryTime=" + deliveryTime + ", orderNumber=" + orderNumber + ", dTasks=" + dTasks + '}';
     }
+    
+    
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+
+
+    
+
+
+
     
     
     

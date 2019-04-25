@@ -12,35 +12,25 @@ import java.util.Date;
  * @author Philip
  */
 public class DepartmentTask {
-    private String type;
-    private Department department;
+
     private Date startDate;
     private Date endDate;
     private boolean finishedOrder;
+    private String departmentName;
 
-    public DepartmentTask(String type, Department department, Date startDate, Date endDate, boolean finishedOrder) {
-        this.type = type;
-        this.department = department;
+    public DepartmentTask(Date startDate, Date endDate, boolean finishedOrder, String departmentName) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.finishedOrder = finishedOrder;
+        this.departmentName = departmentName;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public String toString() {
+        return "DepartmentTask{" + "startDate=" + startDate + ", endDate=" + endDate + ", finishedOrder=" + finishedOrder + ", departmentName=" + departmentName + '}';
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
+   
+    
 
     public Date getStartDate() {
         return startDate;
@@ -66,10 +56,17 @@ public class DepartmentTask {
         this.finishedOrder = finishedOrder;
     }
 
-    @Override
-    public String toString() {
-        return "DepartmentTask{" + "type=" + type + ", department=" + department + ", startDate=" + startDate + ", endDate=" + endDate + ", finishedOrder=" + finishedOrder + '}';
+    public String getDepartmentName() {
+        return departmentName;
     }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+    
+    
+
+
 
     
     
