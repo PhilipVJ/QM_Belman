@@ -33,7 +33,7 @@ public class FileDAO {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
-        Object obj = new JSONParser().parse(new FileReader("data/backup.txt"));
+        Object obj = new JSONParser().parse(new FileReader("data/JSON.txt"));
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
