@@ -72,10 +72,8 @@ public class LoginController implements Initializable {
 
     public void initView(Stage stage) {
 
-        stage.getScene().getAccelerators().put(
-                new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN),
-                new Runnable() {
-            @FXML
+        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN),new Runnable() 
+        {
             public void run() {
                 loadFile();
             }

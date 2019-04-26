@@ -16,8 +16,8 @@ import quickmaff_belman.be.DataContainer;
  */
 public class DatabaseFacade {
 
-    private FileDAO fDAO;
-    private DbDAO dDAO;
+    private final FileDAO fDAO;
+    private final DbDAO dDAO;
 
     public DatabaseFacade(FileDAO fDAO, DbDAO dDAO) {
         this.fDAO = fDAO;

@@ -7,10 +7,6 @@ package quickmaff_belman.gui.model;
 
 import javafx.scene.control.Alert.AlertType;
 
-/**
- *
- * @author nikla
- */
 public class ExceptionHandler {
 
     public static void handleException(Exception ex) {
