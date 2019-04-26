@@ -7,6 +7,7 @@ package quickmaff_belman.dal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.DataContainer;
 
@@ -23,8 +24,10 @@ public class DatabaseFacade {
         wDAO = new WorkerDAO(con);
     }
 
-    public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException {
+    public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
         DataContainer con = fDAO.getDataFromJSON(filepath);
+        wDAO.insertWorkers(con.getAllWorkers());
+        
         // send videre
     }
 

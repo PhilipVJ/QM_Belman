@@ -6,8 +6,10 @@
 package quickmaff_belman.gui.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +25,6 @@ import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
-import quickmaff_belman.dal.OrderDAO;
-import quickmaff_belman.dal.FileDAO;
-import quickmaff_belman.dal.WorkerDAO;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
@@ -55,7 +54,7 @@ public class LoginController implements Initializable {
 
     }
 
-    private void loadFile() {
+    private void loadFile() throws FileNotFoundException, SQLException {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open JSON file");
@@ -80,7 +79,13 @@ public class LoginController implements Initializable {
         stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN),new Runnable() 
         {
             public void run() {
-                loadFile();
+                try {
+                    loadFile();
+                } catch (FileNotFoundException ex) {
+                   ExceptionHandler.handleException(ex);
+                } catch (SQLException ex) {
+                   ExceptionHandler.handleException(ex);
+                }
             }
         });
     }
