@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -44,7 +46,12 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        model = new Model(new BLLManager(new DatabaseFacade(new FileDAO(), new OrderDAO(), new WorkerDAO())));
+        
+        try {
+            model = new Model(new BLLManager(new DatabaseFacade()));
+        } catch (IOException ex) {
+            ExceptionHandler.handleException(ex);
+        }
 
     }
 

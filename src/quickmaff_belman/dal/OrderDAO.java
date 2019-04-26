@@ -8,6 +8,14 @@ package quickmaff_belman.dal;
 
 public class OrderDAO {
     
+    private DbConnection con;
+
+    public OrderDAO(DbConnection con) {
+        this.con = con;
+    }
+    
+    
+    
  
 
 

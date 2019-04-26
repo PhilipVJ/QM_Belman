@@ -11,4 +11,12 @@ package quickmaff_belman.dal;
  */
 public class WorkerDAO {
     
+private DbConnection con;
+
+    public WorkerDAO(DbConnection con) {
+        this.con = con;
+    }
+
+
+    
 }

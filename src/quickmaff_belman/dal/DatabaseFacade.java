@@ -16,10 +16,11 @@ public class DatabaseFacade {
     private final OrderDAO oDAO;
     private final WorkerDAO wDAO;
 
-    public DatabaseFacade(FileDAO fDAO, OrderDAO oDAO, WorkerDAO wDAO) {
-        this.fDAO = fDAO;
-        this.oDAO = oDAO;
-        this.wDAO = wDAO;
+    public DatabaseFacade() throws IOException {
+        DbConnection con = DbConnection.getInstance();
+        fDAO = new FileDAO();
+        oDAO = new OrderDAO(con);
+        wDAO = new WorkerDAO(con);
     }
 
     public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException {
