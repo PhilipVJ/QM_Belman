@@ -6,13 +6,9 @@
 package quickmaff_belman.gui.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -61,7 +57,8 @@ public class LoginController implements Initializable {
         if (mediafile != null) {
             try {
                 model.loadJSONfile(mediafile.getPath());
-                Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført", "JSON filen er blevet læst og lagt op på databasen");
+                Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført", 
+                        "JSON filen er blevet læst og lagt op på databasen");
             } catch (IOException ex) {
                 ExceptionHandler.handleException(ex);
             } catch (ParseException ex) {

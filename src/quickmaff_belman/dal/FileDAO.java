@@ -20,10 +20,6 @@ import quickmaff_belman.be.DepartmentTask;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 
-/**
- *
- * @author Philip
- */
 public class FileDAO {
 
     public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {

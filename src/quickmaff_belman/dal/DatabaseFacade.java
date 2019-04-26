@@ -10,10 +10,6 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.DataContainer;
 
-/**
- *
- * @author Philip
- */
 public class DatabaseFacade {
 
     private final FileDAO fDAO;

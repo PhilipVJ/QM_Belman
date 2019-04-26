@@ -8,10 +8,6 @@ package quickmaff_belman.gui.model;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-/**
- *
- * @author Philip
- */
 public final class Utility
 {
 

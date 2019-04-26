@@ -8,10 +8,6 @@ package quickmaff_belman.be;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
- * @author Philip
- */
 public class ProductionOrder {
     private String customerName;
     private Date deliveryTime;

@@ -5,10 +5,6 @@
  */
 package quickmaff_belman.be;
 
-/**
- *
- * @author Philip
- */
 public class Worker {
 
 

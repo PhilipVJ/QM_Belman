@@ -7,10 +7,6 @@ package quickmaff_belman.be;
 
 import java.util.Date;
 
-/**
- *
- * @author Philip
- */
 public class DepartmentTask {
 
     private Date startDate;

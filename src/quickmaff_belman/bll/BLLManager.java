@@ -10,10 +10,6 @@ import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.dal.DatabaseFacade;
 
-/**
- *
- * @author Philip
- */
 public class BLLManager
 {
     private DatabaseFacade dFacade;
@@ -21,7 +17,6 @@ public class BLLManager
     public BLLManager(DatabaseFacade dFacade) {
         this.dFacade = dFacade;
     }
-    
     
     public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException {
         dFacade.loadJSONFile(filepath);
