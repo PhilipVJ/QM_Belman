@@ -26,6 +26,7 @@ import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.dal.DbDAO;
 import quickmaff_belman.dal.FileDAO;
+import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Model;
 
 /**
@@ -33,8 +34,7 @@ import quickmaff_belman.gui.model.Model;
  *
  * @author Philip
  */
-public class LoginController implements Initializable
-{
+public class LoginController implements Initializable {
 
     @FXML
     private AnchorPane pane;
@@ -44,43 +44,39 @@ public class LoginController implements Initializable
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-     model = new Model(new BLLManager(new DatabaseFacade(new FileDAO(), new DbDAO())));
- 
-    }    
+    public void initialize(URL url, ResourceBundle rb) {
+        model = new Model(new BLLManager(new DatabaseFacade(new FileDAO(), new DbDAO())));
 
-    private void loadFile() throws IOException, FileNotFoundException, ParseException {
-        
+    }
+
+    private void loadFile() {
+
         FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open JSON file");
-            Stage stage = (Stage) pane.getScene().getWindow();
-            File mediafile = fileChooser.showOpenDialog(stage);
-            System.out.println(""+mediafile.getAbsolutePath());
-            System.out.println(""+mediafile.getPath());
-            if(mediafile!=null)
-            {
+        fileChooser.setTitle("Open JSON file");
+        Stage stage = (Stage) pane.getScene().getWindow();
+        File mediafile = fileChooser.showOpenDialog(stage);
+        
+        if (mediafile != null) {
+            try {
                 model.loadJSONfile(mediafile.getPath());
+            } catch (IOException ex) {
+                ExceptionHandler.handleException(ex);
+            } catch (ParseException ex) {
+                ExceptionHandler.handleException(ex);
             }
+        }
     }
-    
-    public void initView(Stage stage)
-    {
 
-            stage.getScene().getAccelerators().put(
-            new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN),
-            new Runnable() {
-                @FXML public void run() {
+    public void initView(Stage stage) {
 
-                    try {
-                        loadFile();
-                    } catch (IOException ex) {
-                        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                });
+        stage.getScene().getAccelerators().put(
+                new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN),
+                new Runnable() {
+            @FXML
+            public void run() {
+                loadFile();
+            }
+        });
     }
-    
+
 }
