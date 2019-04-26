@@ -26,11 +26,12 @@ import quickmaff_belman.be.Worker;
  */
 public class FileDAO {
 
-    public DataContainer getDataFromJSON() throws FileNotFoundException, IOException, ParseException {
+    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
+        
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
-        Object obj = new JSONParser().parse(new FileReader("data/JSON.txt"));
+        Object obj = new JSONParser().parse(new FileReader(filepath));
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
@@ -39,8 +40,7 @@ public class FileDAO {
             String initials = (String) tObj.get("Initials");
             long salary = (long) tObj.get("SalaryNumber");
             String name = (String) tObj.get("Name");
-            String type = (String) tObj.get("__type");
-            Worker worker = new Worker(type, salary, initials, name);
+            Worker worker = new Worker(salary, initials, name);
             allWorkers.add(worker);
         }
         // Get all ProductionOrders
@@ -48,7 +48,6 @@ public class FileDAO {
 
         for (Object object : pOrder) {
             JSONObject pObj = (JSONObject) object;
-            String type = (String) pObj.get("__type");
             JSONObject cObj = (JSONObject) pObj.get("Customer");
             String customerName = (String) cObj.get("Name");
             
@@ -61,7 +60,6 @@ public class FileDAO {
             ArrayList<DepartmentTask> allDepartmentTasks = new ArrayList<>();
             for (Object obj2 : dTaskObj) {
                 JSONObject dTask = (JSONObject) obj2;
-                String tTaskType = (String) dTask.get("__type");
                 JSONObject departmentObj = (JSONObject) dTask.get("Department");
                 String departmentName = (String) departmentObj.get("Name");
 

@@ -5,11 +5,27 @@
  */
 package quickmaff_belman.gui.model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
+import quickmaff_belman.bll.BLLManager;
+
 /**
  *
  * @author Philip
  */
 public class Model
 {
+    private BLLManager bMan;
+
+    public Model(BLLManager bMan) {
+        this.bMan = bMan;
+    }
+    
+    
+
+    public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException {
+      bMan.loadJSONfile(filepath);
+    }
     
 }

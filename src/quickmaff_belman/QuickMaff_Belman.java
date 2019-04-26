@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import quickmaff_belman.gui.controller.LoginController;
 
 /**
  *
@@ -21,12 +22,17 @@ public class QuickMaff_Belman extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
+        Parent root = loader.load();
+        LoginController con = loader.getController();
         
         Scene scene = new Scene(root);
         
+    
         stage.setScene(scene);
         stage.show();
+        
+    con.initView(stage);
     }
 
     /**

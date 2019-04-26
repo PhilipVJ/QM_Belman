@@ -14,14 +14,20 @@ import quickmaff_belman.be.DataContainer;
  *
  * @author Philip
  */
-public class TesterClass {
+public class DatabaseFacade {
+  private FileDAO fDAO;
+  private DbDAO dDAO;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
-      FileDAO fD = new FileDAO();
-
+    public DatabaseFacade(FileDAO fDAO, DbDAO dDAO) {
+        this.fDAO = fDAO;
+        this.dDAO = dDAO;
     }
+  
+ public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException
+ {
+     DataContainer con = fDAO.getDataFromJSON(filepath);
+     // send videre til DbDAO
+ }
+
     
 }

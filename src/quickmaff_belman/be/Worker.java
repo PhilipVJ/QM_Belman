@@ -11,25 +11,18 @@ package quickmaff_belman.be;
  */
 public class Worker {
 
-    private String type;
+
     private long salaryNumber;
     private String intitials;
     private String name;
 
-    public Worker(String type, long salaryNumber, String intitials, String name) {
-        this.type = type;
+    public Worker(long salaryNumber, String intitials, String name) {
+
         this.salaryNumber = salaryNumber;
         this.intitials = intitials;
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public long getSalaryNumber() {
         return salaryNumber;
@@ -57,8 +50,10 @@ public class Worker {
 
     @Override
     public String toString() {
-        return "Worker{" + "type=" + type + ", salary=" + salaryNumber + ", intitials=" + intitials + ", name=" + name + '}';
+        return "Worker{" + "salaryNumber=" + salaryNumber + ", intitials=" + intitials + ", name=" + name + '}';
     }
+
+
     
     
 
