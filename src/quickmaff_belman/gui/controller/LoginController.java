@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -28,6 +29,7 @@ import quickmaff_belman.dal.DbDAO;
 import quickmaff_belman.dal.FileDAO;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Model;
+import quickmaff_belman.gui.model.Utility;
 
 /**
  * FXML Controller class
@@ -59,6 +61,7 @@ public class LoginController implements Initializable {
         if (mediafile != null) {
             try {
                 model.loadJSONfile(mediafile.getPath());
+                Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført", "JSON filen er blevet læst og lagt op på databasen");
             } catch (IOException ex) {
                 ExceptionHandler.handleException(ex);
             } catch (ParseException ex) {
@@ -70,7 +73,7 @@ public class LoginController implements Initializable {
     public void initView(Stage stage) {
 
         stage.getScene().getAccelerators().put(
-                new KeyCodeCombination(KeyCode.S, KeyCombination.ALT_DOWN),
+                new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN),
                 new Runnable() {
             @FXML
             public void run() {

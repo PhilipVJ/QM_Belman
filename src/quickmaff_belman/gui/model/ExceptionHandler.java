@@ -5,6 +5,8 @@
  */
 package quickmaff_belman.gui.model;
 
+import javafx.scene.control.Alert.AlertType;
+
 /**
  *
  * @author nikla
@@ -31,23 +33,23 @@ public class ExceptionHandler {
     }
 
     private static void handleSqlServerException() {
-        Utility.createErrorAlert("Der kan ikke oprettes forbindelse til serveren", "Kontakt support eller prøv igen senere!");
+        Utility.createAlert(AlertType.ERROR,"Fejl","Der kan ikke oprettes forbindelse til serveren", "Kontakt support eller prøv igen senere!");
     }
 
     private static void handleSqlException() {
-        Utility.createErrorAlert("Der er problemer i databasen", "Kontakt support eller prøv igen senere!");
+        Utility.createAlert(AlertType.ERROR,"Fejl","Der er problemer i databasen", "Kontakt support eller prøv igen senere!");
     }
 
     private static void handleIOException() {
-        Utility.createErrorAlert("En fil kunne ikke lokaliseres", "Kontakt venligst support eller kig i manualen");
+        Utility.createAlert(AlertType.ERROR,"Fejl","En fil kunne ikke lokaliseres", "Kontakt venligst support eller kig i manualen");
     }
 
     private static void handleUnknownError() {
-        Utility.createErrorAlert("Ukendt fejl opstod", "Der opstod en ukendt fejl i systemet.");
+        Utility.createAlert(AlertType.ERROR,"Fejl","Ukendt fejl opstod", "Der opstod en ukendt fejl i systemet.");
     }
 
     private static void handleParseException() {
-        Utility.createErrorAlert("Fejl læsning af JSON fil", "Kontakt venligst support");
+        Utility.createAlert(AlertType.ERROR,"Fejl","Fejl læsning af JSON fil", "Kontakt venligst support");
     }
 
 }

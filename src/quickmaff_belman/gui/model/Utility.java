@@ -18,6 +18,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -30,10 +31,10 @@ public final class Utility
     {
     }
 
-    public static void createErrorAlert(String header, String content)
+    public static void createAlert(AlertType type, String title, String header, String content)
     {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Fejl");
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
