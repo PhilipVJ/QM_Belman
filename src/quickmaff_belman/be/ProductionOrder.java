@@ -45,11 +45,11 @@ public class ProductionOrder {
         this.orderNumber = orderNumber;
     }
 
-    public ArrayList<DepartmentTask> getdTasks() {
+    public ArrayList<DepartmentTask> getDepartmentTasks() {
         return dTasks;
     }
 
-    public void setdTasks(ArrayList<DepartmentTask> dTasks) {
+    public void setDepartmentTasks(ArrayList<DepartmentTask> dTasks) {
         this.dTasks = dTasks;
     }
 

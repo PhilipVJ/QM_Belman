@@ -26,7 +26,7 @@ public class DatabaseFacade {
 
     public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
         DataContainer con = fDAO.getDataFromJSON(filepath);
-        wDAO.insertWorkers(con.getAllWorkers());
+        wDAO.insertWorkers(con.getAllWorkers(), con.getAllProductionOrders());
         
         // send videre
     }
