@@ -27,7 +27,7 @@ public class QuickMaff_Belman extends Application
         LoginController con = loader.getController();
         
         Scene scene = new Scene(root);
-        
+        con.buttonGenerator();
     
         stage.setScene(scene);
         stage.show();
