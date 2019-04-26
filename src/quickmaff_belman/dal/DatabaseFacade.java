@@ -13,16 +13,18 @@ import quickmaff_belman.be.DataContainer;
 public class DatabaseFacade {
 
     private final FileDAO fDAO;
-    private final DbDAO dDAO;
+    private final OrderDAO oDAO;
+    private final WorkerDAO wDAO;
 
-    public DatabaseFacade(FileDAO fDAO, DbDAO dDAO) {
+    public DatabaseFacade(FileDAO fDAO, OrderDAO oDAO, WorkerDAO wDAO) {
         this.fDAO = fDAO;
-        this.dDAO = dDAO;
+        this.oDAO = oDAO;
+        this.wDAO = wDAO;
     }
 
     public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException {
         DataContainer con = fDAO.getDataFromJSON(filepath);
-        // send videre til DbDAO
+        // send videre
     }
 
 }

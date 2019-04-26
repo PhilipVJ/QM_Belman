@@ -6,7 +6,7 @@
 package quickmaff_belman.dal;
 
 
-public class DbDAO {
+public class OrderDAO {
     
  
 

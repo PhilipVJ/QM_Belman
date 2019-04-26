@@ -21,8 +21,9 @@ import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
-import quickmaff_belman.dal.DbDAO;
+import quickmaff_belman.dal.OrderDAO;
 import quickmaff_belman.dal.FileDAO;
+import quickmaff_belman.dal.WorkerDAO;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
@@ -43,7 +44,7 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        model = new Model(new BLLManager(new DatabaseFacade(new FileDAO(), new DbDAO())));
+        model = new Model(new BLLManager(new DatabaseFacade(new FileDAO(), new OrderDAO(), new WorkerDAO())));
 
     }
 
