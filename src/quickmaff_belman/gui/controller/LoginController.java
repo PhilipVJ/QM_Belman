@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        buttonGenerator();
+//        buttonGenerator();
         try {
             model = new Model(new BLLManager(new DatabaseFacade()));
         } catch (IOException ex) {
