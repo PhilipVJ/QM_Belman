@@ -5,15 +5,11 @@
  */
 package quickmaff_belman.gui.controller;
 
-import com.jfoenix.controls.JFXToggleButton;
 import java.net.URL;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;

@@ -50,6 +50,7 @@ public class LoginController implements Initializable {
     @FXML
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
+
     /**
      * Initializes the controller class.
      */
@@ -61,48 +62,44 @@ public class LoginController implements Initializable {
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex);
         }
-        
 
     }
 
-    private void loadFile() throws FileNotFoundException, SQLException {
+    private void loadFile() {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open JSON file");
         Stage stage = (Stage) pane.getScene().getWindow();
         File mediafile = fileChooser.showOpenDialog(stage);
-        
+
         if (mediafile != null) {
+
             try {
                 model.loadJSONfile(mediafile.getPath());
-                Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført", 
+                Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført",
                         "JSON filen er blevet læst og lagt op på databasen");
             } catch (IOException ex) {
                 ExceptionHandler.handleException(ex);
             } catch (ParseException ex) {
                 ExceptionHandler.handleException(ex);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex);
             }
+
         }
     }
 
     public void initView(Stage stage) {
 
-        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN),new Runnable() 
-        {
+        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
             public void run() {
-                try {
-                    loadFile();
-                } catch (FileNotFoundException ex) {
-                   ExceptionHandler.handleException(ex);
-                } catch (SQLException ex) {
-                   ExceptionHandler.handleException(ex);
-                }
+                loadFile();
             }
         });
     }
-    
-     public ObservableList<String> getDepartmentNames(){
-              
+
+    public ObservableList<String> getDepartmentNames() {
+
         dep.add("a");
         dep.add("b");
         dep.add("c");
@@ -121,45 +118,44 @@ public class LoginController implements Initializable {
         dep.add("p");
         dep.add("q");
         dep.add("r");
-        
+
         return dep;
     }
-    
-    public void buttonGenerator(){
-        
+
+    public void buttonGenerator() {
+
         ObservableList<String> depNames = getDepartmentNames();
-        
+
         int i = 0; //column index
         int j = 0; //row index
-        
-        for(String buttonName : depNames) {
+
+        for (String buttonName : depNames) {
             Button newButton = new Button(buttonName);
             newButton.setBorder(Border.EMPTY);
             newButton.setPrefHeight(25);
             newButton.setPrefWidth(200);
             //adds mouse clicked event to the button
-            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e ->{
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Authentication.fxml"));
-                Parent root = (Parent) fxmlLoader.load();
-                AuthenticationController hc = fxmlLoader.getController();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.show();
+            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Authentication.fxml"));
+                    Parent root = (Parent) fxmlLoader.load();
+                    AuthenticationController hc = fxmlLoader.getController();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.show();
                 } catch (IOException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            });                            
+            });
             //adds button to gridpane with coordinates
             gridPane.add(newButton, j, i);
             //makes sure to get the right coordinates for column and row.
-            j ++;
-            if(j == 2) {
-                j=0;
+            j++;
+            if (j == 2) {
+                j = 0;
                 i++;
-            }    
+            }
         }
     }
 
-    
 }

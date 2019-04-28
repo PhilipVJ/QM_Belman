@@ -5,20 +5,6 @@
  */
 package quickmaff_belman.dal;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import quickmaff_belman.be.DepartmentTask;
-import quickmaff_belman.be.ProductionOrder;
-import quickmaff_belman.be.Worker;
-import quickmaff_belman.gui.model.ExceptionHandler;
-
 /**
  *
  * @author Philip
