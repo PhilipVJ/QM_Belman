@@ -33,6 +33,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import static javafx.scene.paint.Color.color;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
@@ -114,6 +115,7 @@ public class LoginController implements Initializable {
         dep.add("Department 7");
 
 
+
         return dep;
     }
 
@@ -123,40 +125,35 @@ public class LoginController implements Initializable {
 
         int i = 0; //column index
         int j = 0; //row index
-        pane.setStyle("-fx-background-color: RED;");
         
         for (String depName : depNames) {
-//            Image image = new Image("/quickmaff_belman/gui/view/images/ButtonOFF.png");
-//            Label lblDepName = new Label(depName);
-            
             Button newButton = new Button(depName);
-//            newButton.backgroundProperty().setValue(Background.getClassCssMetaData().addAll(image));
-//            newButton.
-//            newButton.setBackground(Background.EMPTY);
-//            newButton.setGraphic(new ImageView(image));
+            //sets size of text
+            Font font = new Font(22);
+            newButton.setFont(font);
+            //sets prefered size of button = size of pictures
             newButton.setPrefHeight(203);
             newButton.setPrefWidth(206);
-//            newButton.setb
             newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonOFF.png\");");
-//            newButton.setStyle("-fx-background-repeat: stretch;");
-//            newButton.setStyle("-fx-background-size: 100 50;");
-            newButton.scaleShapeProperty().setValue(Boolean.TRUE);
-            newButton.autosize();
+
             //adds mouse clicked event to the button
             newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonON.png\");");
+
+                newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonON.png\");");             
+                
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonOFF.png\");");
                 openMainView();
                 
             });
-            //adds button to gridpane with coordinates
             
+            //adds button to gridpane with coordinates            
             gridPane.add(newButton, j, i);
-            
-            
-            
-//            gridPane.add(new ImageView(image), j, i);
-            
-//            gridPane.setStyle("-fx-background-color: transparent;");
+
             //makes sure to get the right coordinates for column and row.
             j++;
             if (j == 2) {
@@ -179,12 +176,13 @@ public class LoginController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();
-        } catch (Exception ex) {
-            ExceptionHandler.handleException(ex);
-        }
+            
+            }catch (IOException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
         
-    }
+    }   
 
 
 }
