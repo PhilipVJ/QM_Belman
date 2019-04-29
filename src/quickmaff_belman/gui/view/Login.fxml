@@ -32,9 +32,9 @@
             <Insets bottom="50.0" left="350.0" top="250.0" />
          </padding>
       </GridPane>
-      <AnchorPane layoutX="901.0" layoutY="60.0" prefHeight="92.0" prefWidth="117.0">
+      <AnchorPane layoutX="860.0" layoutY="70.0" prefHeight="135.0" prefWidth="200.0">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="157.0" fitWidth="200.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/belman_logo.png" />
                </image>
