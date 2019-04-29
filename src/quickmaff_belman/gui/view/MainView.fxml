@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
    <children>
@@ -51,6 +52,9 @@
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="203.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="156.0" />
                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                 </rowConstraints>
                               </GridPane>
                            </children>
                         </AnchorPane>
@@ -59,5 +63,10 @@
                </children></AnchorPane>
          </center>
       </BorderPane>
+      <ImageView fx:id="Filter" fitHeight="212.0" fitWidth="197.0" layoutX="702.0" layoutY="585.0" onMouseClicked="#filtering">
+         <image>
+            <Image url="@images/FiltrerKnap.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
