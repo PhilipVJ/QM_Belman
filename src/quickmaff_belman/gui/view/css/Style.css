@@ -1,0 +1,8 @@
+.scroll-bar:horizontal , .scroll-bar:vertical
+{    -fx-background-color:transparent;
+}
+
+increment-button ,.mylistview .decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:derive(gray,80%);
+}
