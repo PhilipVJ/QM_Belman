@@ -55,6 +55,8 @@ public class MainViewController implements Initializable {
     private GridPane grid;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private ImageView Filter;
 
     /**
      * Initializes the controller class.
@@ -132,6 +134,24 @@ public class MainViewController implements Initializable {
 
     private void setAllText() {
         department.setText(model.getResourceBundle().getString("department"));
+    }
+
+    @FXML
+    private void filtering(MouseEvent event)
+    {
+                Language language = model.changeLanguage();
+
+        switch (language)
+        {
+            case DANISH:
+                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
+                Filter.setImage(buttonImage);
+                break;
+            case ENGLISH:
+                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
+                Filter.setImage(pressImage);
+                break;
+        }
     }
 
 }
