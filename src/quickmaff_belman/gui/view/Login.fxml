@@ -15,12 +15,13 @@
             <Image url="@images/BelmanAppBg.jpg" />
          </image>
       </ImageView>
-      <GridPane fx:id="gridPane" alignment="CENTER" hgap="10.0" layoutX="190.0" layoutY="61.0" vgap="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane fx:id="gridPane" alignment="CENTER" hgap="100.0" layoutX="190.0" layoutY="61.0" prefHeight="1080.0" prefWidth="1920.0" vgap="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="206.0" prefWidth="206.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="206.0" prefWidth="206.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="206.0" prefWidth="206.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="206.0" prefWidth="206.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -28,7 +29,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <padding>
-            <Insets bottom="30.0" left="500.0" right="500.0" top="100.0" />
+            <Insets bottom="150.0" left="350.0" top="150.0" />
          </padding>
       </GridPane>
    </children>
