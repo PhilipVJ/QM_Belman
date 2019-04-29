@@ -3,20 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package quickmaff_belman.dal;
+package quickmaff_belman.gui.model;
 
 /**
  *
  * @author Philip
  */
-public class WorkerDAO {
+public enum Language {
 
-    private DbConnection con;
-
-    public WorkerDAO(DbConnection con) {
-        this.con = con;
-    }
-
-    
+ DANISH, ENGLISH;
     
 }

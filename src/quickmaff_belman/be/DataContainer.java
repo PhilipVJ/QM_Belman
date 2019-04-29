@@ -24,6 +24,7 @@ public class DataContainer {
 
     public ArrayList<ProductionOrder> getAllProductionOrders() {
         return allProductionOrders;
+        
     }
     
    public void printData()
