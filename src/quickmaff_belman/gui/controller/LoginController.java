@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.gui.controller;
 
-import static java.awt.Color.RED;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -13,26 +12,22 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
-import static javafx.scene.paint.Color.color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -56,7 +51,7 @@ public class LoginController implements Initializable {
     @FXML
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
-
+    private  int counter = 0;
     /**
      * Initializes the controller class.
      */
@@ -113,6 +108,12 @@ public class LoginController implements Initializable {
         dep.add("Department 5");
         dep.add("Department 6");
         dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        
 
 
 
@@ -122,48 +123,52 @@ public class LoginController implements Initializable {
     public void loadGrid() {
 
         ObservableList<String> depNames = getDepartmentNames();
-
         int i = 0; //column index
         int j = 0; //row index
         
         for (String depName : depNames) {
-            Button newButton = new Button(depName);
+            Button newButton = new Button(depName);            
             //sets size of text
             Font font = new Font(22);
             newButton.setFont(font);
             //sets prefered size of button = size of pictures
             newButton.setPrefHeight(203);
             newButton.setPrefWidth(206);
-            newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonOFF.png\");");
-
+            newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonOFF.png);");           
             //adds mouse clicked event to the button
-            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-
-                newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonON.png\");");             
+            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
                 
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                } 
-                newButton.setStyle("-fx-background-image: url(\"/quickmaff_belman/gui/view/images/ButtonOFF.png\");");
-                openMainView();
-                
-            });
-            
+                newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
+                //makes new thread for the timer
+                Thread t = new Thread(() -> {
+                timer();
+                 });
+                 t.start();
+            });            
             //adds button to gridpane with coordinates            
             gridPane.add(newButton, j, i);
-
             //makes sure to get the right coordinates for column and row.
             j++;
-            if (j == 2) {
+            if (j == 3) {
                 j = 0;
                 i++;
             }
-        }
-        
+        }  
     }
     
+   public void timer(){
+         try {
+            Thread.sleep(1000); 
+            
+            Platform.runLater(() -> { 
+                openMainView();
+            });
+            }catch (InterruptedException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         
+    }  
+   
     public void openMainView(){
         
         try {
