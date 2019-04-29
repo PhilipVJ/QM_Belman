@@ -32,6 +32,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
@@ -61,7 +62,7 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        anchorPane.setPrefHeight(6000);
+        anchorPane.setPrefHeight(6100);
 
     }
 
@@ -97,22 +98,27 @@ public class MainViewController implements Initializable {
     public void testScroll() {
         ArrayList<String> names = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            names.add("Button: " + i);
+            names.add("543098" + i);
         }
 
         int i = 0; //column index
         int j = 0; //row index
 
         for (String buttonName : names) {
+            
+            StackPane sPane = new StackPane();
             Image daImage = new Image("/quickmaff_belman/gui/view/images/postit2.png");
             ImageView view = new ImageView(daImage);
+            Label taskId = new Label(buttonName);
 
             view.setPreserveRatio(true);
             view.setFitWidth(160);
-            view.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+            sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
                 System.out.println("Opening task " + buttonName);
             });
-            HBox box = new HBox(view);
+
+            sPane.getChildren().addAll(view, taskId);
+            HBox box = new HBox(sPane);
             box.setAlignment(Pos.CENTER);
             grid.add(box, j, i);
             j++;
