@@ -29,8 +29,17 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <padding>
-            <Insets bottom="150.0" left="350.0" top="150.0" />
+            <Insets bottom="50.0" left="350.0" top="250.0" />
          </padding>
       </GridPane>
+      <AnchorPane layoutX="901.0" layoutY="60.0" prefHeight="92.0" prefWidth="117.0">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/belman_logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
