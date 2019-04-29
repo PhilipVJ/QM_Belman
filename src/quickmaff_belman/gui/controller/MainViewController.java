@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -28,12 +29,15 @@ public class MainViewController implements Initializable {
     private Model model;
     @FXML
     private Label department;
+    @FXML
+    private BorderPane borderPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+//        borderPane.getCenter().setStyle("-fx-background-color: #FFA435");
 
     }
 
