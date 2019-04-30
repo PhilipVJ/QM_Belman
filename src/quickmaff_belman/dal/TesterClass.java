@@ -5,6 +5,8 @@
  */
 package quickmaff_belman.dal;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,8 +21,12 @@ public class TesterClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException, SQLException {
-
+    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException, SQLException 
+    {
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        int height = screenSize.height;
+//        int width = screenSize.width;
+//        System.out.println(width + ", " + height);
 
     }
     

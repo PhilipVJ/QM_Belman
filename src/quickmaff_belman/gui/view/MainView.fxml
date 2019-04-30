@@ -12,7 +12,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
    <children>
-      <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="801.0" layoutY="17.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="17.0">
+      <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="826.0" layoutY="14.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <image>
             <Image url="@images/toggle.png" />
          </image>
@@ -46,16 +46,16 @@
             <Image url="@images/FiltrerKnap.png" />
          </image>
       </ImageView>
-      <StackPane layoutX="245.0" layoutY="4.0" prefHeight="102.0" prefWidth="414.0" AnchorPane.leftAnchor="245.0" AnchorPane.rightAnchor="241.0">
+      <StackPane layoutX="114.0" prefHeight="102.0" prefWidth="414.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
          <children>
-            <ImageView fitHeight="91.0" fitWidth="414.0" StackPane.alignment="TOP_CENTER">
+            <ImageView fitHeight="120.0" fitWidth="501.0" StackPane.alignment="TOP_CENTER">
                <image>
                   <Image url="@images/Skilt.png" />
                </image>
             </ImageView>
-            <Label fx:id="department" alignment="TOP_CENTER" prefHeight="60.0" prefWidth="377.0" textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="department" alignment="TOP_CENTER" prefHeight="95.0" prefWidth="455.0" textAlignment="CENTER" textFill="WHITE">
                <font>
-                  <Font size="59.0" />
+                  <Font size="65.0" />
                </font>
             </Label>
          </children>
