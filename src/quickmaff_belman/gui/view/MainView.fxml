@@ -12,11 +12,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
    <children>
-<<<<<<< HEAD
-      <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="801.0" layoutY="17.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="17.0">
-=======
       <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="600.0" layoutY="26.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="30.0">
->>>>>>> d1a212ede6803ab03bbded8eeffbdaa561506c3e
          <image>
             <Image url="@images/toggle.png" />
          </image>
