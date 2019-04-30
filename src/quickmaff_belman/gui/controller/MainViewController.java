@@ -118,34 +118,10 @@ public class MainViewController implements Initializable {
     }
     
     @FXML
-<<<<<<< HEAD
-    private void filtering(MouseEvent event)
-    {
-<<<<<<< HEAD
-                Language language = model.changeLanguage();
-
-        switch (language)
-        {
-=======
-//                Language language = model.changeLanguage();
-//
-//        switch (language)
-//        {
-//            case DANISH:
-//                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
-//                Filter.setImage(buttonImage);
-//                break;
-//            case ENGLISH:
-//                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
-//                Filter.setImage(pressImage);
-//                break;
-//        }
-=======
     private void filtering(MouseEvent event) {
         Language language = model.changeLanguage();
         
         switch (language) {
->>>>>>> parent of 95f38bb... Revert "Merge branch 'master' of https://github.com/PhilipVJ/QM_Belman"
             case DANISH:
                 Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
                 Filter.setImage(buttonImage);
@@ -155,10 +131,6 @@ public class MainViewController implements Initializable {
                 Filter.setImage(pressImage);
                 break;
         }
-<<<<<<< HEAD
-=======
->>>>>>> 9e50a4fe5de256f9f378b22aa72cb9bfc91d8671
->>>>>>> parent of 95f38bb... Revert "Merge branch 'master' of https://github.com/PhilipVJ/QM_Belman"
     }
     
     public void setStage(Stage stage) {
@@ -166,15 +138,9 @@ public class MainViewController implements Initializable {
     }
     
     private void setGraphics() {
-<<<<<<< HEAD
-
-flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
-       
-=======
         
         flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
         
->>>>>>> 9e50a4fe5de256f9f378b22aa72cb9bfc91d8671
     }
     
 }
