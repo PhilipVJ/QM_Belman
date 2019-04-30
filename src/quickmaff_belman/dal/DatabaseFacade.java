@@ -22,6 +22,7 @@ public class DatabaseFacade {
      
     public DatabaseFacade() throws IOException {
         DbConnection con = DbConnection.getInstance();
+
         fDAO = new FileDAO();
         oDAO = new OrderDAO(con);
         wDAO = new WorkerDAO(con);

@@ -16,7 +16,7 @@
          </image>
       </ImageView>
       <Label fx:id="department" alignment="CENTER" layoutX="180.0" layoutY="34.0" prefHeight="17.0" prefWidth="240.0" textAlignment="CENTER" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="400.0" />
-      <BorderPane fx:id="borderPane" layoutX="79.0" layoutY="115.0" prefHeight="422.0" prefWidth="696.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
+      <BorderPane fx:id="borderPane" layoutX="79.0" layoutY="115.0" prefHeight="422.0" prefWidth="696.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="100.0">
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
          </right>

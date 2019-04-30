@@ -44,8 +44,7 @@ import quickmaff_belman.gui.model.Utility;
  *
  * @author Philip
  */
-public class LoginController implements Initializable
-{
+public class LoginController implements Initializable {
 
     @FXML
     private AnchorPane pane;
@@ -53,20 +52,18 @@ public class LoginController implements Initializable
     @FXML
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
-    private  int counter = 0;
+    private int counter = 0;
     private Stage stage;
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
 //        buttonGenerator();
-        try
-        {
+        try {
             model = new Model(new BLLManager(new DatabaseFacade()));
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ExceptionHandler.handleException(ex);
         }
 
@@ -79,22 +76,18 @@ public class LoginController implements Initializable
         Stage stage = (Stage) pane.getScene().getWindow();
         File mediafile = fileChooser.showOpenDialog(stage);
 
-        if (mediafile != null)
-        {
-            try
-            {
+        if (mediafile != null) {
+            try {
                 boolean checkStatus = model.checkForDuplicateFile(mediafile);
-                if (checkStatus == false)
-                {
+                if (checkStatus == false) {
                     model.loadJSONfile(mediafile.getPath());
                     Utility.createAlert(Alert.AlertType.INFORMATION, "Vigtig besked", "Læsning af JSON fuldført",
-                    "JSON filen er blevet læst og lagt op på databasen");
+                            "JSON filen er blevet læst og lagt op på databasen");
                 } else {
-                    Utility.createAlert(Alert.AlertType.ERROR, "kage", "er dejligt", "men feder");
+                    Utility.createAlert(Alert.AlertType.ERROR, "Vigtig besked", "Indlæsning mislykkedes", "JSON filen er allerede indsat i databasen");
                 }
 
-            } catch (IOException ex)
-            {
+            } catch (IOException ex) {
                 ExceptionHandler.handleException(ex);
             } catch (SQLException ex) {
                 ExceptionHandler.handleException(ex);
@@ -103,14 +96,11 @@ public class LoginController implements Initializable
         }
     }
 
-    public void initView(Stage stage)
-    {
+    public void initView(Stage stage) {
 
-        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable()
-        {
-            public void run()
-            {
-              
+        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
+            public void run() {
+                System.out.println("test");
                 try {
                     loadFile();
                 } catch (FileNotFoundException ex) {
@@ -161,9 +151,9 @@ public class LoginController implements Initializable
                 newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
                 //makes new thread for the timer
                 Thread t = new Thread(() -> {
-                timer();
-                 });
-                 t.start();
+                    timer();
+                });
+                t.start();
             });
             //adds button to gridpane with coordinates
             gridPane.add(newButton, j, i);
@@ -176,20 +166,20 @@ public class LoginController implements Initializable
         }
     }
 
-   public void timer(){
-         try {
+    public void timer() {
+        try {
             Thread.sleep(1000);
 
             Platform.runLater(() -> {
                 openMainView();
             });
-            }catch (InterruptedException ex) {
+        } catch (InterruptedException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        }
 
     }
 
-    public void openMainView(){
+    public void openMainView() {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
@@ -199,24 +189,21 @@ public class LoginController implements Initializable
 
             con.setStage(stage);
 
-            Stage stage = (Stage)pane.getScene().getWindow();
+            Stage stage = (Stage) pane.getScene().getWindow();
             Scene scene = new Scene(root);
 
             stage.setScene(scene);
             stage.show();
             con.initView();
 
-            }catch (IOException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
-    public void setStage(Stage stage)
-    {
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
-
 
 }

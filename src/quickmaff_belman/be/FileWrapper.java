@@ -22,9 +22,11 @@ public class FileWrapper
     public long fileSize;
     private final File file;
 
-    public FileWrapper(File file)
+    public FileWrapper(File file) throws IOException
     {
         this.file = file;
+        setMetaData();
+        
     }
 
     public long getTime()

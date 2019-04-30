@@ -140,7 +140,7 @@ public class MainViewController implements Initializable {
     
     private void setGraphics() {
         
-        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
+        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
         
     }
     
