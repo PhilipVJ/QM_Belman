@@ -26,7 +26,7 @@
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: FFA435;" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane layoutX="35.0" prefHeight="416.0" prefWidth="294.0" style="-fx-background-color: TRANSPARENT; -fx-background: FFA435;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <ScrollPane layoutX="35.0" prefHeight="416.0" prefWidth="294.0" style="-fx-background-color: TRANSPARENT; -fx-background: FFA435;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
                      <content>
                         <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="611.0" prefWidth="578.0" vgap="30.0" />
                      </content>

@@ -23,9 +23,10 @@ public class Model {
     private ResourceBundle rBundle;
     private String departmentName = "Halvfab";
 
+
     public Model(BLLManager bMan) {
         this.bMan = bMan;
-
+       
         // Setting the language to Danish by default
         locale = new Locale("da", "DK");
         rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
@@ -61,5 +62,8 @@ public class Model {
     public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {
         return bMan.getAllBoardTasks(departmentName);
     }
+    
+
+     
 
 }

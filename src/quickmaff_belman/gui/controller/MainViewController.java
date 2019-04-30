@@ -9,6 +9,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -23,6 +25,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -32,7 +35,7 @@ import quickmaff_belman.gui.model.Model;
  * @author Philip
  */
 public class MainViewController implements Initializable {
-    
+
     @FXML
     private ImageView languageSwitch;
     private Model model;
@@ -42,26 +45,27 @@ public class MainViewController implements Initializable {
     private BorderPane borderPane;
     @FXML
     private ImageView Filter;
-      
+
     @FXML
     private FlowPane flowPane;
     private Stage stage;
+        private ExecutorService executor;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
-    
+
     public void setModel(Model model) {
         this.model = model;
     }
-    
+
     @FXML
     private void changeLanguage(MouseEvent event) {
-        
+
         Language language = model.changeLanguage();
         switch (language) {
             case DANISH:
@@ -72,55 +76,36 @@ public class MainViewController implements Initializable {
                 Image engImage = new Image("/quickmaff_belman/gui/view/images/toggle2.png");
                 languageSwitch.setImage(engImage);
                 break;
-            
+
         }
-        
+
         setAllText();
-        
+
     }
-    
+
     public void initView() throws SQLException {
         setGraphics();
         setAllText();
         loadBoard();
     }
     
-    public void loadBoard() throws SQLException {
-       
-       ArrayList<BoardTask> boardTasks = model.getAllBoardTasks();
-        Image daImage = new Image("/quickmaff_belman/gui/view/images/postit.png");
-       
-        for (BoardTask bTask : boardTasks) {           
-            StackPane sPane = new StackPane();
 
-            ImageView view = new ImageView(daImage);
-            Label orderNumber = new Label(bTask.getOrderNumber());
-            orderNumber.setFont(new Font("Arial", 15));
-            Label endDate = new Label("\n\n"+bTask.getEndDate());
-   
-            view.setPreserveRatio(true);
-            view.setFitWidth(160);
-            sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                System.out.println("Opening task from order:"+orderNumber );
-            });
-            
-            sPane.getChildren().addAll(view, orderNumber, endDate);
-            HBox box = new HBox(sPane);
-            box.setAlignment(Pos.CENTER);
-            flowPane.getChildren().add(box);
-            
-        }
-        
-    }
+    public void loadBoard() throws SQLException {
+ 
+        executor = Executors.newSingleThreadExecutor();
+        BoardMaker bMaker = new BoardMaker(flowPane, model);
+        executor.submit(bMaker);
     
+    }
+
     private void setAllText() {
         department.setText(model.getResourceBundle().getString("department"));
     }
-    
+
     @FXML
     private void filtering(MouseEvent event) {
         Language language = model.changeLanguage();
-        
+
         switch (language) {
             case DANISH:
                 Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
@@ -132,15 +117,15 @@ public class MainViewController implements Initializable {
                 break;
         }
     }
-    
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+
     private void setGraphics() {
-        
+
         flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
-        
+
     }
-    
+
 }
