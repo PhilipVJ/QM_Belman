@@ -52,6 +52,7 @@ public class LoginController implements Initializable {
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
     private  int counter = 0;
+    private Stage stage;
     /**
      * Initializes the controller class.
      */
@@ -174,7 +175,7 @@ public class LoginController implements Initializable {
             MainViewController con = loader.getController();
             con.setModel(new Model(new BLLManager(new DatabaseFacade())));
      
-            con.setResolution(pane.getScene().getWindow().getWidth(), pane.getScene().getWindow().getHeight());
+            con.setStage(stage);
                    
             Stage stage = (Stage)pane.getScene().getWindow();
             Scene scene = new Scene(root);
@@ -189,6 +190,11 @@ public class LoginController implements Initializable {
         
         
     }   
+    
+    public void setStage(Stage stage)
+    {
+        this.stage = stage;
+    }
 
 
 }

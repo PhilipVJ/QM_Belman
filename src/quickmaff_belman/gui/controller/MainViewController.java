@@ -15,11 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -37,27 +37,23 @@ public class MainViewController implements Initializable {
     private Label department;
     @FXML
     private BorderPane borderPane;
-    @FXML
-    private GridPane grid;
-    @FXML
-    private AnchorPane anchorPane;
+
+
     @FXML
     private ImageView Filter;
     
     private double stageWidth;
     private double stageHeight;
-    private ImageView top;
+
+    @FXML
+    private FlowPane flowPane;
+    private Stage stage;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-             
-        anchorPane.setPrefHeight(6100);
-        borderPane.setLayoutX(50);
-        borderPane.setLayoutY(0);
         
 
     }
@@ -98,8 +94,7 @@ public class MainViewController implements Initializable {
             names.add("543098" + i);
         }
 
-        int i = 0; //column index
-        int j = 0; //row index
+
 
         for (String buttonName : names) {
             
@@ -117,12 +112,8 @@ public class MainViewController implements Initializable {
             sPane.getChildren().addAll(view, taskId);
             HBox box = new HBox(sPane);
             box.setAlignment(Pos.CENTER);
-            grid.add(box, j, i);
-            j++;
-            if (j == 3) {
-                j = 0;
-                i++;
-            }
+            flowPane.getChildren().add(box);
+
         }
 
     }
@@ -149,16 +140,14 @@ public class MainViewController implements Initializable {
         }
     }
     
-    public void setResolution(double width, double height)
+    public void setStage(Stage stage)
     {
-        stageHeight = height;
-        stageWidth = width;
-        System.out.println(""+stageHeight+"     "+stageWidth);
+        this.stage = stage;
     }
 
     private void setGraphics() {
 
-
+flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
        
     }
 

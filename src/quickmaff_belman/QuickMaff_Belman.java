@@ -29,6 +29,7 @@ public class QuickMaff_Belman extends Application
 //        con.initView();
 //        
         LoginController con = loader.getController();
+        con.setStage(stage);
         
         Scene scene = new Scene(root);
         con.loadGrid();
