@@ -146,7 +146,7 @@ public class LoginController implements Initializable {
             gridPane.add(newButton, j, i);
             //makes sure to get the right coordinates for column and row.
             j++;
-            if (j == 3) {
+            if (j == 4) {
                 j = 0;
                 i++;
             }
