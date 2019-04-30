@@ -7,7 +7,6 @@ package quickmaff_belman.dal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.SQLException;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -19,8 +18,8 @@ public class TesterClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException, SQLException {
-
+    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
+ 
 
     }
     
