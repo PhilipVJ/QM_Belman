@@ -6,13 +6,13 @@
 package quickmaff_belman.gui.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,9 +25,10 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.tika.exception.TikaException;
@@ -53,7 +54,8 @@ public class LoginController implements Initializable
     @FXML
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
-
+    private  int counter = 0;
+    private Stage stage;
     /**
      * Initializes the controller class.
      */
@@ -71,8 +73,7 @@ public class LoginController implements Initializable
 
     }
 
-    private void loadFile() throws FileNotFoundException, SQLException, ParseException, SAXException, TikaException
-    {
+    private void loadFile() {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open JSON file");
@@ -96,7 +97,10 @@ public class LoginController implements Initializable
             } catch (IOException ex)
             {
                 ExceptionHandler.handleException(ex);
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex);
             }
+
         }
     }
 
@@ -130,71 +134,101 @@ public class LoginController implements Initializable
         });
     }
 
-    public ObservableList<String> getDepartmentNames()
-    {
+    public ObservableList<String> getDepartmentNames() {
 
-        dep.add("a");
-        dep.add("b");
-        dep.add("c");
-        dep.add("d");
-        dep.add("e");
-        dep.add("f");
-        dep.add("g");
-        dep.add("h");
-        dep.add("i");
-        dep.add("j");
-        dep.add("k");
-        dep.add("l");
-        dep.add("m");
-        dep.add("n");
-        dep.add("o");
-        dep.add("p");
-        dep.add("q");
-        dep.add("r");
+        dep.add("Department 1");
+        dep.add("Department 2");
+        dep.add("Department 3");
+        dep.add("Department 4");
+        dep.add("Department 5");
+        dep.add("Department 6");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
+        dep.add("Department 7");
 
         return dep;
     }
 
-    public void buttonGenerator()
-    {
+    public void loadGrid() {
 
         ObservableList<String> depNames = getDepartmentNames();
-
         int i = 0; //column index
         int j = 0; //row index
 
-        for (String buttonName : depNames)
-        {
-            Button newButton = new Button(buttonName);
-            newButton.setBorder(Border.EMPTY);
-            newButton.setPrefHeight(25);
-            newButton.setPrefWidth(200);
+        for (String depName : depNames) {
+            Button newButton = new Button(depName);
+            //sets size of text
+            Font font = new Font(22);
+            newButton.setFont(font);
+            //sets prefered size of button = size of pictures
+            newButton.setPrefHeight(203);
+            newButton.setPrefWidth(206);
+            newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonOFF.png);");
             //adds mouse clicked event to the button
-            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e ->
-            {
-                try
-                {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Authentication.fxml"));
-                    Parent root = (Parent) fxmlLoader.load();
-                    AuthenticationController hc = fxmlLoader.getController();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } catch (IOException ex)
-                {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
+
+                newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
+                //makes new thread for the timer
+                Thread t = new Thread(() -> {
+                timer();
+                 });
+                 t.start();
             });
             //adds button to gridpane with coordinates
             gridPane.add(newButton, j, i);
             //makes sure to get the right coordinates for column and row.
             j++;
-            if (j == 2)
-            {
+            if (j == 4) {
                 j = 0;
                 i++;
             }
         }
     }
+
+   public void timer(){
+         try {
+            Thread.sleep(1000);
+
+            Platform.runLater(() -> {
+                openMainView();
+            });
+            }catch (InterruptedException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+    }
+
+    public void openMainView(){
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
+            Parent root = loader.load();
+            MainViewController con = loader.getController();
+            con.setModel(new Model(new BLLManager(new DatabaseFacade())));
+
+            con.setStage(stage);
+
+            Stage stage = (Stage)pane.getScene().getWindow();
+            Scene scene = new Scene(root);
+
+            stage.setScene(scene);
+            stage.show();
+            con.initView();
+
+            }catch (IOException ex) {
+                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
+    }
+
+    public void setStage(Stage stage)
+    {
+        this.stage = stage;
+    }
+
 
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
+   <children>
+      <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="600.0" layoutY="26.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="30.0">
+         <image>
+            <Image url="@images/toggle.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="department" alignment="CENTER" layoutX="180.0" layoutY="34.0" prefHeight="17.0" prefWidth="240.0" textAlignment="CENTER" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="400.0" />
+      <BorderPane fx:id="borderPane" layoutX="79.0" layoutY="115.0" prefHeight="422.0" prefWidth="696.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </left>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: FFA435;" BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane layoutX="35.0" prefHeight="416.0" prefWidth="294.0" style="-fx-background-color: TRANSPARENT; -fx-background: FFA435;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <content>
+                        <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="611.0" prefWidth="578.0" vgap="30.0" />
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="3.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <AnchorPane prefHeight="3.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+      <ImageView fx:id="Filter" fitHeight="212.0" fitWidth="197.0" layoutX="702.0" layoutY="585.0" onMouseClicked="#filtering">
+         <image>
+            <Image url="@images/FiltrerKnap.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

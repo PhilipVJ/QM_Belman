@@ -24,15 +24,24 @@ public class QuickMaff_Belman extends Application
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
         Parent root = loader.load();
+//        MainViewController con = loader.getController();
+//        con.setModel(new Model(new BLLManager(new DatabaseFacade())));
+//        con.initView();
+//        
         LoginController con = loader.getController();
+        con.setStage(stage);
         
         Scene scene = new Scene(root);
-        con.buttonGenerator();
+        con.loadGrid();
+
     
         stage.setScene(scene);
+        stage.setWidth(1960);
+        stage.setHeight(1080);
+//stage.setFullScreen(true);
         stage.show();
-        
-    con.initView(stage);
+//        
+//    con.initView(stage);
     }
 
     /**
