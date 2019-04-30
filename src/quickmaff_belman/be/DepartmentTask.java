@@ -74,6 +74,10 @@ public class DepartmentTask {
         this.departmentName = departmentName;
     }
     
+    public DepartmentTask(String departmentName){
+        this.departmentName = departmentName;
+    }
+    
     
 
 

@@ -28,7 +28,9 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -49,11 +51,14 @@ public class LoginController implements Initializable {
     @FXML
     private AnchorPane pane;
     private Model model;
-    @FXML
     private GridPane gridPane;
     private ObservableList<String> dep = FXCollections.observableArrayList();
     private int counter = 0;
     private Stage stage;
+    @FXML
+    private FlowPane flowPane;
+    
+    
 
     /**
      * Initializes the controller class.
@@ -121,11 +126,6 @@ public class LoginController implements Initializable {
         dep.add("Department 5");
         dep.add("Department 6");
         dep.add("Department 7");
-        dep.add("Department 7");
-        dep.add("Department 7");
-        dep.add("Department 7");
-        dep.add("Department 7");
-        dep.add("Department 7");
 
         return dep;
     }
@@ -133,8 +133,6 @@ public class LoginController implements Initializable {
     public void loadGrid() {
 
         ObservableList<String> depNames = getDepartmentNames();
-        int i = 0; //column index
-        int j = 0; //row index
 
         for (String depName : depNames) {
             Button newButton = new Button(depName);
@@ -155,14 +153,9 @@ public class LoginController implements Initializable {
                 });
                 t.start();
             });
-            //adds button to gridpane with coordinates
-            gridPane.add(newButton, j, i);
-            //makes sure to get the right coordinates for column and row.
-            j++;
-            if (j == 4) {
-                j = 0;
-                i++;
-            }
+
+            flowPane.getChildren().addAll(newButton);
+
         }
     }
 
