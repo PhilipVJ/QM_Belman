@@ -5,10 +5,13 @@
  */
 package quickmaff_belman.bll;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.dal.DatabaseFacade;
 
 public class BLLManager
@@ -22,5 +25,15 @@ public class BLLManager
     public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
         dFacade.loadJSONFile(filepath);
     }
+    
+    public boolean checkForDuplicateFile(File filepath) throws IOException, SQLException 
+    {
+        return dFacade.checkForDuplicateFile(filepath);
+    }
+
+    public ArrayList<BoardTask> getAllBoardTasks(String departmentName) throws SQLException {
+        return dFacade.getAllBoardTasks(departmentName);
+    }
+           
     
 }

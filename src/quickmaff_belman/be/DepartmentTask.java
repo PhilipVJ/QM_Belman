@@ -13,12 +13,22 @@ public class DepartmentTask {
     private Date endDate;
     private boolean finishedOrder;
     private String departmentName;
+    private String orderNumber;
 
     public DepartmentTask(Date startDate, Date endDate, boolean finishedOrder, String departmentName) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.finishedOrder = finishedOrder;
         this.departmentName = departmentName;
+        this.orderNumber = orderNumber;
+    }
+    
+     public DepartmentTask(String orderNumber,Date startDate, Date endDate, boolean finishedOrder, String departmentName) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.finishedOrder = finishedOrder;
+        this.departmentName = departmentName;
+        this.orderNumber = orderNumber;
     }
 
     @Override
@@ -26,6 +36,10 @@ public class DepartmentTask {
         return "DepartmentTask{" + "startDate=" + startDate + ", endDate=" + endDate + ", finishedOrder=" + finishedOrder + ", departmentName=" + departmentName + '}';
     }
    
+    public String getOrderNumber()
+    {
+        return orderNumber;
+    }
     
 
     public Date getStartDate() {
