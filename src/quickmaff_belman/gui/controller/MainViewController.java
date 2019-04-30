@@ -29,7 +29,7 @@ import quickmaff_belman.gui.model.Model;
  * @author Philip
  */
 public class MainViewController implements Initializable {
-
+    
     @FXML
     private ImageView languageSwitch;
     private Model model;
@@ -37,14 +37,13 @@ public class MainViewController implements Initializable {
     private Label department;
     @FXML
     private BorderPane borderPane;
-
-
+    
     @FXML
     private ImageView Filter;
     
     private double stageWidth;
     private double stageHeight;
-
+    
     @FXML
     private FlowPane flowPane;
     private Stage stage;
@@ -55,16 +54,15 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-
     }
-
+    
     public void setModel(Model model) {
         this.model = model;
     }
-
+    
     @FXML
     private void changeLanguage(MouseEvent event) {
-
+        
         Language language = model.changeLanguage();
         switch (language) {
             case DANISH:
@@ -75,60 +73,56 @@ public class MainViewController implements Initializable {
                 Image engImage = new Image("/quickmaff_belman/gui/view/images/toggle2.png");
                 languageSwitch.setImage(engImage);
                 break;
-
+            
         }
-
+        
         setAllText();
-
+        
     }
-
+    
     public void initView() {
         setGraphics();
         setAllText();
         testScroll();
     }
-
+    
     public void testScroll() {
         ArrayList<String> names = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             names.add("543098" + i);
         }
-
-
-
+        
         for (String buttonName : names) {
             
             StackPane sPane = new StackPane();
             Image daImage = new Image("/quickmaff_belman/gui/view/images/postit2.png");
             ImageView view = new ImageView(daImage);
             Label taskId = new Label(buttonName);
-
+            
             view.setPreserveRatio(true);
             view.setFitWidth(160);
             sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
                 System.out.println("Opening task " + buttonName);
             });
-
+            
             sPane.getChildren().addAll(view, taskId);
             HBox box = new HBox(sPane);
             box.setAlignment(Pos.CENTER);
             flowPane.getChildren().add(box);
-
+            
         }
-
+        
     }
-
+    
     private void setAllText() {
         department.setText(model.getResourceBundle().getString("department"));
     }
-
+    
     @FXML
-    private void filtering(MouseEvent event)
-    {
-                Language language = model.changeLanguage();
-
-        switch (language)
-        {
+    private void filtering(MouseEvent event) {
+        Language language = model.changeLanguage();
+        
+        switch (language) {
             case DANISH:
                 Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
                 Filter.setImage(buttonImage);
@@ -140,15 +134,14 @@ public class MainViewController implements Initializable {
         }
     }
     
-    public void setStage(Stage stage)
-    {
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    
     private void setGraphics() {
-
-flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
-       
+        
+        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
+        
     }
-
+    
 }

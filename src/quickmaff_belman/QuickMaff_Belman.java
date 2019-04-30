@@ -36,7 +36,7 @@ public class QuickMaff_Belman extends Application
 
     
         stage.setScene(scene);
-        stage.setWidth(1960);
+        stage.setWidth(1920);
         stage.setHeight(1080);
 //stage.setFullScreen(true);
         stage.show();

@@ -51,4 +51,8 @@ public class Model {
         return rBundle;
     }
 
+    public boolean checkForDuplicateFile(File mediafile) throws IOException, SQLException {
+        return bMan.checkForDuplicateFile(mediafile);
+    }
+
 }

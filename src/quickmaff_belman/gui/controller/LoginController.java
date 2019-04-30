@@ -6,6 +6,7 @@
 package quickmaff_belman.gui.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -31,9 +32,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.tika.exception.TikaException;
 import org.json.simple.parser.ParseException;
-import org.xml.sax.SAXException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.ExceptionHandler;
@@ -73,7 +72,7 @@ public class LoginController implements Initializable
 
     }
 
-    private void loadFile() {
+    private void loadFile() throws FileNotFoundException, ParseException {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open JSON file");
@@ -111,23 +110,12 @@ public class LoginController implements Initializable
         {
             public void run()
             {
-                try
-                {
+              
+                try {
                     loadFile();
-                } catch (FileNotFoundException ex)
-                {
-                    ExceptionHandler.handleException(ex);
-                } catch (SQLException ex)
-                {
-                    ExceptionHandler.handleException(ex);
-                } catch (ParseException ex)
-                {
+                } catch (FileNotFoundException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SAXException ex)
-                {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (TikaException ex)
-                {
+                } catch (ParseException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
