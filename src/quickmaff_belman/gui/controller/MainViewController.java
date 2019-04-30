@@ -5,35 +5,21 @@
  */
 package quickmaff_belman.gui.controller;
 
-import com.jfoenix.controls.JFXScrollPane;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -57,14 +43,22 @@ public class MainViewController implements Initializable {
     private AnchorPane anchorPane;
     @FXML
     private ImageView Filter;
+    
+    private double stageWidth;
+    private double stageHeight;
+    private ImageView top;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
+             
         anchorPane.setPrefHeight(6100);
+        borderPane.setLayoutX(50);
+        borderPane.setLayoutY(0);
+        
 
     }
 
@@ -93,6 +87,7 @@ public class MainViewController implements Initializable {
     }
 
     public void initView() {
+        setGraphics();
         setAllText();
         testScroll();
     }
@@ -152,6 +147,19 @@ public class MainViewController implements Initializable {
                 Filter.setImage(pressImage);
                 break;
         }
+    }
+    
+    public void setResolution(double width, double height)
+    {
+        stageHeight = height;
+        stageWidth = width;
+        System.out.println(""+stageHeight+"     "+stageWidth);
+    }
+
+    private void setGraphics() {
+
+
+       
     }
 
 }

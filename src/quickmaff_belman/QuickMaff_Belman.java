@@ -10,11 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import quickmaff_belman.bll.BLLManager;
-import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.controller.LoginController;
-import quickmaff_belman.gui.controller.MainViewController;
-import quickmaff_belman.gui.model.Model;
 
 /**
  *
@@ -39,6 +35,9 @@ public class QuickMaff_Belman extends Application
 
     
         stage.setScene(scene);
+        stage.setWidth(1960);
+        stage.setHeight(1080);
+//stage.setFullScreen(true);
         stage.show();
 //        
 //    con.initView(stage);

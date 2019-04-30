@@ -114,9 +114,6 @@ public class LoginController implements Initializable {
         dep.add("Department 7");
         dep.add("Department 7");
         
-
-
-
         return dep;
     }
 
@@ -176,11 +173,15 @@ public class LoginController implements Initializable {
             Parent root = loader.load();
             MainViewController con = loader.getController();
             con.setModel(new Model(new BLLManager(new DatabaseFacade())));
-            con.initView();
+     
+            con.setResolution(pane.getScene().getWindow().getWidth(), pane.getScene().getWindow().getHeight());
+                   
+            Stage stage = (Stage)pane.getScene().getWindow();
             Scene scene = new Scene(root);
-            Stage stage = new Stage();
+            
             stage.setScene(scene);
             stage.show();
+            con.initView();
             
             }catch (IOException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
