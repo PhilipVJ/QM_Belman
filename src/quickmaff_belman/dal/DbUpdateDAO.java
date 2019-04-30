@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import quickmaff_belman.be.DepartmentTask;
+import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 import quickmaff_belman.gui.model.ExceptionHandler;
@@ -21,19 +23,38 @@ import quickmaff_belman.gui.model.ExceptionHandler;
  * @author Philip
  */
 public class DbUpdateDAO {
-    
-private DbConnection con;
+
+    private DbConnection con;
 
     public DbUpdateDAO(DbConnection con) {
         this.con = con;
     }
-    
-    public void updateDatabaseWithJSON(ArrayList<Worker> allWorkers, ArrayList<ProductionOrder> pOrder) throws SQLException {
+
+    public boolean checkForDuplicateFile(FileWrapper fW) throws SQLException {
+        String sqlGetInfo = "SELECT * FROM [Log] WHERE description = (?)";
+        PreparedStatement pStatement = null;
+        try (Connection connection = con.getConnection();) {
+            pStatement = connection.prepareStatement(sqlGetInfo);
+            pStatement.setString(1, "" + fW.hashCode());
+            ResultSet set = pStatement.executeQuery();
+
+            if (set.next()) {
+                return true;
+            }
+
+        }
+        System.out.println("return false");
+        return false;
+    }
+
+    public void updateDatabaseWithJSON(ArrayList<Worker> allWorkers, ArrayList<ProductionOrder> pOrder, FileWrapper fileW) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
         String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?);";
         String sqlOrderTask = "INSERT INTO OrderTask VALUES (?,?);";
+        String sqlLog = "INSERT INTO Log VALUES (?,?,?,?);";
 
+        PreparedStatement pstLog;
         PreparedStatement pstWorker;
         PreparedStatement pstOrder;
         PreparedStatement pstDep;
@@ -43,10 +64,13 @@ private DbConnection con;
 
         try {
             connection = con.getConnection();
+
             pstWorker = connection.prepareStatement(sqlWorker);
             pstOrder = connection.prepareStatement(sqlOrder);
             pstDep = connection.prepareStatement(sqlDep, Statement.RETURN_GENERATED_KEYS);
             pstOrderTask = connection.prepareStatement(sqlOrderTask);
+            pstLog = connection.prepareStatement(sqlLog);
+
             connection.setAutoCommit(false);
 
             for (Worker worker : allWorkers) {
@@ -84,9 +108,19 @@ private DbConnection con;
                         pstOrderTask.setInt(2, genKey);
                         pstOrderTask.addBatch();
                     }
-
                 }
+
             }
+
+            Date date = new Date();
+            java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
+
+            pstLog.setDate(1, sqlDateLog);
+            pstLog.setString(2, "updateActivity");
+            pstLog.setString(3, "" + fileW.hashCode());
+            pstLog.setString(4, null);
+            pstLog.executeUpdate();
+
             pstOrder.executeBatch();
             pstOrderTask.executeBatch();
             connection.commit();
@@ -104,5 +138,5 @@ private DbConnection con;
         }
 
     }
-    
+
 }
