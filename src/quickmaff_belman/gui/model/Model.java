@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.bll.BLLManager;
 
 public class Model {
@@ -19,6 +21,7 @@ public class Model {
     private BLLManager bMan;
     private Locale locale;
     private ResourceBundle rBundle;
+    private String departmentName = "Halvfab";
 
     public Model(BLLManager bMan) {
         this.bMan = bMan;
@@ -53,6 +56,10 @@ public class Model {
 
     public boolean checkForDuplicateFile(File mediafile) throws IOException, SQLException {
         return bMan.checkForDuplicateFile(mediafile);
+    }
+
+    public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {
+        return bMan.getAllBoardTasks(departmentName);
     }
 
 }

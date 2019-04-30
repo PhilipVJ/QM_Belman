@@ -6,6 +6,7 @@
 package quickmaff_belman.gui.controller;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -19,7 +20,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -37,13 +40,9 @@ public class MainViewController implements Initializable {
     private Label department;
     @FXML
     private BorderPane borderPane;
-    
     @FXML
     private ImageView Filter;
-    
-    private double stageWidth;
-    private double stageHeight;
-    
+      
     @FXML
     private FlowPane flowPane;
     private Stage stage;
@@ -80,32 +79,32 @@ public class MainViewController implements Initializable {
         
     }
     
-    public void initView() {
+    public void initView() throws SQLException {
         setGraphics();
         setAllText();
-        testScroll();
+        loadBoard();
     }
     
-    public void testScroll() {
-        ArrayList<String> names = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            names.add("543098" + i);
-        }
-        
-        for (String buttonName : names) {
-            
+    public void loadBoard() throws SQLException {
+       
+       ArrayList<BoardTask> boardTasks = model.getAllBoardTasks();
+        Image daImage = new Image("/quickmaff_belman/gui/view/images/postit.png");
+       
+        for (BoardTask bTask : boardTasks) {           
             StackPane sPane = new StackPane();
-            Image daImage = new Image("/quickmaff_belman/gui/view/images/postit2.png");
+
             ImageView view = new ImageView(daImage);
-            Label taskId = new Label(buttonName);
-            
+            Label orderNumber = new Label(bTask.getOrderNumber());
+            orderNumber.setFont(new Font("Arial", 15));
+            Label endDate = new Label("\n\n"+bTask.getEndDate());
+   
             view.setPreserveRatio(true);
             view.setFitWidth(160);
             sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                System.out.println("Opening task " + buttonName);
+                System.out.println("Opening task from order:"+orderNumber );
             });
             
-            sPane.getChildren().addAll(view, taskId);
+            sPane.getChildren().addAll(view, orderNumber, endDate);
             HBox box = new HBox(sPane);
             box.setAlignment(Pos.CENTER);
             flowPane.getChildren().add(box);

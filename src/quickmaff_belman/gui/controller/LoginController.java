@@ -171,7 +171,11 @@ public class LoginController implements Initializable {
             Thread.sleep(1000);
 
             Platform.runLater(() -> {
-                openMainView();
+                try {
+                    openMainView();
+                } catch (SQLException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             });
         } catch (InterruptedException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
@@ -179,7 +183,7 @@ public class LoginController implements Initializable {
 
     }
 
-    public void openMainView() {
+    public void openMainView() throws SQLException {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
