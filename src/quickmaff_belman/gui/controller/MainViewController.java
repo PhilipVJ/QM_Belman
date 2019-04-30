@@ -48,6 +48,8 @@ public class MainViewController implements Initializable {
     @FXML
     private FlowPane flowPane;
     private Stage stage;
+    @FXML
+    private ImageView depSign;
 
     /**
      * Initializes the controller class.
@@ -125,19 +127,19 @@ public class MainViewController implements Initializable {
     @FXML
     private void filtering(MouseEvent event)
     {
-                Language language = model.changeLanguage();
-
-        switch (language)
-        {
-            case DANISH:
-                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
-                Filter.setImage(buttonImage);
-                break;
-            case ENGLISH:
-                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
-                Filter.setImage(pressImage);
-                break;
-        }
+//                Language language = model.changeLanguage();
+//
+//        switch (language)
+//        {
+//            case DANISH:
+//                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
+//                Filter.setImage(buttonImage);
+//                break;
+//            case ENGLISH:
+//                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
+//                Filter.setImage(pressImage);
+//                break;
+//        }
     }
     
     public void setStage(Stage stage)
@@ -147,7 +149,7 @@ public class MainViewController implements Initializable {
 
     private void setGraphics() {
 
-flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
+        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(660));
        
     }
 
