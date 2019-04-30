@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.model;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,6 +22,11 @@ public class Model
     
     public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
       bMan.loadJSONfile(filepath);
+    }
+    
+    public boolean checkForDuplicateFile(File filepath) throws IOException, SQLException 
+    {
+        return bMan.checkForDuplicateFile(filepath);
     }
     
 }

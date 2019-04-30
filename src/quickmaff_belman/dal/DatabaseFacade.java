@@ -5,11 +5,13 @@
  */
 package quickmaff_belman.dal;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.DataContainer;
+import quickmaff_belman.be.FileWrapper;
 
 public class DatabaseFacade {
 
@@ -17,7 +19,7 @@ public class DatabaseFacade {
     private final OrderDAO oDAO;
     private final WorkerDAO wDAO;
     private final DbUpdateDAO uDAO;
-
+     
     public DatabaseFacade() throws IOException {
         DbConnection con = DbConnection.getInstance();
         fDAO = new FileDAO();
@@ -26,9 +28,16 @@ public class DatabaseFacade {
         uDAO = new DbUpdateDAO(con);
     }
 
+    public boolean checkForDuplicateFile(File file) throws IOException, SQLException 
+    {
+        FileWrapper fW = new FileWrapper(file);
+        return uDAO.checkForDuplicateFile(fW);
+    }
+    
     public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
         DataContainer con = fDAO.getDataFromJSON(filepath);
-        uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders());       
+        FileWrapper fileW = new FileWrapper(new File (filepath));
+        uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders(), fileW);       
     }
     
     
