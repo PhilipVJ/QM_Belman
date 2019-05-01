@@ -96,7 +96,7 @@ public class Model {
     }
 
     public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {
-        return bMan.getAllBoardTasks(departmentName);
+        return bMan.getAllBoardTasks(departmentName, timeOffset);
     }
     
 

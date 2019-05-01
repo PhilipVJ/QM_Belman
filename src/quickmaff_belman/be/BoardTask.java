@@ -15,10 +15,12 @@ public class BoardTask {
     
     private String orderNumber;
     private Date endDate;
+    private Date startDate;
 
-    public BoardTask(String orderNumber, Date endDate) {
+    public BoardTask(String orderNumber, Date endDate, Date startDate) {
         this.orderNumber = orderNumber;
         this.endDate = endDate;
+        this.startDate = startDate;
     }
 
     public String getOrderNumber() {
@@ -35,6 +37,11 @@ public class BoardTask {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+    
+    public Date getStartDate()
+    {
+        return startDate;
     }
     
     

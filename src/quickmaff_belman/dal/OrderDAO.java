@@ -44,7 +44,8 @@ public class OrderDAO {
             while (rs.next()) {
                 String orderNumber = rs.getString("orderNumber");
                 Date endDate = rs.getDate("endDate");
-                BoardTask bTask = new BoardTask(orderNumber, endDate);
+                Date startDate = rs.getDate("startDate");
+                BoardTask bTask = new BoardTask(orderNumber, endDate,startDate);
                 allTasks.add(bTask);
             }
             System.out.println("Size"+allTasks.size());

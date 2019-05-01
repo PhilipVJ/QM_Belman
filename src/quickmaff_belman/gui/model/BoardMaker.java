@@ -44,11 +44,16 @@ public class BoardMaker implements Runnable {
                 ArrayList<HBox> boxes = new ArrayList<>();
 
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/postit.png");
+                Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
 
                 for (BoardTask bTask : boardTasks) {
 
                     StackPane sPane = new StackPane();
+
+                   
                     ImageView view = new ImageView(daImage);
+                    
+                    
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
                     Label endDate = new Label("\n\n" + bTask.getEndDate());
