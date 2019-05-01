@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import quickmaff_belman.be.BoardTask;
 
 public class OrderDAO {
@@ -24,11 +26,12 @@ public class OrderDAO {
 
     public ArrayList<BoardTask> getAllBoardTasks(String department) throws SQLServerException, SQLException {
         ArrayList<BoardTask> allTasks = new ArrayList<>();
-        String sql = "select startDate,endDate,orderNumber from DepartmentTask INNER JOIN OrderTask on DepartmentTask.taskID = OrderTask.taskID "
-                + "where departmentName=(?) AND finishedOrder=0 AND startDate>=(?) order by endDate asc;";
+        String sql = "SELECT startDate,endDate,orderNumber from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate>=(?) order by endDate asc;";
 
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
-            Date date = new Date();
+            Calendar cal = Calendar.getInstance(Locale.ENGLISH);            
+            Date date = cal.getTime();
+            
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
            
             pst.setString(1, department);

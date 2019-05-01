@@ -50,15 +50,13 @@ public class DbUpdateDAO {
     public void updateDatabaseWithJSON(ArrayList<Worker> allWorkers, ArrayList<ProductionOrder> pOrder, FileWrapper fileW) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
-        String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?);";
-        String sqlOrderTask = "INSERT INTO OrderTask VALUES (?,?);";
+        String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?,?);";
         String sqlLog = "INSERT INTO Log VALUES (?,?,?,?);";
 
         PreparedStatement pstLog;
         PreparedStatement pstWorker;
         PreparedStatement pstOrder;
         PreparedStatement pstDep;
-        PreparedStatement pstOrderTask;
 
         Connection connection = null;
 
@@ -68,7 +66,6 @@ public class DbUpdateDAO {
             pstWorker = connection.prepareStatement(sqlWorker);
             pstOrder = connection.prepareStatement(sqlOrder);
             pstDep = connection.prepareStatement(sqlDep, Statement.RETURN_GENERATED_KEYS);
-            pstOrderTask = connection.prepareStatement(sqlOrderTask);
             pstLog = connection.prepareStatement(sqlLog);
 
             connection.setAutoCommit(false);
@@ -83,7 +80,7 @@ public class DbUpdateDAO {
 
             pstWorker.executeBatch();
 
-            // alt over virker
+
             for (ProductionOrder poOrder : pOrder) {
                 java.sql.Date sqlDateDel = new java.sql.Date(poOrder.getDeliveryTime().getTime());
                 pstOrder.setString(1, poOrder.getOrderNumber());
@@ -100,14 +97,9 @@ public class DbUpdateDAO {
                     pstDep.setDate(2, sqlDateStart);
                     pstDep.setDate(3, sqlDateEnd);
                     pstDep.setBoolean(4, deTask.isFinishedOrder());
-                    pstDep.executeUpdate();
-                    ResultSet set = pstDep.getGeneratedKeys();
-                    while (set.next()) {
-                        int genKey = set.getInt(1);
-                        pstOrderTask.setString(1, poOrder.getOrderNumber());
-                        pstOrderTask.setInt(2, genKey);
-                        pstOrderTask.addBatch();
-                    }
+                    pstDep.setString(5, poOrder.getOrderNumber());
+                    pstDep.addBatch();
+
                 }
 
             }
@@ -122,7 +114,7 @@ public class DbUpdateDAO {
             pstLog.executeUpdate();
 
             pstOrder.executeBatch();
-            pstOrderTask.executeBatch();
+            pstDep.executeBatch();
             connection.commit();
 
         } catch (SQLException ex) {
