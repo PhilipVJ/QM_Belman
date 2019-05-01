@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.model;
 
+
 import javafx.scene.control.Alert.AlertType;
 
 public class ExceptionHandler {
@@ -22,6 +23,12 @@ public class ExceptionHandler {
                 break;
             case "ParseException":
                 handleParseException();
+                break;
+            case "IOException":
+                handleIOException();
+                break;
+            case "InterruptedException":
+                handleInterruptedException();
                 break;
             default:
                 handleUnknownError();
@@ -46,6 +53,9 @@ public class ExceptionHandler {
 
     private static void handleParseException() {
         Utility.createAlert(AlertType.ERROR,"Fejl","Fejl læsning af JSON fil", "Kontakt venligst support");
+    }
+    private static void handleInterruptedException() {
+        Utility.createAlert(AlertType.ERROR,"Fejl","System fejl", "Genstart venligst programmet og prøv igen");
     }
 
 }

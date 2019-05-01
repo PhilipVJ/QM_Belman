@@ -134,7 +134,7 @@ public class LoginController implements Initializable {
             //sets size of text
             Font font = new Font(22);
             newButton.setFont(font);
-            //sets prefered size of button = size of pictures
+            //sets prefered size of button to size of pictures
             newButton.setPrefHeight(203);
             newButton.setPrefWidth(206);
             newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonOFF.png);");
@@ -142,9 +142,9 @@ public class LoginController implements Initializable {
             newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
                 try {
                     model.setDepartment(depName);
-                    System.out.println(""+ depName);
-                } catch (IOException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                    
+                } catch (Exception ex) {
+                    ExceptionHandler.handleException(ex);
                 }
                 newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
                 //makes new thread for the timer
@@ -161,17 +161,17 @@ public class LoginController implements Initializable {
 
     public void timer() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
 
             Platform.runLater(() -> {
                 try {
                     openMainView();
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    ExceptionHandler.handleException(ex);
                 }
             });
-        } catch (InterruptedException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            ExceptionHandler.handleException(ex);
         }
 
     }
