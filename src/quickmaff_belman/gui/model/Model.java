@@ -29,7 +29,7 @@ public class Model {
     private Locale locale;
     private ResourceBundle rBundle;
     private String departmentName = "Halvfab";
-    private static final String PROP_FILE = "config.info";
+    private static final String PROP_FILE = "src/resources/config.properties";
     private Properties properties;
     private int timeOffset;
     
