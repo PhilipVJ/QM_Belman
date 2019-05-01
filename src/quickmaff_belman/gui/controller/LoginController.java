@@ -127,9 +127,8 @@ public class LoginController implements Initializable {
     }    
 
     public void loadButtons() throws IOException {
-        ArrayList<String> dNames = model.getDepartmentNames();
-        ObservableList<String> depNames = FXCollections.observableArrayList(dNames);
-
+        ArrayList<String> depNames = model.getDepartmentNames();
+        
         for (String depName : depNames) {
             Button newButton = new Button(depName);
             //sets size of text
@@ -141,7 +140,12 @@ public class LoginController implements Initializable {
             newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonOFF.png);");
             //adds mouse clicked event to the button
             newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
-
+                try {
+                    model.setDepartment(depName);
+                    System.out.println(""+ depName);
+                } catch (IOException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
                 //makes new thread for the timer
                 Thread t = new Thread(() -> {

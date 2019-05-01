@@ -30,8 +30,8 @@ public class Model {
     private ResourceBundle rBundle;
     private String departmentName = "Halvfab";
     private static final String PROP_FILE = "config.info";
-    private ObservableList<String> dep = FXCollections.observableArrayList();
     private Properties properties;
+    private int timeOffset;
     
     public Model(BLLManager bMan) throws FileNotFoundException, IOException {
         this.bMan = bMan;
@@ -46,11 +46,9 @@ public class Model {
     public int getTimeOffset(String departmentName) throws IOException{
        
             int timeOffset = Integer.parseInt(properties.getProperty(departmentName));
-
             return timeOffset;
-         
-
     }
+    
     public ArrayList<String> getDepartmentNames() throws FileNotFoundException, IOException {
        ArrayList<String> names = new ArrayList<>();
        
@@ -62,6 +60,12 @@ public class Model {
             
         }
         return names;
+    }
+    
+    public void setDepartment(String department) throws IOException{
+        this.departmentName = department;
+        this.timeOffset = getTimeOffset(departmentName);
+        
     }
 
     public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
