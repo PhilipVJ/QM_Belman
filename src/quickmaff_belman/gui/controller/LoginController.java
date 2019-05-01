@@ -5,11 +5,16 @@
  */
 package quickmaff_belman.gui.controller;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +39,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.activation.FileDataSource;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
@@ -59,6 +65,7 @@ public class LoginController implements Initializable {
     private FlowPane flowPane;
     
     
+    
 
     /**
      * Initializes the controller class.
@@ -73,6 +80,8 @@ public class LoginController implements Initializable {
         }
 
     }
+    
+   
 
     private void loadFile() throws FileNotFoundException, ParseException {
 
@@ -115,24 +124,11 @@ public class LoginController implements Initializable {
                 }
             }
         });
-    }
+    }    
 
-    public ObservableList<String> getDepartmentNames() {
-
-        dep.add("Department 1");
-        dep.add("Department 2");
-        dep.add("Department 3");
-        dep.add("Department 4");
-        dep.add("Department 5");
-        dep.add("Department 6");
-        dep.add("Department 7");
-
-        return dep;
-    }
-
-    public void loadGrid() {
-
-        ObservableList<String> depNames = getDepartmentNames();
+    public void loadButtons() throws IOException {
+        ArrayList<String> dNames = model.getDepartmentNames();
+        ObservableList<String> depNames = FXCollections.observableArrayList(dNames);
 
         for (String depName : depNames) {
             Button newButton = new Button(depName);
@@ -188,9 +184,10 @@ public class LoginController implements Initializable {
 
             Stage stage = (Stage) pane.getScene().getWindow();
             Scene scene = new Scene(root);
-
+            stage.setFullScreen(true);
             stage.setScene(scene);
             stage.show();
+            
             con.initView();
 
         } catch (IOException ex) {
@@ -202,5 +199,12 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    
+     
+
+//    private void loadFile() throws IOException
+//    {
+//        
+//    } 
 
 }
