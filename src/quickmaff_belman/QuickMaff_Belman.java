@@ -29,7 +29,7 @@ public class QuickMaff_Belman extends Application
         con.setStage(stage);
         
         
-        con.loadGrid();
+        con.loadButtons();
         Scene scene = new Scene(root);
 //        stage.setFullScreen(true);
         stage.setScene(scene);

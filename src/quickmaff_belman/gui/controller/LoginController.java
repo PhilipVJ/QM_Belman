@@ -126,7 +126,7 @@ public class LoginController implements Initializable {
         });
     }    
 
-    public void loadGrid() throws IOException {
+    public void loadButtons() throws IOException {
         ArrayList<String> dNames = model.getDepartmentNames();
         ObservableList<String> depNames = FXCollections.observableArrayList(dNames);
 
