@@ -28,14 +28,14 @@ public class QuickMaff_Belman extends Application
         LoginController con = loader.getController();
         con.setStage(stage);
         
-        Scene scene = new Scene(root);
+        
         con.loadGrid();
-
-    
+        Scene scene = new Scene(root);
+//        stage.setFullScreen(true);
         stage.setScene(scene);
-        stage.setWidth(1920);
-        stage.setHeight(1080);
-//stage.setFullScreen(true);
+//        stage.setWidth(1920);
+//        stage.setHeight(1080);
+        
         stage.show();
 //        
     con.initView(stage);

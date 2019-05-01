@@ -5,13 +5,20 @@
  */
 package quickmaff_belman.gui.model;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.bll.BLLManager;
@@ -22,14 +29,49 @@ public class Model {
     private Locale locale;
     private ResourceBundle rBundle;
     private String departmentName = "Halvfab";
-
-
-    public Model(BLLManager bMan) {
+    private static final String PROP_FILE = "config.info";
+    private ObservableList<String> dep = FXCollections.observableArrayList();
+    private Properties properties;
+    
+    public Model(BLLManager bMan) throws FileNotFoundException, IOException {
         this.bMan = bMan;
-       
+        properties = new Properties();
+        properties.load(new FileInputStream(PROP_FILE));
         // Setting the language to Danish by default
         locale = new Locale("da", "DK");
         rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
+    }
+    
+    
+
+
+//    private Model() throws IOException
+//    {
+//        Properties prop = new Properties();
+//        prop.load(new FileInputStream(PROP_FILE));
+//        
+//        
+//    }
+    
+    public int getTimeOffset(String departmentName) throws IOException{
+       
+            int timeOffset = Integer.parseInt(properties.getProperty(departmentName));
+
+            return timeOffset;
+         
+
+    }
+    public ArrayList<String> getDepartmentNames() throws FileNotFoundException, IOException {
+       ArrayList<String> names = new ArrayList<>();
+       
+            Set<Object> dnames = properties.keySet();
+            for (Object dname : dnames) {
+                String depName = (String)dname;
+                
+                names.add(depName);
+            
+        }
+        return names;
     }
 
     public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
