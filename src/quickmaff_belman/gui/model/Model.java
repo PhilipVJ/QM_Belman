@@ -43,16 +43,6 @@ public class Model {
     }
     
     
-
-
-//    private Model() throws IOException
-//    {
-//        Properties prop = new Properties();
-//        prop.load(new FileInputStream(PROP_FILE));
-//        
-//        
-//    }
-    
     public int getTimeOffset(String departmentName) throws IOException{
        
             int timeOffset = Integer.parseInt(properties.getProperty(departmentName));

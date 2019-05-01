@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -123,24 +124,11 @@ public class LoginController implements Initializable {
                 }
             }
         });
-    }
+    }    
 
-    public ObservableList<String> getDepartmentNames() {
-
-        dep.add("Department 1");
-        dep.add("Department 2");
-        dep.add("Department 3");
-        dep.add("Department 4");
-        dep.add("Department 5");
-        dep.add("Department 6");
-        dep.add("Department 7");
-
-        return dep;
-    }
-
-    public void loadGrid() {
-
-        ObservableList<String> depNames = getDepartmentNames();
+    public void loadGrid() throws IOException {
+        ArrayList<String> dNames = model.getDepartmentNames();
+        ObservableList<String> depNames = FXCollections.observableArrayList(dNames);
 
         for (String depName : depNames) {
             Button newButton = new Button(depName);
