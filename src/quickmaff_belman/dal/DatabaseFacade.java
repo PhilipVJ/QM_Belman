@@ -43,8 +43,8 @@ public class DatabaseFacade {
         uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders(), fileW);       
     }
 
-    public ArrayList<BoardTask> getAllBoardTasks(String departmentName) throws SQLException {
-       return oDAO.getAllBoardTasks(departmentName);
+    public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
+       return oDAO.getAllBoardTasks(departmentName, offset);
     }
     
     

@@ -31,8 +31,8 @@ public class BLLManager
         return dFacade.checkForDuplicateFile(filepath);
     }
 
-    public ArrayList<BoardTask> getAllBoardTasks(String departmentName) throws SQLException {
-        return dFacade.getAllBoardTasks(departmentName);
+    public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
+        return dFacade.getAllBoardTasks(departmentName, offset);
     }
            
     
