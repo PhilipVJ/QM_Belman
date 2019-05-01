@@ -68,7 +68,6 @@ public class BoardMaker implements Runnable {
                 Platform.runLater(() -> {
                     fPane.getChildren().clear();
                     fPane.getChildren().addAll(boxes);
-                    System.out.println("Updating tasks");
                 });
 
             } catch (SQLException ex) {
