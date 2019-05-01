@@ -26,12 +26,12 @@ public class OrderDAO {
 
     public ArrayList<BoardTask> getAllBoardTasks(String department, int offset) throws SQLServerException, SQLException {
         ArrayList<BoardTask> allTasks = new ArrayList<>();
-        String sql = "SELECT startDate,endDate,orderNumber from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate>=(?) order by endDate asc;";
+        String sql = "SELECT startDate,endDate,orderNumber from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate<=(?) order by endDate asc;";
 
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
             Calendar cal = Calendar.getInstance(Locale.ENGLISH);    
-            cal.set(2015, 2, 27);  // for testing
-            cal.add(Calendar.DAY_OF_YEAR, -offset);
+            System.out.println("Offset: "+offset);
+            cal.add(Calendar.DAY_OF_YEAR, +offset);
             System.out.println(""+cal.getTime());
             
             Date date = cal.getTime();
