@@ -182,8 +182,7 @@ public class LoginController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
             Parent root = loader.load();
             MainViewController con = loader.getController();
-            con.setModel(new Model(new BLLManager(new DatabaseFacade())));
-
+            con.setModel(model);
             con.setStage(stage);
 
             Stage stage = (Stage) pane.getScene().getWindow();
