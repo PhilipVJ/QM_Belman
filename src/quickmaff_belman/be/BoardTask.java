@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.be;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @author Philip
  */
 public class BoardTask {
-    
+
     private String orderNumber;
     private Date endDate;
     private Date startDate;
@@ -40,16 +41,22 @@ public class BoardTask {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-    
-    public Date getStartDate()
-    {
+
+    public Date getStartDate() {
         return startDate;
     }
-    
-    public boolean getReadyForWork()
-    {
+
+    public boolean getReadyForWork() {
         return readyForWork;
     }
-    
-    
+
+    public boolean passedEndDate() {
+        Date today = new Date();
+        if(today.after(endDate))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

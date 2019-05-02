@@ -31,7 +31,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -58,11 +58,11 @@ public class LoginController implements Initializable {
     private ImageView imgBackground;
     @FXML
     private AnchorPane pane;
-    
+
     private Model model;
     private Stage stage;
-    
-    
+
+
     /**
      * Initializes the controller class.
      */
@@ -75,7 +75,7 @@ public class LoginController implements Initializable {
         }
 
     }
-    
+
     private void loadFile() throws FileNotFoundException, ParseException {
 
         FileChooser fileChooser = new FileChooser();
@@ -117,11 +117,11 @@ public class LoginController implements Initializable {
                 }
             }
         });
-    }    
+    }
 
     public void loadButtons() throws IOException {
         ArrayList<String> depNames = model.getDepartmentNames();
-        
+
         for (String depName : depNames) {
             Button newButton = new Button();
             VBox vbox = new VBox();
@@ -139,7 +139,7 @@ public class LoginController implements Initializable {
             newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
                 try {
                     model.setDepartment(depName);
-                    
+
                 } catch (Exception ex) {
                     ExceptionHandler.handleException(ex);
                 }
@@ -189,7 +189,7 @@ public class LoginController implements Initializable {
             stage.setFullScreen(true);
             stage.setScene(scene);
             stage.show();
-            
+
             con.initView();
 
         } catch (IOException ex) {
@@ -201,7 +201,7 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+
     public void setGraphics()
     {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());

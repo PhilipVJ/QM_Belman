@@ -7,24 +7,18 @@ package quickmaff_belman.gui.controller;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
@@ -49,7 +43,7 @@ public class MainViewController implements Initializable {
     @FXML
     private FlowPane flowPane;
     private Stage stage;
-        private ExecutorService executor;
+    private ExecutorService executor;
 
     /**
      * Initializes the controller class.
@@ -88,14 +82,13 @@ public class MainViewController implements Initializable {
         setAllText();
         loadBoard();
     }
-    
 
     public void loadBoard() throws SQLException {
- 
+
         executor = Executors.newSingleThreadExecutor();
         BoardMaker bMaker = new BoardMaker(flowPane, model);
         executor.submit(bMaker);
-    
+
     }
 
     private void setAllText() {
