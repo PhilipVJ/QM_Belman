@@ -5,22 +5,16 @@
  */
 package quickmaff_belman.gui.controller;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,20 +23,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javax.activation.FileDataSource;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
@@ -58,24 +51,23 @@ import quickmaff_belman.gui.model.Utility;
 public class LoginController implements Initializable {
 
     @FXML
-    private AnchorPane pane;
-    private Model model;
-    private GridPane gridPane;
-    private ObservableList<String> dep = FXCollections.observableArrayList();
-    private int counter = 0;
-    private Stage stage;
+    private ImageView imgBelmanLogo;
     @FXML
     private FlowPane flowPane;
+    @FXML
+    private ImageView imgBackground;
+    @FXML
+    private AnchorPane pane;
+    
+    private Model model;
+    private Stage stage;
     
     
-    
-
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        buttonGenerator();
         try {
             model = new Model(new BLLManager(new DatabaseFacade()));
         } catch (IOException ex) {
@@ -84,8 +76,6 @@ public class LoginController implements Initializable {
 
     }
     
-   
-
     private void loadFile() throws FileNotFoundException, ParseException {
 
         FileChooser fileChooser = new FileChooser();
@@ -212,11 +202,10 @@ public class LoginController implements Initializable {
         this.stage = stage;
     }
     
-     
-
-//    private void loadFile() throws IOException
-//    {
-//        
-//    } 
+    public void setGraphics()
+    {
+        imgBackground.fitHeightProperty().bind(stage.heightProperty());
+        imgBackground.fitWidthProperty().bind(stage.widthProperty());
+    }
 
 }

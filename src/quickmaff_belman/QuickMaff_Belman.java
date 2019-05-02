@@ -37,6 +37,7 @@ public class QuickMaff_Belman extends Application
 //        stage.setHeight(1080);
         
         stage.show();
+        con.setGraphics();
 //        
     con.initView(stage);
     }
