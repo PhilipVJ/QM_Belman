@@ -10,10 +10,10 @@
    <children>
       <ImageView fitHeight="1080.0" fitWidth="1920.0">
          <image>
-            <Image url="@images/BelmanAppBg.jpg" />
+            <Image url="@images/BelmanBG.png" />
          </image>
       </ImageView>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0">
+      <BorderPane layoutX="420.0" layoutY="279.0" prefHeight="711.0" prefWidth="1110.0" AnchorPane.rightAnchor="408.0" AnchorPane.topAnchor="300.0">
          <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -22,7 +22,7 @@
             </AnchorPane>
          </center>
       </BorderPane>
-      <ImageView fitHeight="157.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="860.0" AnchorPane.rightAnchor="860.0" AnchorPane.topAnchor="70.0">
+      <ImageView fitHeight="193.0" fitWidth="240.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="817.0" AnchorPane.leftAnchor="840.0" AnchorPane.rightAnchor="840.0" AnchorPane.topAnchor="70.0">
          <image>
             <Image url="@images/belman_logo.png" />
          </image>

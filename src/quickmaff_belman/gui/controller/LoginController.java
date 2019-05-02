@@ -28,6 +28,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -36,7 +37,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.activation.FileDataSource;
@@ -130,14 +133,18 @@ public class LoginController implements Initializable {
         ArrayList<String> depNames = model.getDepartmentNames();
         
         for (String depName : depNames) {
-            Button newButton = new Button(depName);
-            //sets size of text
-            Font font = new Font(22);
-            newButton.setFont(font);
+            Button newButton = new Button();
+            VBox vbox = new VBox();
+            //sets size of text and position
+            Label lbl = new Label();
+            lbl.setText(""+ depName);
+            lbl.setTranslateX(10);
+            lbl.setTranslateY(-267);
+            lbl.setFont(new Font("Arial",24));
             //sets prefered size of button to size of pictures
-            newButton.setPrefHeight(203);
-            newButton.setPrefWidth(206);
-            newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonOFF.png);");
+            newButton.setPrefHeight(300);
+            newButton.setPrefWidth(191);
+            newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2Off.png);");
             //adds mouse clicked event to the button
             newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
                 try {
@@ -146,15 +153,17 @@ public class LoginController implements Initializable {
                 } catch (Exception ex) {
                     ExceptionHandler.handleException(ex);
                 }
-                newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/ButtonON.png);");
+                newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2On.png);");
                 //makes new thread for the timer
                 Thread t = new Thread(() -> {
                     timer();
                 });
                 t.start();
             });
-
-            flowPane.getChildren().addAll(newButton);
+            vbox.getChildren().addAll(newButton,lbl);
+            flowPane.getChildren().addAll(vbox);
+            flowPane.setHgap(38);
+            flowPane.setVgap(-5);
 
         }
     }
