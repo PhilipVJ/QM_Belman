@@ -16,11 +16,13 @@ public class BoardTask {
     private String orderNumber;
     private Date endDate;
     private Date startDate;
+    private boolean readyForWork;
 
-    public BoardTask(String orderNumber, Date endDate, Date startDate) {
+    public BoardTask(String orderNumber, Date endDate, Date startDate, boolean readyForWork) {
         this.orderNumber = orderNumber;
         this.endDate = endDate;
         this.startDate = startDate;
+        this.readyForWork = readyForWork;
     }
 
     public String getOrderNumber() {
@@ -44,6 +46,10 @@ public class BoardTask {
         return startDate;
     }
     
+    public boolean getReadyForWork()
+    {
+        return readyForWork;
+    }
     
     
 }

@@ -46,24 +46,28 @@ public class BoardMaker implements Runnable {
                 ArrayList<HBox> boxes = new ArrayList<>();
                 Date today = new Date();
 
-                Image daImage = new Image("/quickmaff_belman/gui/view/images/postit.png");
+                Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit.png");
                 Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
+                Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
                 ImageView view = null;
 
                 for (BoardTask bTask : boardTasks) {
 
                     StackPane sPane = new StackPane();
-                    // check if start day is after or the same as the current day
-                    SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
-                    String thisDay = fmt.format(today);
-                    String startDay = fmt.format(bTask.getStartDate());
                     
                     // Makes the post it blue if the start day is sooner than the current day
                     if (bTask.getStartDate().after(today)) {
                         view = new ImageView(bluePostIt);
-                    // else make them a normal postit
-                    } else {
-                        view = new ImageView(daImage);
+                   
+                    // If they are ready to start working on they will be made green                  
+                    } else if(bTask.getReadyForWork()==true){
+                        view = new ImageView(greenPostIt);
+                    }
+                    // If the tasks start date is larger than today, but isn't ready to start work on yet
+                    // it will become a yellow post
+                    else
+                    {
+                        view = new ImageView(gulPostIt);
                     }
 
                     Label orderNumber = new Label(bTask.getOrderNumber());

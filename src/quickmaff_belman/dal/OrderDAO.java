@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.TaskStatus;
 
 public class OrderDAO {
 
@@ -29,15 +30,15 @@ public class OrderDAO {
         String sql = "SELECT startDate,endDate,orderNumber from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate<=(?) order by endDate asc;";
 
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
-            Calendar cal = Calendar.getInstance(Locale.ENGLISH);    
-            System.out.println("Offset: "+offset);
+            Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+            System.out.println("Offset: " + offset);
             cal.add(Calendar.DAY_OF_YEAR, +offset);
-            System.out.println(""+cal.getTime());
-            
+            System.out.println("" + cal.getTime());
+
             Date date = cal.getTime();
-            
+
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-           
+
             pst.setString(1, department);
             pst.setDate(2, sqlDate);
             ResultSet rs = pst.executeQuery();
@@ -45,12 +46,46 @@ public class OrderDAO {
                 String orderNumber = rs.getString("orderNumber");
                 Date endDate = rs.getDate("endDate");
                 Date startDate = rs.getDate("startDate");
-                BoardTask bTask = new BoardTask(orderNumber, endDate,startDate);
+                boolean readyForWork = checkIfReadyForWork(orderNumber, department);
+                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, readyForWork);
+                System.out.println("READY? = "+readyForWork);
                 allTasks.add(bTask);
             }
-            System.out.println("Size"+allTasks.size());
+            System.out.println("Size" + allTasks.size());
             return allTasks;
         }
+    }
+
+    public boolean checkIfReadyForWork(String orderNumber, String departmentName) throws SQLServerException, SQLException {
+        boolean readyForWork = true;
+        ArrayList<TaskStatus> allTasks = new ArrayList<>();
+        String sql = "select * from departmenttask where orderNumber=(?) order by startDate asc";
+        try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
+            pst.setString(1, orderNumber);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String dName = rs.getString("departmentName");
+                boolean done = rs.getBoolean("finishedOrder");
+                TaskStatus tStatus = new TaskStatus(dName, done);
+                allTasks.add(tStatus);
+            }
+
+        }
+        int indexOfDepartment = 0; // may change
+        for (int i = 0; i < allTasks.size(); i++) {
+            if (allTasks.get(i).getDepartmentName().equals(departmentName)) {
+                indexOfDepartment = i;
+            }
+        }
+        // check if all prior in the list has marked hasn't marked their task as done
+
+        for (int i = 0; i < indexOfDepartment; i++) {
+            if(allTasks.get(i).getIsFinished()==false)
+            {
+                readyForWork=false;
+            }
+        }
+        return readyForWork;
     }
 
 }
