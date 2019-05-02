@@ -60,5 +60,10 @@
             </Label>
          </children>
       </StackPane>
+      <StackPane layoutX="76.0" layoutY="67.0" prefHeight="414.0" prefWidth="211.0" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="614.0">
+         <children>
+            <ImageView fx:id="iView" fitHeight="435.0" fitWidth="207.0" StackPane.alignment="TOP_CENTER" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

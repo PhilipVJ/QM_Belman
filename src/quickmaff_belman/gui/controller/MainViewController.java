@@ -5,19 +5,26 @@
  */
 package quickmaff_belman.gui.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.Language;
@@ -44,6 +51,9 @@ public class MainViewController implements Initializable {
     private FlowPane flowPane;
     private Stage stage;
     private ExecutorService executor;
+    @FXML
+    private ImageView iView;
+
 
     /**
      * Initializes the controller class.
@@ -86,7 +96,7 @@ public class MainViewController implements Initializable {
     public void loadBoard() throws SQLException {
 
         executor = Executors.newSingleThreadExecutor();
-        BoardMaker bMaker = new BoardMaker(flowPane, model);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
         executor.submit(bMaker);
 
     }
@@ -116,7 +126,7 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-
+                
         flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
 
     }
