@@ -68,7 +68,7 @@ public class BoardMaker implements Runnable {
 
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
-                    Label endDate = new Label("\n\n" + bTask.getEndDate());
+                    Label endDate = new Label("\n\n" + bTask.getEndDate());                    
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
 
