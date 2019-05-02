@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -128,9 +129,11 @@ public class LoginController implements Initializable {
             //sets size of text and position
             Label lbl = new Label();
             lbl.setText(""+ depName);
+            lbl.setMinWidth(173);
             lbl.setTranslateX(10);
             lbl.setTranslateY(-267);
             lbl.setFont(new Font("Arial",24));
+            lbl.setAlignment(Pos.CENTER);
             //sets prefered size of button to size of pictures
             newButton.setPrefHeight(300);
             newButton.setPrefWidth(191);
