@@ -6,10 +6,13 @@
 package quickmaff_belman;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import quickmaff_belman.gui.controller.LoginController;
 
 /**
@@ -33,8 +36,15 @@ public class QuickMaff_Belman extends Application
         Scene scene = new Scene(root);
 //        stage.setFullScreen(true);
         stage.setScene(scene);
-//        stage.setWidth(1920);
-//        stage.setHeight(1080);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent> () {
+            @Override
+            public void handle(WindowEvent event) {
+               Platform.exit();
+               System.exit(0);
+            }
+        });{
+        
+    }
         
         stage.show();
 //        
