@@ -19,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
 
@@ -44,35 +46,19 @@ public class BoardMaker implements Runnable {
             try {
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
-                Date today = new Date();
 
-                Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit.png");
-                Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
-                Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
                 ImageView view = null;
 
                 for (BoardTask bTask : boardTasks) {
 
                     StackPane sPane = new StackPane();
-                    
-                    // Makes the post it blue if the start day is sooner than the current day
-                    if (bTask.getStartDate().after(today)) {
-                        view = new ImageView(bluePostIt);
-                   
-                    // If they are ready to start working on they will be made green                  
-                    } else if(bTask.getReadyForWork()==true){
-                        view = new ImageView(greenPostIt);
-                    }
-                    // If the tasks start date is larger than today, but isn't ready to start work on yet
-                    // it will become a yellow post
-                    else
-                    {
-                        view = new ImageView(gulPostIt);
-                    }
+
+                    view = getPostItColour(bTask);
 
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
-                    Label endDate = new Label("\n\n" + bTask.getEndDate());                    
+                    Label endDate = new Label("\n\n" + bTask.getEndDate());
+   
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
 
@@ -81,6 +67,16 @@ public class BoardMaker implements Runnable {
                     });
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);
+                    if(bTask.passedEndDate()==true)
+{
+    System.out.println("Circle maker for: "+bTask.getOrderNumber());
+    Circle warning = new Circle(50);
+    warning.setStroke(Color.RED);
+    warning.setFill(Color.TRANSPARENT);
+    warning.setStrokeWidth(2);
+    warning.setTranslateY(10);
+    sPane.getChildren().add(warning);
+}
                     HBox box = new HBox(sPane);
                     box.setAlignment(Pos.CENTER);
                     boxes.add(box);
@@ -101,5 +97,33 @@ public class BoardMaker implements Runnable {
             }
 
         }
+    }
+
+    private ImageView getPostItColour(BoardTask bTask) {
+        Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit.png");
+        Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
+        Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
+        Image redPostIt = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+    
+
+        Date today = new Date();
+        ImageView view = new ImageView();
+        // Makes the post it blue if the start day is sooner than the current day
+        if (bTask.getStartDate().after(today)) {
+            view.setImage(bluePostIt);
+            return view;
+        }
+        
+        
+        // If they are ready to start working on they will be made green                  
+        if (bTask.getReadyForWork() == true) {
+            view.setImage(greenPostIt);
+        } // If the tasks start date is sooner than today, but isn't ready to start work on yet
+        // it will become a yellow post
+        else {
+            view.setImage(gulPostIt);
+        }
+
+        return view;
     }
 }
