@@ -19,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.BoardMaker;
@@ -35,22 +34,24 @@ import quickmaff_belman.gui.model.Model;
 public class MainViewController implements Initializable {
 
     @FXML
-    private ImageView languageSwitch;
-    private Model model;
-    @FXML
-    private Label department;
-    @FXML
-    private BorderPane borderPane;
-    @FXML
-    private ImageView Filter;
-
-    @FXML
-    private FlowPane flowPane;
-    private Stage stage;
-    private ExecutorService executor;
+    private ImageView imgBelmanLogo;
     @FXML
     private ImageView iView;
-
+    @FXML
+    private ImageView imgBackground;
+    @FXML
+    private Label lblDepartment;
+    @FXML
+    private ImageView languageSwitch;
+    @FXML
+    private FlowPane flowPane;
+    @FXML
+    private ImageView filter;
+    
+    private Model model;
+    private Stage stage;
+    private ExecutorService executor;
+    
 
     /**
      * Initializes the controller class.
@@ -70,11 +71,11 @@ public class MainViewController implements Initializable {
         Language language = model.changeLanguage();
         switch (language) {
             case DANISH:
-                Image daImage = new Image("/quickmaff_belman/gui/view/images/toggle.png");
+                Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
                 break;
             case ENGLISH:
-                Image engImage = new Image("/quickmaff_belman/gui/view/images/toggle2.png");
+                Image engImage = new Image("/quickmaff_belman/gui/view/images/knapSprogENG.png");
                 languageSwitch.setImage(engImage);
                 break;
 
@@ -85,6 +86,7 @@ public class MainViewController implements Initializable {
     public void initView() throws SQLException, IOException, InterruptedException {
         setGraphics();
         setAllText();
+        stage.setFullScreen(true);
         // Setting up the board
         BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
         executor.submit(bMaker);
@@ -95,7 +97,7 @@ public class MainViewController implements Initializable {
 
 
     private void setAllText() {
-        department.setText(model.getDepartmentName());
+        lblDepartment.setText(model.getDepartmentName());
     }
 
     @FXML
@@ -104,12 +106,12 @@ public class MainViewController implements Initializable {
 
         switch (language) {
             case DANISH:
-                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
-                Filter.setImage(buttonImage);
+                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
+                filter.setImage(buttonImage);
                 break;
             case ENGLISH:
-                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
-                Filter.setImage(pressImage);
+                Image pressImage = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
+                filter.setImage(pressImage);
                 break;
         }
     }
@@ -119,9 +121,18 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-                
-        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
+        
+        imgBelmanLogo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
+        imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
+        imgBackground.fitHeightProperty().bind(stage.heightProperty());
+        imgBackground.fitWidthProperty().bind(stage.widthProperty());
+        lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
+        lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
+        filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
+        filter.translateYProperty().bind(stage.heightProperty().multiply(-0.008));
+        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
+        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
 
     }
-
+    
 }
