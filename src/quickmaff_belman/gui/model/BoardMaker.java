@@ -14,9 +14,11 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -34,14 +36,18 @@ public class BoardMaker implements Runnable {
     private FlowPane fPane;
     private Model model;
     private ImageView iView;
+    private AnchorPane aPane;
+    private AnchorPane bPane;
     
 
 //    private BoardTask boTask;
 
-    public BoardMaker(FlowPane fPane, Model model, ImageView iView) {
+    public BoardMaker(FlowPane fPane, Model model, ImageView iView, AnchorPane aPane, AnchorPane bPane) {
         this.fPane = fPane;
         this.model = model;
         this.iView = iView;
+        this.aPane = aPane;
+        this.bPane = bPane;
     }
 
     @Override
@@ -69,6 +75,14 @@ public class BoardMaker implements Runnable {
                     view.setFitWidth(160);
                     
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+                        
+                        BoxBlur blur = new BoxBlur();
+                        blur.setWidth(25);
+                        blur.setHeight(25);
+                         
+                        aPane.setEffect(blur);
+                        bPane.toFront();
+                        
                         Image gul = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
                         Image blue = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
                         Image green = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
@@ -83,24 +97,14 @@ public class BoardMaker implements Runnable {
                             if (bTask.getReadyForWork() == true) {
                                 iView.setImage(green);
                             }
-                            if(bTask.getEndDate().after(bTask.getEndDate()))
+                            if(bTask.getEndDate().before(today))
                                 iView.setImage(red);
                             
                             else {
                                 iView.setImage(gul);
                             }       
-                //                        
 
-                       
-                        DropShadow ds = new DropShadow();
-                        ds.setBlurType(BlurType.GAUSSIAN);
-                        
-//                        sPane.getChildren().addAll(ds);
-//                        fPane.blendModeProperty().setValue(BlendMode.ADD);
-                        
-//                            
-                            System.out.println("Opening task from order:" + orderNumber);
-//                        
+                            System.out.println("Opening task from order:" + orderNumber);                     
                     });
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);

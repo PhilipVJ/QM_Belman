@@ -33,8 +33,6 @@ import quickmaff_belman.gui.model.Model;
 public class MainViewController implements Initializable {
 
     @FXML
-    private AnchorPane anchorPaneAll;
-    @FXML
     private ImageView imgBelmanLogo;
     @FXML
     private ImageView iView;
@@ -52,6 +50,10 @@ public class MainViewController implements Initializable {
     private Model model;
     private Stage stage;
     private ExecutorService executor;
+    @FXML
+    private AnchorPane bPane;
+    @FXML
+    private AnchorPane aPane;
 
     /**
      * Initializes the controller class.
@@ -86,10 +88,11 @@ public class MainViewController implements Initializable {
 
     public void initView() throws SQLException, IOException, InterruptedException {
         setGraphics();
+        setPostItView();
         setAllText();
         stage.setFullScreen(true);
         // Setting up the board
-        BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, iView, aPane, bPane);
         executor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
         FolderWatcher fWatcher = new FolderWatcher(model);
@@ -132,6 +135,10 @@ public class MainViewController implements Initializable {
         filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
         languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
         languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
+    }
+    private void setPostItView(){
+    bPane.toBack();
+    
     }
 
 }
