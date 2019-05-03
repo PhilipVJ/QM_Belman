@@ -121,7 +121,7 @@ public class LoginController implements Initializable {
 
     public void openMainView() throws SQLException, InterruptedException {
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
