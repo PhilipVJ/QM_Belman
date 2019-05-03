@@ -5,14 +5,19 @@
  */
 package quickmaff_belman.gui.controller;
 
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -35,7 +40,7 @@ import quickmaff_belman.gui.model.Model;
 public class MainViewController implements Initializable {
 
     @FXML
-    private ImageView iView; 
+    private ImageView iView;
     @FXML
     private ImageView imgBackground;
     @FXML
@@ -49,11 +54,13 @@ public class MainViewController implements Initializable {
     @FXML
     private ImageView Filter;
     private Model model;
-    
+
     private Stage stage;
     private ExecutorService executor;
-    
-
+    @FXML
+    private ImageView iView;
+    @FXML
+    private Label infoBar;
 
     /**
      * Initializes the controller class.
@@ -61,6 +68,7 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         executor = Executors.newFixedThreadPool(2);
+        startLabelResetter();
     }
 
     public void setModel(Model model) {
@@ -86,7 +94,7 @@ public class MainViewController implements Initializable {
     }
 
     public void initView() throws SQLException, IOException, InterruptedException {
-        
+
         setGraphics();
         setAllText();
         stage.setFullScreen(true);
@@ -94,13 +102,12 @@ public class MainViewController implements Initializable {
         BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
         executor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
-        FolderWatcher fWatcher = new FolderWatcher(model);
+        FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
         executor.submit(fWatcher);
     }
 
-
     private void setAllText() {
-        department.setText(model.getResourceBundle().getString("department"));
+        department.setText(model.getDepartmentName());
     }
 
     @FXML
@@ -124,7 +131,7 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-        
+
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.02));
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
@@ -134,6 +141,26 @@ public class MainViewController implements Initializable {
         Filter.translateYProperty().bind(stage.heightProperty().multiply(-0.01));
         languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.4));
         languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(-0.01));
+
+    }
+
+    private void startLabelResetter() {
+        infoBar.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+                Runnable resetter = new Runnable() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            infoBar.setText("");
+                        });
+                    }
+                };
+              executor.schedule(resetter, 5000, TimeUnit.MILLISECONDS);
+            }
+
+        });
 
     }
 

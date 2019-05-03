@@ -10,6 +10,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -121,8 +124,11 @@ public class LoginController implements Initializable {
 
     public void openMainView() throws SQLException, InterruptedException {
 
-        Thread.sleep(1000);
-        Platform.runLater(() -> {
+       ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+       Runnable openView = new Runnable() {
+           @Override
+           public void run() {
+               Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
                 Parent root = loader.load();
@@ -140,9 +146,13 @@ public class LoginController implements Initializable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            });
+        });
+           }
+       };
+       executor.schedule(openView, 2000, TimeUnit.MILLISECONDS);
 
-        }
+
+    }
 
     public void setGraphics() {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
