@@ -5,6 +5,8 @@
  */
 package quickmaff_belman.gui.controller;
 
+
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -46,6 +48,9 @@ public class MainViewController implements Initializable {
     private FlowPane flowPane;
     private Stage stage;
     private ExecutorService executor;
+    @FXML
+    private ImageView iView;
+
 
     /**
      * Initializes the controller class.
@@ -80,13 +85,14 @@ public class MainViewController implements Initializable {
     public void initView() throws SQLException, IOException, InterruptedException {
         setGraphics();
         setAllText();
-        // Load the board
-        BoardMaker bMaker = new BoardMaker(flowPane, model);
+
+        executor = Executors.newSingleThreadExecutor();
+        BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
+        System.out.println("setting up threads");
         executor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
         FolderWatcher fWatcher = new FolderWatcher(model);
         executor.submit(fWatcher);
-        
     }
 
 
@@ -115,7 +121,7 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-
+                
         flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
 
     }

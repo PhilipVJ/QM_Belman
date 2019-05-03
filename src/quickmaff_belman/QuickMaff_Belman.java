@@ -33,7 +33,7 @@ public class QuickMaff_Belman extends Application
 
         con.loadButtons();
         Scene scene = new Scene(root);
-//        stage.setFullScreen(true);
+        stage.setFullScreen(true);
         stage.setScene(scene);
         stage.setOnCloseRequest(new EventHandler<WindowEvent> () {
             @Override

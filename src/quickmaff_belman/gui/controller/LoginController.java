@@ -5,8 +5,6 @@
  */
 package quickmaff_belman.gui.controller;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,26 +19,19 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.json.simple.parser.ParseException;
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Model;
-import quickmaff_belman.gui.model.Utility;
 
 /**
  * FXML Controller class
@@ -50,13 +41,15 @@ import quickmaff_belman.gui.model.Utility;
 public class LoginController implements Initializable {
 
     @FXML
-    private ImageView imgBelmanLogo;
-    @FXML
-    private FlowPane flowPane;
+    private AnchorPane anPane;
     @FXML
     private ImageView imgBackground;
     @FXML
-    private AnchorPane pane;
+    private VBox vebox;
+    @FXML
+    private ImageView imgBelmanLogo;
+    @FXML
+    private FlowPane flowPane;
 
     private Model model;
     private Stage stage;
@@ -97,16 +90,16 @@ public class LoginController implements Initializable {
             newButton.setPrefWidth(191);
             newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2Off.png);");
             //adds mouse clicked event to the button
-            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
+            newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
+                    -> {
                 try {
                     model.setDepartment(depName);
-
                 } catch (Exception ex) {
                     ExceptionHandler.handleException(ex);
                 }
                 newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2On.png);");
-                //makes new thread for the timer
                 Thread t = new Thread(() -> {
+
                     try {
                         openMainView();
                     } catch (SQLException ex) {
@@ -116,6 +109,7 @@ public class LoginController implements Initializable {
                     }
                 });
                 t.start();
+
             });
             vbox.getChildren().addAll(newButton, lbl);
             flowPane.getChildren().addAll(vbox);
@@ -125,12 +119,9 @@ public class LoginController implements Initializable {
         }
     }
 
-
-
     public void openMainView() throws SQLException, InterruptedException {
 
-        Thread.sleep(500);
-
+        Thread.sleep(2000);
         Platform.runLater(() -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
@@ -149,10 +140,9 @@ public class LoginController implements Initializable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
+            });
 
-        });
-
-    }
+        }
 
     public void setGraphics() {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());

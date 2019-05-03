@@ -6,7 +6,6 @@
 package quickmaff_belman.gui.model;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -14,6 +13,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -32,10 +33,15 @@ public class BoardMaker implements Runnable {
 
     private FlowPane fPane;
     private Model model;
+    private ImageView iView;
+    
 
-    public BoardMaker(FlowPane fPane, Model model) {
+//    private BoardTask boTask;
+
+    public BoardMaker(FlowPane fPane, Model model, ImageView iView) {
         this.fPane = fPane;
         this.model = model;
+        this.iView = iView;
     }
 
     @Override
@@ -46,7 +52,7 @@ public class BoardMaker implements Runnable {
             try {
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
-
+                iView.setVisible(false);
                 ImageView view = null;
 
                 for (BoardTask bTask : boardTasks) {
@@ -61,9 +67,40 @@ public class BoardMaker implements Runnable {
    
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
-
+                    
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                        System.out.println("Opening task from order:" + orderNumber);
+                        Image gul = new Image("/quickmaff_belman/gui/view/images/postit.png");
+                        Image blue = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
+                        Image green = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
+                        Image red = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+                        Date today = new Date();
+                        iView.setVisible(true);
+
+                         if (bTask.getStartDate().after(today)) {
+                                iView.setImage(blue);                               
+                            }
+
+                            if (bTask.getReadyForWork() == true) {
+                                iView.setImage(green);
+                            }
+                            if(bTask.getEndDate().after(bTask.getEndDate()))
+                                iView.setImage(red);
+                            
+                            else {
+                                iView.setImage(gul);
+                            }       
+                //                        
+
+                       
+                        DropShadow ds = new DropShadow();
+                        ds.setBlurType(BlurType.GAUSSIAN);
+                        
+//                        sPane.getChildren().addAll(ds);
+//                        fPane.blendModeProperty().setValue(BlendMode.ADD);
+                        
+//                            
+                            System.out.println("Opening task from order:" + orderNumber);
+//                        
                     });
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);
@@ -98,7 +135,7 @@ public class BoardMaker implements Runnable {
         }
     }
 
-    private ImageView getPostItColour(BoardTask bTask) {
+    private final ImageView getPostItColour(BoardTask bTask) {
         Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit.png");
         Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
         Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
@@ -124,5 +161,11 @@ public class BoardMaker implements Runnable {
         }
 
         return view;
+    }    
+    
+    public void postItView(BoardTask bTask){
+        
+    
     }
+    
 }
