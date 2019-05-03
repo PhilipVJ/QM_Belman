@@ -85,10 +85,8 @@ public class MainViewController implements Initializable {
     public void initView() throws SQLException, IOException, InterruptedException {
         setGraphics();
         setAllText();
-
-        executor = Executors.newSingleThreadExecutor();
+        // Setting up the board
         BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
-        System.out.println("setting up threads");
         executor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
         FolderWatcher fWatcher = new FolderWatcher(model);
