@@ -35,24 +35,21 @@ import quickmaff_belman.gui.model.Model;
 public class MainViewController implements Initializable {
 
     @FXML
-    private ImageView iView; 
-    @FXML
-    private ImageView imgBackground;
+    private ImageView languageSwitch;
+    private Model model;
     @FXML
     private Label department;
     @FXML
-    private ImageView imgBelmanLogo;
-    @FXML
-    private ImageView languageSwitch;
-    @FXML
-    private FlowPane flowPane;
+    private BorderPane borderPane;
     @FXML
     private ImageView Filter;
-    private Model model;
-    
+
+    @FXML
+    private FlowPane flowPane;
     private Stage stage;
     private ExecutorService executor;
-    
+    @FXML
+    private ImageView iView;
 
 
     /**
@@ -73,11 +70,11 @@ public class MainViewController implements Initializable {
         Language language = model.changeLanguage();
         switch (language) {
             case DANISH:
-                Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
+                Image daImage = new Image("/quickmaff_belman/gui/view/images/toggle.png");
                 languageSwitch.setImage(daImage);
                 break;
             case ENGLISH:
-                Image engImage = new Image("/quickmaff_belman/gui/view/images/knapSprogENG.png");
+                Image engImage = new Image("/quickmaff_belman/gui/view/images/toggle2.png");
                 languageSwitch.setImage(engImage);
                 break;
 
@@ -86,10 +83,8 @@ public class MainViewController implements Initializable {
     }
 
     public void initView() throws SQLException, IOException, InterruptedException {
-        
         setGraphics();
         setAllText();
-        stage.setFullScreen(true);
         // Setting up the board
         BoardMaker bMaker = new BoardMaker(flowPane, model, iView);
         executor.submit(bMaker);
@@ -109,11 +104,11 @@ public class MainViewController implements Initializable {
 
         switch (language) {
             case DANISH:
-                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
+                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap.png");
                 Filter.setImage(buttonImage);
                 break;
             case ENGLISH:
-                Image pressImage = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
+                Image pressImage = new Image("/quickmaff_belman/gui/view/images/FiltrerKnap-tryk.png");
                 Filter.setImage(pressImage);
                 break;
         }
@@ -124,16 +119,8 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-        
-        imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.02));
-        imgBackground.fitHeightProperty().bind(stage.heightProperty());
-        imgBackground.fitWidthProperty().bind(stage.widthProperty());
-        department.translateXProperty().bind(stage.widthProperty().multiply(-0.3));
-        department.translateYProperty().bind(stage.heightProperty().multiply(-0.01));
-        Filter.translateXProperty().bind(stage.widthProperty().multiply(0.4));
-        Filter.translateYProperty().bind(stage.heightProperty().multiply(-0.01));
-        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.4));
-        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(-0.01));
+                
+        flowPane.prefWidthProperty().bind(stage.widthProperty().subtract(615));
 
     }
 

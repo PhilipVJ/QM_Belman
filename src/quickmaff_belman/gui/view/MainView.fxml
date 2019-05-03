@@ -1,60 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
    <children>
-      <ImageView fx:id="imgBackground" fitHeight="1080.0" fitWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fx:id="languageSwitch" fitHeight="33.0" fitWidth="60.0" layoutX="826.0" layoutY="14.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <image>
-            <Image url="@images/BelmanBG.png" />
+            <Image url="@images/toggle.png" />
          </image>
       </ImageView>
-      <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <AnchorPane prefHeight="212.0" prefWidth="1920.0">
+      <BorderPane fx:id="borderPane" layoutX="79.0" layoutY="115.0" prefHeight="422.0" prefWidth="696.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="150.0">
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </left>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: FFA435;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="imgBelmanLogo" fitHeight="219.0" fitWidth="330.0" layoutX="821.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/belman_logo.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="languageSwitch" fitHeight="125.0" fitWidth="125.0" layoutX="898.0" layoutY="26.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/knapSprogDK.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="department" alignment="TOP_LEFT" layoutX="705.0" layoutY="27.0" prefHeight="122.0" prefWidth="511.0">
-                     <font>
-                        <Font name="Arial" size="65.0" />
-                     </font>
-                  </Label>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-            </AnchorPane>
-            <ScrollPane prefHeight="546.0" prefWidth="1320.0" style="-fx-background-color: TRANSPARENT; -fx-background: FFA435;">
-               <content>
-                  <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="495.0" prefWidth="876.0" vgap="30.0" />
-               </content>
-               <VBox.margin>
-                  <Insets bottom="30.0" left="300.0" right="300.0" top="20.0" />
-               </VBox.margin>
-            </ScrollPane>
-            <ImageView fx:id="Filter" fitHeight="125.0" fitWidth="125.0" onMouseClicked="#filtering">
+                  <ScrollPane layoutX="35.0" prefHeight="416.0" prefWidth="294.0" style="-fx-background-color: TRANSPARENT; -fx-background: FFA435;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                     <content>
+                        <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="611.0" prefWidth="578.0" vgap="30.0" />
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="3.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <AnchorPane prefHeight="3.0" prefWidth="200.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+      <ImageView fx:id="Filter" fitHeight="212.0" fitWidth="197.0" layoutX="702.0" layoutY="585.0" onMouseClicked="#filtering">
+         <image>
+            <Image url="@images/FiltrerKnap.png" />
+         </image>
+      </ImageView>
+      <StackPane layoutX="114.0" prefHeight="102.0" prefWidth="414.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+         <children>
+            <ImageView fitHeight="120.0" fitWidth="501.0" StackPane.alignment="TOP_CENTER">
                <image>
-                  <Image url="@images/filterknap1.png" />
+                  <Image url="@images/Skilt.png" />
                </image>
             </ImageView>
+            <Label fx:id="department" alignment="TOP_CENTER" prefHeight="95.0" prefWidth="455.0" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="65.0" />
+               </font>
+            </Label>
          </children>
-      </VBox>
+      </StackPane>
+      <StackPane layoutX="76.0" layoutY="67.0" prefHeight="414.0" prefWidth="211.0" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="614.0">
+         <children>
+            <ImageView fx:id="iView" fitHeight="435.0" fitWidth="207.0" StackPane.alignment="TOP_CENTER" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>
