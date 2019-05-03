@@ -107,7 +107,7 @@ public class MainViewController implements Initializable {
     }
 
     private void setAllText() {
-        department.setText(model.getDepartmentName());
+        department.setText(model.getResourceBundle().getString("department"));
     }
 
     @FXML

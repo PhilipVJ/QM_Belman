@@ -105,14 +105,14 @@ public class BoardMaker implements Runnable {
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);
                     if(bTask.passedEndDate()==true)
-                    {
-                        Circle warning = new Circle(50);
-                        warning.setStroke(Color.RED);
-                        warning.setFill(Color.TRANSPARENT);
-                        warning.setStrokeWidth(2);
-                        warning.setTranslateY(10);
-                        sPane.getChildren().add(warning);
-                    }
+{
+    Circle warning = new Circle(50);
+    warning.setStroke(Color.RED);
+    warning.setFill(Color.TRANSPARENT);
+    warning.setStrokeWidth(2);
+    warning.setTranslateY(10);
+    sPane.getChildren().add(warning);
+}
                     HBox box = new HBox(sPane);
                     box.setAlignment(Pos.CENTER);
                     boxes.add(box);
