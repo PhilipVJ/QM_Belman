@@ -31,12 +31,8 @@ public class OrderDAO {
 
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
             Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-            System.out.println("Offset: " + offset);
             cal.add(Calendar.DAY_OF_YEAR, +offset);
-            System.out.println("" + cal.getTime());
-
             Date date = cal.getTime();
-
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
             pst.setString(1, department);
@@ -48,10 +44,8 @@ public class OrderDAO {
                 Date startDate = rs.getDate("startDate");
                 boolean readyForWork = checkIfReadyForWork(orderNumber, department);
                 BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, readyForWork);
-                System.out.println("READY? = "+readyForWork);
                 allTasks.add(bTask);
             }
-            System.out.println("Size" + allTasks.size());
             return allTasks;
         }
     }

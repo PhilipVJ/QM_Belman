@@ -5,15 +5,12 @@
  */
 package quickmaff_belman.dal;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
-import quickmaff_belman.bll.BLLManager;
-import quickmaff_belman.gui.model.Model;
+import quickmaff_belman.be.FileWrapper;
 
 /**
  *
@@ -24,25 +21,10 @@ public class TesterClass {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException, SQLException 
+    public static void main(String[] args) throws IOException, FileNotFoundException, ParseException, SQLException, InterruptedException 
     {
-        
-        Model model = new Model(new BLLManager(new DatabaseFacade()));
-        
-        ArrayList<String> depName = model.getDepartmentNames();
-        for (String object : depName) {
-            System.out.println(""+ object);
-            int offset = model.getTimeOffset(object);
-            System.out.println(""+ offset);
-            
-        }
-        
-        
-        
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//        int height = screenSize.height;
-//        int width = screenSize.width;
-//        System.out.println(width + ", " + height);
+        FileWrapper fWrap = new FileWrapper(new File("JSON.txt"));
+        System.out.println(""+fWrap.hashCode());
 
     }
     

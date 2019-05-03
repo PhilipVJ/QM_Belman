@@ -22,12 +22,18 @@ import quickmaff_belman.be.Worker;
 
 public class FileDAO {
 
-    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
+    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException {
         
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
-        Object obj = new JSONParser().parse(new FileReader(filepath));
+        Object obj=null;
+        try {
+            obj = new JSONParser().parse(new FileReader(filepath));
+        } catch (ParseException ex) {
+    
+            System.out.println("Kan ikke læses - er ikke en JSON fil");
+        }
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");

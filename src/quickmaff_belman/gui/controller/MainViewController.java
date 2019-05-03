@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.BoardMaker;
+import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 
@@ -50,7 +52,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        executor = Executors.newFixedThreadPool(2);
     }
 
     public void setModel(Model model) {
@@ -72,24 +74,21 @@ public class MainViewController implements Initializable {
                 break;
 
         }
-
         setAllText();
-
     }
 
-    public void initView() throws SQLException {
+    public void initView() throws SQLException, IOException, InterruptedException {
         setGraphics();
         setAllText();
-        loadBoard();
-    }
-
-    public void loadBoard() throws SQLException {
-
-        executor = Executors.newSingleThreadExecutor();
+        // Load the board
         BoardMaker bMaker = new BoardMaker(flowPane, model);
         executor.submit(bMaker);
-
+        // Start the FolderWatcher looking for changes in the JSON folder
+        FolderWatcher fWatcher = new FolderWatcher(model);
+        executor.submit(fWatcher);
+        
     }
+
 
     private void setAllText() {
         department.setText(model.getResourceBundle().getString("department"));

@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.bll.BLLManager;
 
 public class Model {
@@ -63,8 +64,8 @@ public class Model {
 
     }
 
-    public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
-        bMan.loadJSONfile(filepath);
+    public void loadJSONfile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
+        bMan.loadJSONfile(file);
     }
 
     public Language changeLanguage() {
@@ -85,8 +86,8 @@ public class Model {
         return rBundle;
     }
 
-    public boolean checkForDuplicateFile(File mediafile) throws IOException, SQLException {
-        return bMan.checkForDuplicateFile(mediafile);
+    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException {
+        return bMan.checkForDuplicateFile(file);
     }
 
     public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {

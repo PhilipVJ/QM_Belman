@@ -30,8 +30,7 @@ public class QuickMaff_Belman extends Application
    
         LoginController con = loader.getController();
         con.setStage(stage);
-        
-        
+
         con.loadButtons();
         Scene scene = new Scene(root);
 //        stage.setFullScreen(true);
@@ -49,7 +48,7 @@ public class QuickMaff_Belman extends Application
         stage.show();
         con.setGraphics();
 //        
-    con.initView(stage);
+
     }
 
     /**

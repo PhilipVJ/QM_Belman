@@ -31,16 +31,15 @@ public class DatabaseFacade {
         uDAO = new DbUpdateDAO(con);
     }
 
-    public boolean checkForDuplicateFile(File file) throws IOException, SQLException 
+    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException 
     {
-        FileWrapper fW = new FileWrapper(file);
-        return uDAO.checkForDuplicateFile(fW);
+ 
+        return uDAO.checkForDuplicateFile(file);
     }
     
-    public void loadJSONFile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
-        DataContainer con = fDAO.getDataFromJSON(filepath);
-        FileWrapper fileW = new FileWrapper(new File (filepath));
-        uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders(), fileW);       
+    public void loadJSONFile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
+        DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
+        uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders(), file);       
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {

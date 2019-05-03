@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.dal.DatabaseFacade;
 
 public class BLLManager
@@ -22,13 +23,13 @@ public class BLLManager
         this.dFacade = dFacade;
     }
     
-    public void loadJSONfile(String filepath) throws IOException, FileNotFoundException, ParseException, SQLException {
-        dFacade.loadJSONFile(filepath);
+    public void loadJSONfile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
+        dFacade.loadJSONFile(file);
     }
     
-    public boolean checkForDuplicateFile(File filepath) throws IOException, SQLException 
+    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException 
     {
-        return dFacade.checkForDuplicateFile(filepath);
+        return dFacade.checkForDuplicateFile(file);
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {

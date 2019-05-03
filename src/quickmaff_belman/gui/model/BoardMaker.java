@@ -69,7 +69,6 @@ public class BoardMaker implements Runnable {
                     sPane.getChildren().addAll(view, orderNumber, endDate);
                     if(bTask.passedEndDate()==true)
 {
-    System.out.println("Circle maker for: "+bTask.getOrderNumber());
     Circle warning = new Circle(50);
     warning.setStroke(Color.RED);
     warning.setFill(Color.TRANSPARENT);
