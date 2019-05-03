@@ -17,6 +17,7 @@
             <Image url="@images/toggle.png" />
          </image>
       </ImageView>
+      <Label fx:id="infoBar" prefHeight="44.0" prefWidth="142.0" />
       <BorderPane fx:id="borderPane" layoutX="79.0" layoutY="115.0" prefHeight="422.0" prefWidth="696.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="150.0">
          <right>
             <AnchorPane prefHeight="200.0" prefWidth="3.0" style="-fx-background-color: BLACK;" BorderPane.alignment="CENTER" />

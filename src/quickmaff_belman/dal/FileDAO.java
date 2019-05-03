@@ -22,18 +22,14 @@ import quickmaff_belman.be.Worker;
 
 public class FileDAO {
 
-    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException {
-        
+    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
+
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
-        Object obj=null;
-        try {
-            obj = new JSONParser().parse(new FileReader(filepath));
-        } catch (ParseException ex) {
-    
-            System.out.println("Kan ikke læses - er ikke en JSON fil");
-        }
+        Object obj = null;
+        obj = new JSONParser().parse(new FileReader(filepath));
+
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
@@ -52,7 +48,7 @@ public class FileDAO {
             JSONObject pObj = (JSONObject) object;
             JSONObject cObj = (JSONObject) pObj.get("Customer");
             String customerName = (String) cObj.get("Name");
-            
+
             JSONObject dObj = (JSONObject) pObj.get("Delivery");
             String dDate = (String) dObj.get("DeliveryTime");
             Date deliveryTime = makeDateObject(dDate);
@@ -70,7 +66,7 @@ public class FileDAO {
                 boolean finished = (boolean) dTask.get("FinishedOrder");
                 String startDate = (String) dTask.get("StartDate");
                 Date startDateObj = makeDateObject(startDate);
-                DepartmentTask taskToAdd = new DepartmentTask(startDateObj, endDateObj, finished,departmentName);
+                DepartmentTask taskToAdd = new DepartmentTask(startDateObj, endDateObj, finished, departmentName);
                 allDepartmentTasks.add(taskToAdd);
             }
 
