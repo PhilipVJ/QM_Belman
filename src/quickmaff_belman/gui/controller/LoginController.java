@@ -147,6 +147,8 @@ public class LoginController implements Initializable {
     public void setGraphics() {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
+        imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
+
     }
 
 }
