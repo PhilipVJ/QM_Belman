@@ -93,5 +93,10 @@ public class Model {
     public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {
         return bMan.getAllBoardTasks(departmentName, timeOffset);
     }
+    
+    public String getDepartmentName()
+    {
+        return departmentName;
+    }
 
 }
