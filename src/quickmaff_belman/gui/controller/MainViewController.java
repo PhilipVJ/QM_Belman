@@ -5,8 +5,6 @@
  */
 package quickmaff_belman.gui.controller;
 
-
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.BoardMaker;
@@ -34,6 +33,8 @@ import quickmaff_belman.gui.model.Model;
 public class MainViewController implements Initializable {
 
     @FXML
+    private AnchorPane anchorPaneAll;
+    @FXML
     private ImageView imgBelmanLogo;
     @FXML
     private ImageView iView;
@@ -47,11 +48,10 @@ public class MainViewController implements Initializable {
     private FlowPane flowPane;
     @FXML
     private ImageView filter;
-    
+
     private Model model;
     private Stage stage;
     private ExecutorService executor;
-    
 
     /**
      * Initializes the controller class.
@@ -69,7 +69,8 @@ public class MainViewController implements Initializable {
     private void changeLanguage(MouseEvent event) {
 
         Language language = model.changeLanguage();
-        switch (language) {
+        switch (language)
+        {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
@@ -95,7 +96,6 @@ public class MainViewController implements Initializable {
         executor.submit(fWatcher);
     }
 
-
     private void setAllText() {
         lblDepartment.setText(model.getDepartmentName());
     }
@@ -104,7 +104,8 @@ public class MainViewController implements Initializable {
     private void filtering(MouseEvent event) {
         Language language = model.changeLanguage();
 
-        switch (language) {
+        switch (language)
+        {
             case DANISH:
                 Image buttonImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
                 filter.setImage(buttonImage);
@@ -121,7 +122,6 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-        
         imgBelmanLogo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
@@ -129,10 +129,9 @@ public class MainViewController implements Initializable {
         lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
         lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
         filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
-        filter.translateYProperty().bind(stage.heightProperty().multiply(-0.008));
+        filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
         languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
         languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
-
     }
-    
+
 }

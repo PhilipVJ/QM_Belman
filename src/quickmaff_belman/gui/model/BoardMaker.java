@@ -69,7 +69,7 @@ public class BoardMaker implements Runnable {
                     view.setFitWidth(160);
                     
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                        Image gul = new Image("/quickmaff_belman/gui/view/images/postit.png");
+                        Image gul = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
                         Image blue = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
                         Image green = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
                         Image red = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
@@ -136,7 +136,7 @@ public class BoardMaker implements Runnable {
     }
 
     private final ImageView getPostItColour(BoardTask bTask) {
-        Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit.png");
+        Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
         Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
         Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
         Image redPostIt = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
