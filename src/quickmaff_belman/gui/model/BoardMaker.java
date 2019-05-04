@@ -18,6 +18,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -38,16 +39,18 @@ public class BoardMaker implements Runnable {
     private ImageView iView;
     private AnchorPane aPane;
     private AnchorPane bPane;
+    private AnchorPane cPane;
     
 
 //    private BoardTask boTask;
 
-    public BoardMaker(FlowPane fPane, Model model, ImageView iView, AnchorPane aPane, AnchorPane bPane) {
+    public BoardMaker(FlowPane fPane, Model model, ImageView iView, AnchorPane aPane, AnchorPane bPane, AnchorPane cPane) {
         this.fPane = fPane;
         this.model = model;
         this.iView = iView;
         this.aPane = aPane;
         this.bPane = bPane;
+        this.cPane = cPane;
     }
 
     @Override
@@ -58,9 +61,9 @@ public class BoardMaker implements Runnable {
             try {
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
-                iView.setVisible(false);
+//                iView.setVisible(false);
                 ImageView view = null;
-
+                cPane.setMouseTransparent(true);
                 for (BoardTask bTask : boardTasks) {
 
                     StackPane sPane = new StackPane();
@@ -82,13 +85,14 @@ public class BoardMaker implements Runnable {
                          
                         aPane.setEffect(blur);
                         bPane.toFront();
+                        cPane.setMouseTransparent(false);
                         
                         Image gul = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
                         Image blue = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
                         Image green = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
                         Image red = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
                         Date today = new Date();
-                        iView.setVisible(true);
+//                        iView.setVisible(true);
 
                          if (bTask.getStartDate().after(today)) {
                                 iView.setImage(blue);                               
@@ -102,10 +106,13 @@ public class BoardMaker implements Runnable {
                             
                             else {
                                 iView.setImage(gul);
-                            }       
+                            }
+                            
+                             
 
                             System.out.println("Opening task from order:" + orderNumber);                     
                     });
+                    
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);
                     if(bTask.passedEndDate()==true)

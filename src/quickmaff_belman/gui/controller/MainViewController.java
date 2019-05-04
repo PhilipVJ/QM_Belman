@@ -11,8 +11,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.AccessibleRole;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,6 +57,17 @@ public class MainViewController implements Initializable {
     private AnchorPane bPane;
     @FXML
     private AnchorPane aPane;
+    @FXML
+    private Label lblOrderNumber;
+    @FXML
+    private Label lblEndDate;
+    @FXML
+    private Button btnCompleteOrder;
+    @FXML
+    private Label lblInfo;
+    @FXML
+    private AnchorPane cPane;
+
 
     /**
      * Initializes the controller class.
@@ -92,7 +106,7 @@ public class MainViewController implements Initializable {
         setAllText();
         stage.setFullScreen(true);
         // Setting up the board
-        BoardMaker bMaker = new BoardMaker(flowPane, model, iView, aPane, bPane);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, iView, aPane, bPane, cPane);
         executor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
         FolderWatcher fWatcher = new FolderWatcher(model);
@@ -138,7 +152,26 @@ public class MainViewController implements Initializable {
     }
     private void setPostItView(){
     bPane.toBack();
+    lblOrderNumber.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
+    lblEndDate.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
+    btnCompleteOrder.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteButton3.png);");
+    lblInfo.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
+    
+    btnCompleteOrder.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
+            -> {
+                bPane.toBack(); 
+                aPane.setEffect(null);
+            });
+    
+    cPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
+            -> {
+            bPane.toBack();
+            cPane.setMouseTransparent(true);
+            aPane.setEffect(null);
+
+            });
     
     }
-
+    
+    
 }
