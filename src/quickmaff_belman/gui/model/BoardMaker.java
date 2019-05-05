@@ -73,12 +73,7 @@ public class BoardMaker implements Runnable {
                     sPane.getChildren().addAll(view, orderNumber, endDate);
                     // Adds a warning if the due date has passed
                     if (bTask.passedEndDate() == true) {
-                        Circle warning = new Circle(50);
-                        warning.setStroke(Color.RED);
-                        warning.setFill(Color.TRANSPARENT);
-                        warning.setStrokeWidth(2);
-                        warning.setTranslateY(10);
-                        sPane.getChildren().add(warning);
+                        makeRedCirkel(sPane);
                     }
 
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
@@ -135,6 +130,15 @@ public class BoardMaker implements Runnable {
             }
 
         }
+    }
+
+    private void makeRedCirkel(StackPane sPane) {
+        Circle warning = new Circle(50);
+        warning.setStroke(Color.RED);
+        warning.setFill(Color.TRANSPARENT);
+        warning.setStrokeWidth(2);
+        warning.setTranslateY(10);
+        sPane.getChildren().add(warning);
     }
 
     private ImageView getPostItColour(BoardTask bTask) {

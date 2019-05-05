@@ -91,15 +91,14 @@ public class FileDAO {
         return date;
     }
     
-    public ArrayList<FileWrapper> getAllJSONFiles() throws IOException
+    public ArrayList<FileWrapper> getAllFolderFiles() throws IOException
     {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
         ArrayList<FileWrapper> allWrappedFiles = new ArrayList<>();
         for (File file : allFiles) {
             FileWrapper fWrap = new FileWrapper(file);
-            allWrappedFiles.add(fWrap);
-            
+            allWrappedFiles.add(fWrap);         
         }
         return allWrappedFiles;
     }

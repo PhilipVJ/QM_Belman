@@ -9,8 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
@@ -24,7 +22,6 @@ public class DatabaseFacade {
 
     public DatabaseFacade() throws IOException {
         DbConnection con = DbConnection.getInstance();
-
         fDAO = new FileDAO();
         oDAO = new OrderDAO(con);
         uDAO = new DbUpdateDAO(con);
@@ -43,6 +40,21 @@ public class DatabaseFacade {
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         return oDAO.getAllBoardTasks(departmentName, offset);
     }
+    
+    public int checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException
+    {
+        int numberOfNewFilesAdded = 0;
+        ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
+        for (FileWrapper file : allFiles) {
+            if(!uDAO.checkForDuplicateFile(file))
+            {
+                loadJSONFile(file);
+                numberOfNewFilesAdded++;
+            }
+        }
+        return numberOfNewFilesAdded;
+    }
+
 
     }
 

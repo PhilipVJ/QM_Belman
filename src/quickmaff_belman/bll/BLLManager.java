@@ -34,6 +34,10 @@ public class BLLManager
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         return dFacade.getAllBoardTasks(departmentName, offset);
     }
+
+    public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
+        return dFacade.checkForUnloadedFiles();
+    }
            
     
 }

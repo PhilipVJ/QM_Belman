@@ -94,4 +94,8 @@ public class Model {
         return departmentName;
     }
 
+    public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
+        return bMan.checkForUnLoadedFiles();
+    }
+
 }

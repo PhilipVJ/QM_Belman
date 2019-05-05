@@ -5,13 +5,17 @@
  */
 package quickmaff_belman.gui.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
@@ -130,7 +135,7 @@ public class MainViewController implements Initializable {
             setAllText();
 
             // Setting up the board
-            BoardMaker bMaker = new BoardMaker(flowPane, model,anchorPane);
+            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane);
             executor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
@@ -168,21 +173,36 @@ public class MainViewController implements Initializable {
     private void setGraphics() {
 //        logo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
 //        logo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
-        
+
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
-        
+
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
-        
+
 //        lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
 //        lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
-        
 //        filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
 //        filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
 //        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
 //        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
     }
 
+    public void checkForUnloadedFiles() {
+        int numberOfAddedFiles;
+        try {
+            numberOfAddedFiles = model.checkForUnLoadedFiles();
+            System.out.println("" + numberOfAddedFiles);
+            infoBar.setText(model.getResourceBundle().getString("loadfile"));
+        } catch (IOException ex) {
+            infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
 
+        } catch (SQLException ex) {
+            infoBar.setText(model.getResourceBundle().getString("sqlExceptionHeader"));
+
+        } catch (ParseException ex) {
+            infoBar.setText(model.getResourceBundle().getString("parseExceptionHeader"));
+        }
+
+    }
 
 }

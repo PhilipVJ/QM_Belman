@@ -134,6 +134,7 @@ public class LoginController implements Initializable {
                         stage.setScene(scene);
                         stage.show();
                         con.initView();
+                        con.checkForUnloadedFiles();
                     } catch (IOException ex) {
                         ExceptionHandler.handleException(ex,model.getResourceBundle());
                     }
