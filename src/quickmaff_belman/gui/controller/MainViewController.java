@@ -7,16 +7,18 @@ package quickmaff_belman.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javafx.event.EventType;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.AccessibleRole;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import quickmaff_belman.gui.model.BoardMaker;
+import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
@@ -35,13 +38,9 @@ import quickmaff_belman.gui.model.Model;
  */
 public class MainViewController implements Initializable {
 
-    @FXML
     private ImageView imgBelmanLogo;
     @FXML
-    private ImageView iView;
-    @FXML
     private ImageView imgBackground;
-    @FXML
     private Label lblDepartment;
     @FXML
     private ImageView languageSwitch;
@@ -53,21 +52,19 @@ public class MainViewController implements Initializable {
     private Model model;
     private Stage stage;
     private ExecutorService executor;
-    @FXML
-    private AnchorPane bPane;
-    @FXML
-    private AnchorPane aPane;
-    @FXML
-    private Label lblOrderNumber;
-    @FXML
-    private Label lblEndDate;
-    @FXML
-    private Button btnCompleteOrder;
-    @FXML
-    private Label lblInfo;
-    @FXML
-    private AnchorPane cPane;
 
+    @FXML
+    private Label infoBar;
+
+    private ScheduledExecutorService labelWatcher;
+    @FXML
+    private AnchorPane anchorPane;
+    @FXML
+    private ImageView logo;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private Label departmentName;
 
     /**
      * Initializes the controller class.
@@ -75,6 +72,9 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         executor = Executors.newFixedThreadPool(2);
+        labelWatcher = Executors.newScheduledThreadPool(1);
+
+        startLabelResetter();
     }
 
     public void setModel(Model model) {
@@ -85,8 +85,7 @@ public class MainViewController implements Initializable {
     private void changeLanguage(MouseEvent event) {
 
         Language language = model.changeLanguage();
-        switch (language)
-        {
+        switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
@@ -100,29 +99,57 @@ public class MainViewController implements Initializable {
         setAllText();
     }
 
-    public void initView() throws SQLException, IOException, InterruptedException {
-        setGraphics();
-        setPostItView();
-        setAllText();
-        stage.setFullScreen(true);
-        // Setting up the board
-        BoardMaker bMaker = new BoardMaker(flowPane, model, iView, aPane, bPane, cPane);
-        executor.submit(bMaker);
-        // Start the FolderWatcher looking for changes in the JSON folder
-        FolderWatcher fWatcher = new FolderWatcher(model);
-        executor.submit(fWatcher);
+    /**
+     * When the info label is updated it will be reset after 5 seconds
+     */
+    private void startLabelResetter() {
+        infoBar.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                Runnable resetter = new Runnable() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            infoBar.setText("");
+                        });
+                    }
+                };
+                labelWatcher.schedule(resetter, 5, TimeUnit.SECONDS);
+
+            }
+
+        });
+
+    }
+
+    public void initView() {
+        try {
+            stage.setFullScreen(true);
+            setGraphics();
+            setAllText();
+
+            // Setting up the board
+            BoardMaker bMaker = new BoardMaker(flowPane, model,anchorPane);
+            executor.submit(bMaker);
+            // Start the FolderWatcher looking for changes in the JSON folder
+            FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
+            executor.submit(fWatcher);
+        } catch (IOException ex) {
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
+        } catch (InterruptedException ex) {
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
+        }
     }
 
     private void setAllText() {
-        lblDepartment.setText(model.getDepartmentName());
+        departmentName.setText(model.getDepartmentName());
     }
 
-    @FXML
     private void filtering(MouseEvent event) {
         Language language = model.changeLanguage();
 
-        switch (language)
-        {
+        switch (language) {
             case DANISH:
                 Image buttonImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
                 filter.setImage(buttonImage);
@@ -139,39 +166,23 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-        imgBelmanLogo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
-        imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
+//        logo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
+//        logo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
+        
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
-        lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
-        lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
-        filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
-        filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
-        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
-        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
+        
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
+        
+//        lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
+//        lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
+        
+//        filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
+//        filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
+//        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
+//        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
     }
-    private void setPostItView(){
-    bPane.toBack();
-    lblOrderNumber.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
-    lblEndDate.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
-    btnCompleteOrder.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteButton3.png);");
-    lblInfo.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/noteTitle.png);");
-    
-    btnCompleteOrder.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
-            -> {
-                bPane.toBack(); 
-                aPane.setEffect(null);
-            });
-    
-    cPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
-            -> {
-            bPane.toBack();
-            cPane.setMouseTransparent(true);
-            aPane.setEffect(null);
 
-            });
-    
-    }
-    
-    
+
+
 }

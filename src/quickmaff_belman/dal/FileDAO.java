@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.dal;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,23 +18,22 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.DepartmentTask;
+import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 
 public class FileDAO {
+    
+    private static final String PATH = "JSON";
 
-    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException {
+    public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
         
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
 
         Object obj=null;
-        try {
-            obj = new JSONParser().parse(new FileReader(filepath));
-        } catch (ParseException ex) {
-    
-            System.out.println("Kan ikke læses - er ikke en JSON fil");
-        }
+        obj = new JSONParser().parse(new FileReader(filepath));
+        
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
@@ -89,6 +89,19 @@ public class FileDAO {
         long sinceEpoch = Long.parseLong(subString);
         Date date = new Date(sinceEpoch);
         return date;
+    }
+    
+    public ArrayList<FileWrapper> getAllJSONFiles() throws IOException
+    {
+        File folder = new File(PATH);
+        File[] allFiles = folder.listFiles();
+        ArrayList<FileWrapper> allWrappedFiles = new ArrayList<>();
+        for (File file : allFiles) {
+            FileWrapper fWrap = new FileWrapper(file);
+            allWrappedFiles.add(fWrap);
+            
+        }
+        return allWrappedFiles;
     }
 
 }

@@ -17,6 +17,8 @@ import java.nio.file.WatchService;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.FileWrapper;
 
@@ -31,12 +33,14 @@ public class FolderWatcher implements Runnable {
     private WatchKey watchKey;
     private final String FOLDER_PATH = "JSON";
     private final Model model;
+    private final Label infoBar;
 
-    public FolderWatcher(Model model) throws IOException, InterruptedException {
+    public FolderWatcher(Model model, Label infoBar) throws IOException, InterruptedException {
         this.wService = FileSystems.getDefault().newWatchService();
         this.path = Paths.get(FOLDER_PATH);
         watchKey = path.register(wService, StandardWatchEventKinds.ENTRY_CREATE);
         this.model = model;
+        this.infoBar = infoBar;
     }
 
     @Override
@@ -45,31 +49,42 @@ public class FolderWatcher implements Runnable {
             while ((watchKey = wService.take()) != null) {
                 for (WatchEvent<?> event : watchKey.pollEvents()) {
                     String filePath = event.context().toString();
-                    File file = new File(FOLDER_PATH+"/"+filePath);
-                    FileWrapper wrappedFile = new FileWrapper(file);
-                    boolean checkStatus = model.checkForDuplicateFile(wrappedFile);
-                    System.out.println("boolean: "+checkStatus);
-                    if (checkStatus == false) {
-                        model.loadJSONfile(wrappedFile);
-                        System.out.println("DONE");
-                        
-                    }
-                    else
-                    {
-                        System.out.println("IS A DUPLICATE");
-                    }
+                    File file = new File(FOLDER_PATH + "/" + filePath);
+                    FileWrapper wrappedFile;
+                    try {
+                        wrappedFile = new FileWrapper(file);
 
+                        boolean checkStatus = model.checkForDuplicateFile(wrappedFile);
+                        if (checkStatus == false) {
+                            model.loadJSONfile(wrappedFile);
+                            System.out.println("LOADED FILE");
+                            setLabel(model.getResourceBundle().getString("loadfile"));
+
+                        } else {
+                            setLabel(model.getResourceBundle().getString("duplicateFile"));
+                        }
+
+                    } catch (IOException ex) {
+                        setLabel(model.getResourceBundle().getString("fileMissingHeader"));
+
+                    } catch (SQLException ex) {
+                        setLabel(model.getResourceBundle().getString("sqlExceptionHeader"));
+
+                    } catch (ParseException ex) {
+                        setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
+                    }
+                    watchKey.reset();
                 }
-                watchKey.reset();
+
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(FolderWatcher.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(FolderWatcher.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(FolderWatcher.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(FolderWatcher.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void setLabel(String text) {
+        Platform.runLater(() -> {
+            infoBar.setText(text);
+        });
     }
 }

@@ -5,57 +5,58 @@
  */
 package quickmaff_belman.gui.model;
 
-
+import java.util.ResourceBundle;
 import javafx.scene.control.Alert.AlertType;
 
 public class ExceptionHandler {
 
-    public static void handleException(Exception ex) {
+    public static void handleException(Exception ex, ResourceBundle languagePack) {
         switch (ex.getClass().getSimpleName()) {
             case "SQLServerException":
-                handleSqlServerException();
+                handleSqlServerException(languagePack);
                 break;
             case "SQLException":
-                handleSqlException();
+                handleSqlException(languagePack);
                 break;
             case "FileNotFoundException":
-                handleIOException();
+                handleIOException(languagePack);
                 break;
             case "ParseException":
-                handleParseException();
+                handleParseException(languagePack);
                 break;
             case "IOException":
-                handleIOException();
+                handleIOException(languagePack);
                 break;
             case "InterruptedException":
-                handleInterruptedException();
+                handleInterruptedException(languagePack);
                 break;
             default:
-                handleUnknownError();
+                handleUnknownError(languagePack);
         }
     }
 
-    private static void handleSqlServerException() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","Der kan ikke oprettes forbindelse til serveren", "Kontakt support eller prøv igen senere!");
+    private static void handleSqlServerException(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("sqlServerException"), lang.getString("contactSupport"));
     }
 
-    private static void handleSqlException() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","Der er problemer i databasen", "Kontakt support eller prøv igen senere!");
+    private static void handleSqlException(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("sqlExceptionHeader"), lang.getString("contactSupport"));
     }
 
-    private static void handleIOException() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","En fil kunne ikke lokaliseres", "Kontakt venligst support eller kig i manualen");
+    private static void handleIOException(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("fileMissingHeader"), lang.getString("fileMissingText"));
     }
 
-    private static void handleUnknownError() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","Ukendt fejl opstod", "Der opstod en ukendt fejl i systemet.");
+    private static void handleUnknownError(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"),lang.getString("unknownErrorHeader"), lang.getString("unknownErrorText"));
     }
 
-    private static void handleParseException() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","Fejl læsning af JSON fil", "Kontakt venligst support");
+    private static void handleParseException(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("parseExceptionHeader"), lang.getString("unknownErrorText"));
     }
-    private static void handleInterruptedException() {
-        Utility.createAlert(AlertType.ERROR,"Fejl","System fejl", "Genstart venligst programmet og prøv igen");
+
+    private static void handleInterruptedException(ResourceBundle lang) {
+        Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("systemErrorHeader"), lang.getString("systemErrorText"));
     }
 
 }

@@ -26,7 +26,6 @@ public class FileWrapper {
     public FileWrapper(File file) throws IOException {
         this.file = file;
         setMetaData();
-
     }
 
     @Override
@@ -58,25 +57,17 @@ public class FileWrapper {
         return true;
     }
     
-    
-
-
-    
     public String getFilePath()
     {
         return file.getPath();
     }
 
-
-
-
-
-
     public void setMetaData() throws IOException {
 
+        // Set filesize
         BasicFileAttributes at = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
         fileSize = at.size();
-
+        // Set number of characters
         FileInputStream fileStream = new FileInputStream(file);
         InputStreamReader input = new InputStreamReader(fileStream);
         BufferedReader reader = new BufferedReader(input);
@@ -86,7 +77,5 @@ public class FileWrapper {
             counter += data.length();
         }
         numberOfCharacters=counter;
-        System.out.println("Char: "+numberOfCharacters);
-
     }
 }

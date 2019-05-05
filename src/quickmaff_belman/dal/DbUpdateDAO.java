@@ -16,7 +16,7 @@ import quickmaff_belman.be.DepartmentTask;
 import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
-import quickmaff_belman.gui.model.ExceptionHandler;
+
 
 /**
  *
@@ -24,7 +24,7 @@ import quickmaff_belman.gui.model.ExceptionHandler;
  */
 public class DbUpdateDAO {
 
-    private DbConnection con;
+    private final DbConnection con;
 
     public DbUpdateDAO(DbConnection con) {
         this.con = con;
@@ -118,7 +118,7 @@ public class DbUpdateDAO {
             connection.commit();
 
         } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex);
+            
             if (connection != null) {
                 connection.rollback();
             }

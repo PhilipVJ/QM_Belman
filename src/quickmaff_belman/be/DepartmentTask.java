@@ -20,7 +20,6 @@ public class DepartmentTask {
         this.endDate = endDate;
         this.finishedOrder = finishedOrder;
         this.departmentName = departmentName;
-        this.orderNumber = orderNumber;
     }
     
      public DepartmentTask(String orderNumber,Date startDate, Date endDate, boolean finishedOrder, String departmentName) {
@@ -46,40 +45,20 @@ public class DepartmentTask {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
 
     public boolean isFinishedOrder() {
         return finishedOrder;
     }
 
-    public void setFinishedOrder(boolean finishedOrder) {
-        this.finishedOrder = finishedOrder;
-    }
 
     public String getDepartmentName() {
         return departmentName;
     }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-    
-    public DepartmentTask(String departmentName){
-        this.departmentName = departmentName;
-    }
-    
-    
-
 
 
     

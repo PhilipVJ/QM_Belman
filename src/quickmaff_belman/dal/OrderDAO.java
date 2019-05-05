@@ -19,7 +19,7 @@ import quickmaff_belman.be.TaskStatus;
 
 public class OrderDAO {
 
-    private DbConnection con;
+    private final DbConnection con;
 
     public OrderDAO(DbConnection con) {
         this.con = con;
@@ -71,7 +71,7 @@ public class OrderDAO {
                 indexOfDepartment = i;
             }
         }
-        // check if all prior in the list has marked hasn't marked their task as done
+        // check if all prior in the list isn't done with their task yet
 
         for (int i = 0; i < indexOfDepartment; i++) {
             if(allTasks.get(i).getIsFinished()==false)

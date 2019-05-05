@@ -19,30 +19,21 @@ public class Worker {
         this.name = name;
     }
 
-
     public long getSalaryNumber() {
         return salaryNumber;
     }
 
-    public void setSalaryNumber(long salaryNumber) {
-        this.salaryNumber = salaryNumber;
-    }
+
 
     public String getIntitials() {
         return intitials;
     }
 
-    public void setIntitials(String intitials) {
-        this.intitials = intitials;
-    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public String toString() {

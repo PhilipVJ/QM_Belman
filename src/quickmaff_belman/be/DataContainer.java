@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class DataContainer {
 
-    private ArrayList<Worker> allWorkers;
-    private ArrayList<ProductionOrder> allProductionOrders;
+    private final ArrayList<Worker> allWorkers;
+    private final ArrayList<ProductionOrder> allProductionOrders;
 
     public DataContainer(ArrayList<Worker> allWorkers, ArrayList<ProductionOrder> allProductionOrders) {
         this.allWorkers = allWorkers;
@@ -29,13 +29,13 @@ public class DataContainer {
     
    public void printData()
    {
-       for (Worker worker : allWorkers) {
+       allWorkers.forEach((worker) -> {
            System.out.println(""+worker.toString());
-       }
+        });
        
-       for (ProductionOrder pOrder : allProductionOrders) {
+       allProductionOrders.forEach((pOrder) -> {
            System.out.println(""+pOrder.toString());
-       }
+        });
    }
 
 

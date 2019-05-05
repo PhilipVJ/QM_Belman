@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.bll;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,7 +16,7 @@ import quickmaff_belman.dal.DatabaseFacade;
 
 public class BLLManager
 {
-    private DatabaseFacade dFacade;
+    private final DatabaseFacade dFacade;
 
     public BLLManager(DatabaseFacade dFacade) {
         this.dFacade = dFacade;

@@ -10,9 +10,9 @@ import java.util.Date;
 
 public class ProductionOrder {
     private String customerName;
-    private Date deliveryTime;
-    private String orderNumber;
-    private ArrayList<DepartmentTask> dTasks;
+    private final Date deliveryTime;
+    private final String orderNumber;
+    private final ArrayList<DepartmentTask> dTasks;
 
     public ProductionOrder(String customerName, Date deliveryTime, String orderNumber, ArrayList<DepartmentTask> dTasks) {
         this.customerName = customerName;
@@ -33,25 +33,16 @@ public class ProductionOrder {
         return deliveryTime;
     }
 
-    public void setDeliveryTime(Date deliveryTime) {
-        this.deliveryTime = deliveryTime;
-    }
 
     public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
 
     public ArrayList<DepartmentTask> getDepartmentTasks() {
         return dTasks;
     }
 
-    public void setDepartmentTasks(ArrayList<DepartmentTask> dTasks) {
-        this.dTasks = dTasks;
-    }
 
     @Override
     public String toString() {

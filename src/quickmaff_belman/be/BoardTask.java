@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.be;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -16,8 +15,8 @@ public class BoardTask {
 
     private String orderNumber;
     private Date endDate;
-    private Date startDate;
-    private boolean readyForWork;
+    private final Date startDate;
+    private final boolean readyForWork;
 
     public BoardTask(String orderNumber, Date endDate, Date startDate, boolean readyForWork) {
         this.orderNumber = orderNumber;

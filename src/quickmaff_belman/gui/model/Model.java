@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.gui.model;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,12 +21,12 @@ import quickmaff_belman.bll.BLLManager;
 
 public class Model {
 
-    private BLLManager bMan;
+    private final BLLManager bMan;
     private Locale locale;
     private ResourceBundle rBundle;
-    private String departmentName = "Halvfab";
+    private String departmentName;
     private static final String PROP_FILE = "src/resources/config.properties";
-    private Properties properties;
+    private final Properties properties;
     private int timeOffset;
 
     public Model(BLLManager bMan) throws FileNotFoundException, IOException {
@@ -39,10 +38,8 @@ public class Model {
         rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
     }
 
-    public int getTimeOffset(String departmentName) throws IOException {
-
-        int timeOffset = Integer.parseInt(properties.getProperty(departmentName));
-        return timeOffset;
+    public void setTimeOffset(String departmentName) throws IOException {
+        this.timeOffset = Integer.parseInt(properties.getProperty(departmentName));
     }
 
     public ArrayList<String> getDepartmentNames() throws FileNotFoundException, IOException {
@@ -51,16 +48,14 @@ public class Model {
         Set<Object> dnames = properties.keySet();
         for (Object dname : dnames) {
             String depName = (String) dname;
-
             names.add(depName);
-
         }
         return names;
     }
 
     public void setDepartment(String department) throws IOException {
         this.departmentName = department;
-        this.timeOffset = getTimeOffset(departmentName);
+        setTimeOffset(departmentName);
 
     }
 
