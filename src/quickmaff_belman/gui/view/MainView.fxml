@@ -72,12 +72,15 @@
       </ImageView>
       <StackPane fx:id="display" layoutX="144.0" layoutY="829.0" prefHeight="186.0" prefWidth="1143.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0">
          <children>
-            <ImageView fitHeight="95.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="120.0" fitWidth="539.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/display.png" />
                </image>
             </ImageView>
-            <Label fx:id="infoBar" prefHeight="44.0" prefWidth="433.0" />
+            <Label fx:id="infoBar" prefHeight="44.0" prefWidth="445.0" text="Den tilføjede JSON fil er en kopi af en tidligere">
+               <font>
+                  <Font name="Bookshelf Symbol 7" size="20.0" />
+               </font></Label>
          </children>
       </StackPane>
    </children>
