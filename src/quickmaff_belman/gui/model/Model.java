@@ -97,8 +97,8 @@ public class Model {
     public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
         return bMan.checkForUnLoadedFiles();
     }
-    public boolean setCompleteTask(int taskID) throws SQLException{
-        return bMan.setCompleteTask(taskID);
+    public void setCompleteTask(int taskID) throws SQLException{
+         bMan.setCompleteTask(taskID);
     }
 
 }
