@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -98,8 +99,13 @@ public class BoardMaker implements Runnable {
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
+                        Button completeOrder = new Button(model.getResourceBundle().getString("completeOrder"));
+                        completeOrder.setFont(new Font ("Ariel", 25));
+                        completeOrder.setTranslateY(350);
+                        completeOrder.setTranslateX(200);
                         
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel);
+                        
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeOrder);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
                            if(q.getButton()==MouseButton.SECONDARY){
                              aPane.getChildren().remove(stackPane);
