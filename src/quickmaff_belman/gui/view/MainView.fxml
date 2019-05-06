@@ -18,7 +18,7 @@
             <Image url="@images/BelmanBG.png" />
          </image>
       </ImageView>
-      <StackPane prefHeight="186.0" prefWidth="602.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="50.0">
+      <StackPane prefHeight="186.0" prefWidth="757.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="50.0">
          <children>
             <ImageView fx:id="logo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -27,13 +27,13 @@
             </ImageView>
          </children>
       </StackPane>
-      <BorderPane prefHeight="540.0" prefWidth="1226.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="250.0">
+      <BorderPane prefHeight="540.0" prefWidth="1226.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="250.0">
          <center>
             <AnchorPane prefHeight="907.0" prefWidth="1620.0" BorderPane.alignment="CENTER">
                <children>
                   <ScrollPane fx:id="scrollPane" focusTraversable="false" prefHeight="536.0" prefWidth="1216.0" style="-fx-background-color: WHITE; -fx-background: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="1081.0" prefWidth="1172.0" style="-fx-background-color: white;" vgap="30.0">
+                        <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="300.0" prefWidth="1172.0" style="-fx-background-color: white;" vgap="30.0">
                            <padding>
                               <Insets left="50.0" />
                            </padding>
@@ -56,7 +56,7 @@
             <AnchorPane prefHeight="2.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER" />
          </top>
       </BorderPane>
-      <ImageView fx:id="languageSwitch" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="50.0">
+      <ImageView fx:id="languageSwitch" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#changeLanguage" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="70.0">
          <image>
             <Image url="@images/knapSprogDK.png" />
          </image>
@@ -65,11 +65,20 @@
          <font>
             <Font size="31.0" />
          </font></Label>
-      <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="80.0">
+      <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
          <image>
             <Image url="@images/filterknap1.png" />
          </image>
       </ImageView>
-      <Label fx:id="infoBar" layoutX="14.0" layoutY="21.0" prefHeight="44.0" prefWidth="328.0" text="Info bar" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="80.0" />
+      <StackPane fx:id="display" layoutX="144.0" layoutY="829.0" prefHeight="186.0" prefWidth="1143.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0">
+         <children>
+            <ImageView fitHeight="95.0" fitWidth="503.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/display.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="infoBar" prefHeight="44.0" prefWidth="433.0" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

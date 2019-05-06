@@ -52,6 +52,7 @@ public class DatabaseFacade {
                 numberOfNewFilesAdded++;
             }
         }
+        
         return numberOfNewFilesAdded;
     }
 

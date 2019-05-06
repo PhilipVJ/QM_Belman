@@ -28,6 +28,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.gui.model.BoardMaker;
@@ -43,10 +45,8 @@ import quickmaff_belman.gui.model.Model;
  */
 public class MainViewController implements Initializable {
 
-    private ImageView imgBelmanLogo;
     @FXML
     private ImageView imgBackground;
-    private Label lblDepartment;
     @FXML
     private ImageView languageSwitch;
     @FXML
@@ -70,6 +70,8 @@ public class MainViewController implements Initializable {
     private ScrollPane scrollPane;
     @FXML
     private Label departmentName;
+    @FXML
+    private StackPane display;
 
     /**
      * Initializes the controller class.
@@ -120,7 +122,7 @@ public class MainViewController implements Initializable {
                         });
                     }
                 };
-                labelWatcher.schedule(resetter, 5, TimeUnit.SECONDS);
+                labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
 
             }
 
@@ -171,28 +173,24 @@ public class MainViewController implements Initializable {
     }
 
     private void setGraphics() {
-//        logo.translateXProperty().bind(stage.widthProperty().multiply(0.5));
-//        logo.translateYProperty().bind(stage.heightProperty().multiply(0.07));
 
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
 
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
 
-//        lblDepartment.translateXProperty().bind(stage.widthProperty().multiply(0.09));
-//        lblDepartment.translateYProperty().bind(stage.heightProperty().multiply(0.06));
-//        filter.translateXProperty().bind(stage.widthProperty().multiply(0.925));
-//        filter.translateYProperty().bind(stage.heightProperty().multiply(0.015));
-//        languageSwitch.translateXProperty().bind(stage.widthProperty().multiply(0.925));
-//        languageSwitch.translateYProperty().bind(stage.heightProperty().multiply(0.06));
+
     }
 
     public void checkForUnloadedFiles() {
         int numberOfAddedFiles;
         try {
             numberOfAddedFiles = model.checkForUnLoadedFiles();
-            System.out.println("" + numberOfAddedFiles);
-            infoBar.setText(model.getResourceBundle().getString("loadfile"));
+            if(numberOfAddedFiles>0)
+            {
+            infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
+            }
         } catch (IOException ex) {
             infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
 
