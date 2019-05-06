@@ -83,6 +83,8 @@ public class BoardMaker implements Runnable {
                         // Blurs everything which exists in the root Pane
                         ObservableList<Node> allNodes = aPane.getChildren();
                         BoxBlur blur = new BoxBlur();
+                        blur.setWidth(25);
+                        blur.setHeight(25);
                         for (Node child : allNodes) {
                             child.setEffect(blur);
                         }
@@ -93,8 +95,11 @@ public class BoardMaker implements Runnable {
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
                         orderLabel.setFont(new Font("Arial", 50));
                         orderLabel.setTranslateY(-200);
+                        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
+                        endDateLabel.setFont(new Font("Arial", 50));
+                        endDateLabel.setTranslateY(-100);
                         
-                        stackPane.getChildren().add(orderLabel);
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
                            if(q.getButton()==MouseButton.SECONDARY){
                              aPane.getChildren().remove(stackPane);
