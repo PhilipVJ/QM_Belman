@@ -55,8 +55,11 @@ public class DatabaseFacade {
         
         return numberOfNewFilesAdded;
     }
+    public boolean setCompleteTask(int taskID) throws SQLException{
+        return oDAO.setCompleteTask(taskID);
+    } 
 
 
-    }
+}
 
 

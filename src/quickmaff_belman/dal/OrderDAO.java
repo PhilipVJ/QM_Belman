@@ -83,7 +83,7 @@ public class OrderDAO {
         return readyForWork;
     }
     
-     public boolean completeTask(int taskID) throws SQLServerException, SQLException
+     public boolean setCompleteTask(int taskID) throws SQLServerException, SQLException
     {
         Connection connection = null;
         boolean success = false;
