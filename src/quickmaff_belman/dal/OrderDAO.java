@@ -27,7 +27,7 @@ public class OrderDAO {
 
     public ArrayList<BoardTask> getAllBoardTasks(String department, int offset) throws SQLServerException, SQLException {
         ArrayList<BoardTask> allTasks = new ArrayList<>();
-        String sql = "SELECT startDate,endDate,orderNumber from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate<=(?) order by endDate asc;";
+        String sql = "SELECT startDate,endDate,orderNumber,taskID from DepartmentTask where departmentName=(?) AND finishedOrder=0 AND startDate<=(?) order by endDate asc;";
 
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);) {
             Calendar cal = Calendar.getInstance(Locale.ENGLISH);
@@ -43,7 +43,8 @@ public class OrderDAO {
                 Date endDate = rs.getDate("endDate");
                 Date startDate = rs.getDate("startDate");
                 boolean readyForWork = checkIfReadyForWork(orderNumber, department);
-                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, readyForWork);
+                int taskID = rs.getInt("taskID");
+                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, readyForWork, taskID);
                 allTasks.add(bTask);
             }
             return allTasks;
@@ -80,6 +81,47 @@ public class OrderDAO {
             }
         }
         return readyForWork;
+    }
+    
+     public boolean completeTask(int taskID) throws SQLServerException, SQLException
+    {
+        Connection connection = null;
+        boolean success = false;
+        try 
+        {
+            connection = con.getConnection();
+            connection.setAutoCommit(false);
+            
+        
+        String sql = "UPDATE DepartmentTask\n" +
+                    "set finishedOrder =1\n" +
+                    "where taskID = (?)";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        
+            pst.setInt(1, taskID);
+            pst.executeUpdate();
+            connection.commit();
+            
+            
+        }catch (SQLException ex)
+        {
+            if (connection != null)
+            {                
+                connection.rollback();
+            }
+        } finally
+        {
+            if (connection != null)
+            {
+                connection.setAutoCommit(true); 
+                connection.close(); 
+                success = true;
+                
+            }
+        }
+
+        return success;
+
     }
 
 }

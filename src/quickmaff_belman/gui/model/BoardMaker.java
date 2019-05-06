@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -99,13 +100,10 @@ public class BoardMaker implements Runnable {
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
-                        Button completeOrder = new Button(model.getResourceBundle().getString("completeOrder"));
-                        completeOrder.setFont(new Font ("Ariel", 25));
-                        completeOrder.setTranslateY(350);
-                        completeOrder.setTranslateX(200);
+                        Button completeTask = completeTaskButton();
                         
                         
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeOrder);
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
                            if(q.getButton()==MouseButton.SECONDARY){
                              aPane.getChildren().remove(stackPane);
@@ -141,6 +139,16 @@ public class BoardMaker implements Runnable {
             }
 
         }
+    }
+
+    private Button completeTaskButton() {
+        Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
+        completeTask.setFont(new Font ("Ariel", 25));
+        completeTask.setTranslateY(350);
+        completeTask.setTranslateX(200);
+        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+        });
+        return completeTask;
     }
 
     private void makeRedCirkel(StackPane sPane) {
