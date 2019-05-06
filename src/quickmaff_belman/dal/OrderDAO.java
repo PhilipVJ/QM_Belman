@@ -83,10 +83,10 @@ public class OrderDAO {
         return readyForWork;
     }
     
-     public boolean setCompleteTask(int taskID) throws SQLServerException, SQLException
+     public void setCompleteTask(int taskID) throws SQLServerException, SQLException
     {
         Connection connection = null;
-        boolean success = false;
+        
         try 
         {
             connection = con.getConnection();
@@ -115,12 +115,12 @@ public class OrderDAO {
             {
                 connection.setAutoCommit(true); 
                 connection.close(); 
-                success = true;
+                
                 
             }
         }
 
-        return success;
+        
 
     }
 

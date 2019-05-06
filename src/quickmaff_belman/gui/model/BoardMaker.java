@@ -60,6 +60,7 @@ public class BoardMaker implements Runnable {
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
+                
 
                 for (BoardTask bTask : boardTasks) {
                     StackPane sPane = new StackPane();
@@ -101,7 +102,8 @@ public class BoardMaker implements Runnable {
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
                         
-                        Button completeTask = completeTaskButton(bTask);
+                        
+                        Button completeTask = completeTaskButton(bTask,stackPane,aPane);
                         
                         stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
@@ -141,7 +143,8 @@ public class BoardMaker implements Runnable {
         }
     }
 
-    private Button completeTaskButton(BoardTask bTask) {
+    private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
+        ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font ("Ariel", 25));
         completeTask.setTranslateY(350);
@@ -149,6 +152,12 @@ public class BoardMaker implements Runnable {
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
             try {
                 model.setCompleteTask(bTask.getTaskID());
+                aPane.getChildren().remove(stackPane);
+                for (Node child : allNodes) {
+                            child.setEffect(null);
+                        }
+               
+                
             } catch (Exception ex) {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
