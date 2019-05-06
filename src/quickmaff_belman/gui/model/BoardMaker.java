@@ -101,18 +101,7 @@ public class BoardMaker implements Runnable {
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
                         
-                        Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
-                        completeTask.setFont(new Font ("Ariel", 25));
-                        completeTask.setTranslateY(350);
-                        completeTask.setTranslateX(200);
-                        
-//                        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-//                            try {
-//                                model.setCompleteTask(bTask.getTaskID());
-//                            } catch (Exception ex) {
-//                                ExceptionHandler.handleException(ex, model.getResourceBundle());
-//                            }
-//                        });
+                        Button completeTask = completeTaskButton(bTask);
                         
                         stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
@@ -150,6 +139,21 @@ public class BoardMaker implements Runnable {
             }
 
         }
+    }
+
+    private Button completeTaskButton(BoardTask bTask) {
+        Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
+        completeTask.setFont(new Font ("Ariel", 25));
+        completeTask.setTranslateY(350);
+        completeTask.setTranslateX(200);
+        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+            try {
+                model.setCompleteTask(bTask.getTaskID());
+            } catch (Exception ex) {
+                ExceptionHandler.handleException(ex, model.getResourceBundle());
+            }
+        });
+        return completeTask;
     }
 
   
