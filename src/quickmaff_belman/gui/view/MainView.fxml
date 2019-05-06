@@ -77,7 +77,7 @@
                   <Image url="@images/display.png" />
                </image>
             </ImageView>
-            <Label fx:id="infoBar" prefHeight="44.0" prefWidth="445.0" text="Den tilføjede JSON fil er en kopi af en tidligere">
+            <Label fx:id="infoBar" prefHeight="44.0" prefWidth="445.0">
                <font>
                   <Font name="Bookshelf Symbol 7" size="20.0" />
                </font></Label>
