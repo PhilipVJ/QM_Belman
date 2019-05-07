@@ -65,7 +65,7 @@
          <font>
             <Font name="Arial" size="32.0" />
          </font></Label>
-      <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
+      <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#filtering" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
          <image>
             <Image url="@images/filterknap1.png" />
          </image>

@@ -32,6 +32,7 @@ import quickmaff_belman.be.BluePainter;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ColorfulPainter;
 import quickmaff_belman.be.GreenPainter;
+import quickmaff_belman.be.ITaskPainter;
 import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
@@ -40,13 +41,13 @@ import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Painter;
 
-
 /**
  * FXML Controller class
  *
  * @author Philip
  */
-public class MainViewController implements Initializable {
+public class MainViewController implements Initializable
+{
 
     @FXML
     private ImageView imgBackground;
@@ -75,30 +76,46 @@ public class MainViewController implements Initializable {
     private Label departmentName;
     @FXML
     private StackPane display;
-    
-   
 
-    
+    private int filterOption = 1;
+
+    private Image greenFilter;
+    private Image redFilter;
+    private Image yellowFilter;
+    private Image blueFilter;
+    private Image offFilter;
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb)
+    {
         executor = Executors.newFixedThreadPool(2);
         labelWatcher = Executors.newScheduledThreadPool(1);
 
         startLabelResetter();
+        //set Images
+        greenFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
+        yellowFilter = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
+        redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
+        blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
+        offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
+
     }
 
-    public void setModel(Model model) {
+    public void setModel(Model model)
+    {
         this.model = model;
     }
 
     @FXML
-    private void changeLanguage(MouseEvent event) {
+    private void changeLanguage(MouseEvent event)
+    {
 
         Language language = model.changeLanguage();
-        switch (language) {
+        switch (language)
+        {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
@@ -115,15 +132,21 @@ public class MainViewController implements Initializable {
     /**
      * When the info label is updated it will be reset after 5 seconds
      */
-    private void startLabelResetter() {
-        infoBar.textProperty().addListener(new ChangeListener<String>() {
+    private void startLabelResetter()
+    {
+        infoBar.textProperty().addListener(new ChangeListener<String>()
+        {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
+            {
 
-                Runnable resetter = new Runnable() {
+                Runnable resetter = new Runnable()
+                {
                     @Override
-                    public void run() {
-                        Platform.runLater(() -> {
+                    public void run()
+                    {
+                        Platform.runLater(() ->
+                        {
                             infoBar.setText("");
                         });
                     }
@@ -135,8 +158,10 @@ public class MainViewController implements Initializable {
 
     }
 
-    public void initView() {
-        try {
+    public void initView()
+    {
+        try
+        {
             stage.setFullScreen(true);
             setGraphics();
             setAllText();
@@ -148,24 +173,27 @@ public class MainViewController implements Initializable {
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             executor.submit(fWatcher);
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
-        } catch (InterruptedException ex) {
+        } catch (InterruptedException ex)
+        {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
-    private void setAllText() {
+    private void setAllText()
+    {
         departmentName.setText(model.getDepartmentName());
     }
 
-    
-
-    public void setStage(Stage stage) {
+    public void setStage(Stage stage)
+    {
         this.stage = stage;
     }
 
-    private void setGraphics() {
+    private void setGraphics()
+    {
 
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
@@ -173,63 +201,67 @@ public class MainViewController implements Initializable {
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
 
-
     }
 
-    public void checkForUnloadedFiles() {
+    public void checkForUnloadedFiles()
+    {
         int numberOfAddedFiles;
-        try {
+        try
+        {
             numberOfAddedFiles = model.checkForUnLoadedFiles();
-            if(numberOfAddedFiles>0)
+            if (numberOfAddedFiles > 0)
             {
-            infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
+                infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
             }
-        } catch (IOException ex) {
+        } catch (IOException ex)
+        {
             infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
 
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             infoBar.setText(model.getResourceBundle().getString("sqlExceptionHeader"));
 
-        } catch (ParseException ex) {
+        } catch (ParseException ex)
+        {
             infoBar.setText(model.getResourceBundle().getString("parseExceptionHeader"));
         }
 
     }
 
-//    @FXML
-//    private void filtering(MouseEvent event, Painter painter)
-//    {
-//         ColorfulPainter paint = new ColorfulPainter();
-//        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint);
-//        
-//        switch (painter) {
-//            case Green:
-//                GreenPainter gp = new GreenPainter();
-//                bMaker = new BoardMaker(flowPane, model, anchorPane, gp);
-//                Image greenImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
-//                filter.setImage(greenImage);
-//                break;
-//            case Yellow:
-//                YellowPainter yp = new YellowPainter();
-//                bMaker = new BoardMaker(flowPane, model, anchorPane, yp);
-//                Image yellowImage = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
-//                filter.setImage(yellowImage);
-//                break;
-//            case Red:
-//                Image redImage = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
-//                filter.setImage(redImage);
-//                break;
-//            case Blue:
-//                BluePainter bp = new BluePainter();
-//                bMaker = new BoardMaker(flowPane, model, anchorPane, bp);
-//                Image blueImage = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
-//                filter.setImage(blueImage);
-//                break;
-//            default:
-//                Image off = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
-//                filter.setImage(off);
-//                break;
-//        }
-//    }
+    @FXML
+    private void filtering(MouseEvent event)
+    {
+        if (filterOption == 5)
+        {
+            filterOption = 1;
+        } else
+        {
+            filterOption++;
+        }
 
+        switch (filterOption)
+        {
+            case 1:
+                filter.setImage(offFilter);
+                break;
+            case 2:
+                filter.setImage(greenFilter);
+                break;
+            case 3:
+                filter.setImage(yellowFilter);
+                break;
+            case 4:
+                filter.setImage(redFilter);
+                break;
+            case 5:
+                filter.setImage(blueFilter);
+                break;
+        }
+        System.out.println(filterOption);
+    }
+
+    private void restartBoardMaker(ITaskPainter chosenFilter)
+    {
+        
+    }
 }
