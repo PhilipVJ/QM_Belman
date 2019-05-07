@@ -83,7 +83,7 @@ public class OrderDAO {
         return readyForWork;
     }
     
-     public void setCompleteTask(int taskID, String orderNumber, String departmentName) throws SQLServerException, SQLException
+     public void setCompleteTask(int taskID, String departmentName) throws SQLServerException, SQLException
     {
         Connection connection = null;
         
@@ -110,8 +110,8 @@ public class OrderDAO {
             java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
             
             pstLog.setDate(1, sqlDateLog);
-            pstLog.setString(2, "Task Finished");
-            pstLog.setString(3, ""+orderNumber);
+            pstLog.setString(2, "Task Processed");
+            pstLog.setString(3, ""+taskID);
             pstLog.setString(4, ""+departmentName);
             pstLog.executeUpdate();
             

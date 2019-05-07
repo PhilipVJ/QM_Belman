@@ -38,8 +38,8 @@ public class BLLManager
     public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
         return dFacade.checkForUnloadedFiles();
     }
-    public void setCompleteTask(int taskID, String orderNumber, String departmentName) throws SQLException{
-         dFacade.setCompleteTask(taskID, orderNumber, departmentName);
+    public void setCompleteTask(int taskID, String departmentName) throws SQLException{
+         dFacade.setCompleteTask(taskID, departmentName);
     }
            
     

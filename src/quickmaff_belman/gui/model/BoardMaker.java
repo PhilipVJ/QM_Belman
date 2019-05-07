@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -162,11 +163,12 @@ public class BoardMaker implements Runnable {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
-        completeTask.setTranslateY(350);
-        completeTask.setTranslateX(200);
+        completeTask.setTranslateY(0);
+        completeTask.setTranslateX(0);
+        completeTask.setBlendMode(BlendMode.MULTIPLY);
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
             try {
-                model.setCompleteTask(bTask.getTaskID(), bTask.getOrderNumber());
+                model.setCompleteTask(bTask.getTaskID());
                 aPane.getChildren().remove(stackPane);
                 for (Node child : allNodes) {
                     child.setEffect(null);
