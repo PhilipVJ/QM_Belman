@@ -17,12 +17,22 @@ public class BoardTask {
     private Date endDate;
     private final Date startDate;
     private final boolean readyForWork;
+    private int taskID;
 
-    public BoardTask(String orderNumber, Date endDate, Date startDate, boolean readyForWork) {
+    public BoardTask(String orderNumber, Date endDate, Date startDate, boolean readyForWork, int taskID) {
         this.orderNumber = orderNumber;
         this.endDate = endDate;
         this.startDate = startDate;
         this.readyForWork = readyForWork;
+        this.taskID = taskID;
+    }
+
+    public void setTaskID(int taskID) {
+        this.taskID = taskID;
+    }
+
+    public int getTaskID() {
+        return taskID;
     }
 
     public String getOrderNumber() {
