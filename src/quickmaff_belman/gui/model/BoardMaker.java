@@ -166,6 +166,9 @@ public class BoardMaker implements Runnable {
         completeTask.setTranslateY(0);
         completeTask.setTranslateX(0);
         completeTask.setBlendMode(BlendMode.MULTIPLY);
+        completeTask.setPrefHeight(60);
+        completeTask.setPrefWidth(250);
+        completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
             try {
                 model.setCompleteTask(bTask.getTaskID());
