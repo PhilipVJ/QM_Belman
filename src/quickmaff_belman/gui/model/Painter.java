@@ -9,7 +9,10 @@ package quickmaff_belman.gui.model;
  *
  * @author Caspe
  */
-public class DelayedSorting
+public enum Painter
 {
-    
+    Yellow, 
+    Green,
+    Blue,
+    Red;
 }
