@@ -41,7 +41,8 @@ public class BoardMaker implements Runnable {
     private final Model model;
     private final AnchorPane aPane;
     private ITaskPainter paintStrategy;
-
+   
+    
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy) {
         this.fPane = fPane;
         this.model = model;
@@ -49,10 +50,10 @@ public class BoardMaker implements Runnable {
         this.paintStrategy = strategy;
 
     }
-
+    
     @Override
     public void run() {
-
+        
         while (true) {
             ArrayList<BoardTask> boardTasks;
             try {
@@ -73,7 +74,7 @@ public class BoardMaker implements Runnable {
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
                     Label endDate = new Label("\n\n" + bTask.getEndDate());
-
+                    
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
 
@@ -101,12 +102,20 @@ public class BoardMaker implements Runnable {
                         StackPane stackPane = new StackPane(openedView);
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
+                        
+                        
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-                        orderLabel.setFont(new Font("Arial", 50));
+                        orderLabel.setFont(new Font("Arial",50));
+//                        ImageView orderView = new ImageView(postItLine);
+//                        orderView.setTranslateY(-200);
+//                        orderView
                         orderLabel.setTranslateY(-200);
+                        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItLine.png);");
+                        
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
+//                        endDateLabel.setGraphic(new ImageView(postItLine));
 
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
 
@@ -157,7 +166,7 @@ public class BoardMaker implements Runnable {
         completeTask.setTranslateX(200);
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
             try {
-                model.setCompleteTask(bTask.getTaskID());
+                model.setCompleteTask(bTask.getTaskID(), bTask.getOrderNumber());
                 aPane.getChildren().remove(stackPane);
                 for (Node child : allNodes) {
                     child.setEffect(null);
