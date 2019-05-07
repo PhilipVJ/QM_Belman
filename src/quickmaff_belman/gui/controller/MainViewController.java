@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.gui.controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -14,8 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,9 +26,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.ColorfulPainter;
+import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
@@ -123,7 +121,6 @@ public class MainViewController implements Initializable {
                     }
                 };
                 labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
-
             }
 
         });
@@ -137,7 +134,8 @@ public class MainViewController implements Initializable {
             setAllText();
 
             // Setting up the board
-            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane);
+            ColorfulPainter paint = new ColorfulPainter();
+            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint);
             executor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);

@@ -27,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.ITaskPainter;
 
 /**
  *
@@ -36,16 +37,15 @@ public class BoardMaker implements Runnable {
 
     private final FlowPane fPane;
     private final Model model;
-    private final Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
-    private final Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
-    private final Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
-    private Image prevUsedImage = null;
+    private Image tempImage = null;
     private final AnchorPane aPane;
+    private ITaskPainter paintStrategy;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
+        this.paintStrategy = strategy;
 
     }
 
@@ -60,12 +60,17 @@ public class BoardMaker implements Runnable {
                 ImageView view = null;
 
                 for (BoardTask bTask : boardTasks) {
+                    view = new ImageView();
                     StackPane sPane = new StackPane();
-                    view = getPostItColour(bTask);
+                    tempImage = paintStrategy.getColor(bTask);
+                    if(tempImage==null)
+                    {
+                        continue;
+                    }
+                    view.setImage(tempImage);
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
                     Label endDate = new Label("\n\n" + bTask.getEndDate());
-                    Image prevImage = prevUsedImage;
 
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
@@ -79,7 +84,7 @@ public class BoardMaker implements Runnable {
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
                         ImageView openedView = new ImageView();
                         Date today = new Date();
-                        openedView.setImage(prevImage);
+                        openedView.setImage(tempImage);
                         // Blurs everything which exists in the root Pane
                         ObservableList<Node> allNodes = aPane.getChildren();
                         BoxBlur blur = new BoxBlur();
@@ -139,29 +144,6 @@ public class BoardMaker implements Runnable {
         warning.setStrokeWidth(2);
         warning.setTranslateY(10);
         sPane.getChildren().add(warning);
-    }
-
-    private ImageView getPostItColour(BoardTask bTask) {
-
-        Date today = new Date();
-        ImageView view = new ImageView();
-        // Makes the post it blue if the start day is sooner than the current day
-        if (bTask.getStartDate().after(today)) {
-            prevUsedImage = bluePostIt;
-            view.setImage(bluePostIt);
-            return view;
-        } // If they are ready to start working on they will be made green                  
-        else if (bTask.getReadyForWork() == true) {
-            prevUsedImage = greenPostIt;
-            view.setImage(greenPostIt);
-
-        } // If the tasks start date is prior to today, but isn't ready to start work on yet
-        // it will become a yellow post
-        else {
-            prevUsedImage = gulPostIt;
-            view.setImage(gulPostIt);
-        }
-        return view;
     }
 
 }
