@@ -122,17 +122,32 @@ public class MainViewController implements Initializable {
                 else if (!isLoading.get())
                 {
                      Platform.runLater(()->{
-                       infoBar.setText(""); 
+                       
+                       if(flowPane.getChildren().isEmpty())
+                       {
+                           infoBar.setText(model.getResourceBundle().getString("noTasks"));
+                       }
+                       else
+                       {
+                           infoBar.setText("");
+                       }
                     });
                 }
             }
+
+           
         });
     }
 
     public void setModel(Model model) {
         this.model = model;
     }
-
+    
+     private void checkForEmptyFlowPane()
+        {
+            
+        }
+    
     @FXML
     private void changeLanguage(MouseEvent event) {
 
