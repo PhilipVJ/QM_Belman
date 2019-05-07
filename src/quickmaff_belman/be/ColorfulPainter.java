@@ -25,17 +25,14 @@ public class ColorfulPainter implements ITaskPainter {
         Date today = new Date();
 
         if (task.getStartDate().after(today)) {
-            System.out.println("returning blue");
             return bluePostIt;
         } // If they are ready to start working on they will be made green                  
         else if (task.getReadyForWork() == true) {
-            System.out.println("returning green");
            return greenPostIt;
 
         } // If the tasks start date is prior to today, but isn't ready to start work on yet
         // it will become a yellow post
         else {
-            System.out.println("returning yellow");
            return gulPostIt;
                   
         }

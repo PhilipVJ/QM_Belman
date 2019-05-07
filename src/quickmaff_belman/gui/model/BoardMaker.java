@@ -39,7 +39,6 @@ public class BoardMaker implements Runnable {
 
     private final FlowPane fPane;
     private final Model model;
-    private Image tempImage = null;
     private final AnchorPane aPane;
     private ITaskPainter paintStrategy;
 
@@ -60,17 +59,17 @@ public class BoardMaker implements Runnable {
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
-                
 
                 for (BoardTask bTask : boardTasks) {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
-                    tempImage = paintStrategy.getColor(bTask);
-                    if(tempImage==null)
-                    {
+                    Image color = paintStrategy.getColor(bTask);
+                    
+                    if (color == null) {
                         continue;
                     }
-                    view.setImage(tempImage);
+                   
+                    view.setImage(color);
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
                     Label endDate = new Label("\n\n" + bTask.getEndDate());
@@ -85,9 +84,10 @@ public class BoardMaker implements Runnable {
                     }
 
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
+ 
                         ImageView openedView = new ImageView();
                         Date today = new Date();
-                        openedView.setImage(tempImage);
+                        openedView.setImage(color);
                         // Blurs everything which exists in the root Pane
                         ObservableList<Node> allNodes = aPane.getChildren();
                         BoxBlur blur = new BoxBlur();
@@ -106,26 +106,25 @@ public class BoardMaker implements Runnable {
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
-                        
-                        
-                        Button completeTask = completeTaskButton(bTask,stackPane,aPane);
-                        
+
+                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+
                         stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
-                        stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->{
-                           if(q.getButton()==MouseButton.SECONDARY){
-                             aPane.getChildren().remove(stackPane);
-                             for (Node child : allNodes) {
-                            child.setEffect(null);
-                        }
-                           }
-                        
+                        stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
+                            if (q.getButton() == MouseButton.SECONDARY) {
+                                aPane.getChildren().remove(stackPane);
+                                for (Node child : allNodes) {
+                                    child.setEffect(null);
+                                }
+                            }
+
                         });
                         aPane.getChildren().addAll(stackPane);
 
                         System.out.println("Opening task from order:" + orderNumber);
-                        
+
                     });
-                    
+
                     HBox box = new HBox(sPane);
                     box.setAlignment(Pos.CENTER);
                     boxes.add(box);
@@ -151,7 +150,7 @@ public class BoardMaker implements Runnable {
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
-        completeTask.setFont(new Font ("Ariel", 25));
+        completeTask.setFont(new Font("Ariel", 25));
         completeTask.setTranslateY(350);
         completeTask.setTranslateX(200);
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
@@ -159,10 +158,9 @@ public class BoardMaker implements Runnable {
                 model.setCompleteTask(bTask.getTaskID());
                 aPane.getChildren().remove(stackPane);
                 for (Node child : allNodes) {
-                            child.setEffect(null);
-                        }
-               
-                
+                    child.setEffect(null);
+                }
+
             } catch (Exception ex) {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
@@ -170,7 +168,6 @@ public class BoardMaker implements Runnable {
         return completeTask;
     }
 
-  
     private void makeRedCirkel(StackPane sPane) {
         Circle warning = new Circle(50);
         warning.setStroke(Color.RED);
