@@ -44,8 +44,8 @@ public class BoardMaker implements Runnable {
     private final AnchorPane aPane;
     private final ITaskPainter paintStrategy;
     private final BooleanProperty isLoading;
-
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading ) {
+    private int roundCounter = 0;
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
@@ -60,6 +60,10 @@ public class BoardMaker implements Runnable {
         while (true) {
             ArrayList<BoardTask> boardTasks;
             try {
+                if(roundCounter==0){
+                isLoading.set(true);
+                }
+
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
@@ -147,6 +151,10 @@ public class BoardMaker implements Runnable {
                     fPane.getChildren().clear();
                     fPane.getChildren().addAll(boxes);
                 });
+                if(roundCounter==0){
+                isLoading.set(false);
+                }
+                roundCounter++;
 
             } catch (SQLException ex) {
                 Logger.getLogger(BoardMaker.class.getName()).log(Level.SEVERE, null, ex);
