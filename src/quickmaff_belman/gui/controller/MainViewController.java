@@ -31,7 +31,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BluePainter;
-import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ColorfulPainter;
 import quickmaff_belman.be.GreenPainter;
 import quickmaff_belman.be.ITaskPainter;
@@ -87,8 +86,9 @@ public class MainViewController implements Initializable
     private Image yellowFilter;
     private Image blueFilter;
     private Image offFilter;
-    
+
     private BooleanProperty isLoading;
+
     /**
      * Initializes the controller class.
      */
@@ -106,13 +106,48 @@ public class MainViewController implements Initializable
         redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
-        
+
         isLoading = new SimpleBooleanProperty(false);
+
+        isLoading.addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
+            {
+                if (isLoading.get())
+                {
+                    Platform.runLater(() ->
+                    {
+                        infoBar.setText(model.getResourceBundle().getString("loading"));
+                    });
+                    System.out.println("" + Thread.currentThread().getName());
+
+                } else if (!isLoading.get())
+                {
+                    Platform.runLater(() ->
+                    {
+                        if (flowPane.getChildren().isEmpty())
+                        {
+                            infoBar.setText(model.getResourceBundle().getString("noTasks"));
+                        } else
+                        {
+                            infoBar.setText("");
+                        }
+                    });
+                }
+            }
+
+        });
     }
 
     public void setModel(Model model)
     {
         this.model = model;
+    }
+
+    private void checkForEmptyFlowPane()
+    {
+
     }
 
     @FXML
@@ -145,21 +180,24 @@ public class MainViewController implements Initializable
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
             {
-
-                Runnable resetter = new Runnable()
+                if (!isLoading.get())
                 {
-                    @Override
-                    public void run()
+                    Runnable resetter = new Runnable()
                     {
-                        Platform.runLater(() ->
+                        @Override
+                        public void run()
                         {
-                            infoBar.setText("");
-                        });
-                    }
-                };
-                labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
-            }
+                            Platform.runLater(()
+                                    ->
+                            {
+                                infoBar.setText("");
+                            });
+                        }
+                    };
+                    labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
+                }
 
+            }
         });
 
     }
@@ -252,7 +290,7 @@ public class MainViewController implements Initializable
                 filter.setImage(offFilter);
                 ITaskPainter colorfulPainter = new ColorfulPainter();
                 restartBoardMaker(colorfulPainter);
-                
+
                 break;
             case 2:
                 filter.setImage(greenFilter);
@@ -282,13 +320,13 @@ public class MainViewController implements Initializable
     private void restartBoardMaker(ITaskPainter chosenFilter)
     {
         // Shut down the current thread
-      bMakerExecutor.shutdown();
-      bMakerExecutor.shutdownNow();
-      // Make a new thread with a new runnable
-      bMakerExecutor = Executors.newSingleThreadExecutor();
-      flowPane.getChildren().clear();
-      infoBar.setText(model.getResourceBundle().getString("loading"));
-      BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
-      bMakerExecutor.submit(bMaker);
+        bMakerExecutor.shutdown();
+        bMakerExecutor.shutdownNow();
+        // Make a new thread with a new runnable
+        bMakerExecutor = Executors.newSingleThreadExecutor();
+        flowPane.getChildren().clear();
+        infoBar.setText(model.getResourceBundle().getString("loading"));
+        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
+        bMakerExecutor.submit(bMaker);
     }
 }
