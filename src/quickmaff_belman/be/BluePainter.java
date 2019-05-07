@@ -7,7 +7,6 @@ package quickmaff_belman.be;
 
 import java.util.Date;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  *
