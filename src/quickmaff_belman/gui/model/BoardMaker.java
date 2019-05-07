@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventType;
 import javafx.geometry.Pos;
@@ -42,13 +43,14 @@ public class BoardMaker implements Runnable {
     private final Model model;
     private final AnchorPane aPane;
     private final ITaskPainter paintStrategy;
+    private final BooleanProperty isLoading;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading ) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
         this.paintStrategy = strategy;
-     
+        this.isLoading = isLoading;
 
     }
 

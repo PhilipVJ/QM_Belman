@@ -14,6 +14,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -85,7 +87,8 @@ public class MainViewController implements Initializable
     private Image yellowFilter;
     private Image blueFilter;
     private Image offFilter;
-
+    
+    private BooleanProperty isLoading;
     /**
      * Initializes the controller class.
      */
@@ -103,7 +106,8 @@ public class MainViewController implements Initializable
         redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
-
+        
+        isLoading = new SimpleBooleanProperty(false);
     }
 
     public void setModel(Model model)
@@ -170,7 +174,7 @@ public class MainViewController implements Initializable
 
             // Setting up the board
             ColorfulPainter paint = new ColorfulPainter();
-            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint);
+            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint, isLoading);
             bMakerExecutor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
@@ -283,7 +287,8 @@ public class MainViewController implements Initializable
       // Make a new thread with a new runnable
       bMakerExecutor = Executors.newSingleThreadExecutor();
       flowPane.getChildren().clear();
-      BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter);
+      infoBar.setText(model.getResourceBundle().getString("loading"));
+      BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
       bMakerExecutor.submit(bMaker);
     }
 }
