@@ -64,11 +64,11 @@ public class BoardMaker implements Runnable {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
                     Image color = paintStrategy.getColor(bTask);
-                    
+
                     if (color == null) {
                         continue;
                     }
-                   
+
                     view.setImage(color);
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
@@ -84,7 +84,7 @@ public class BoardMaker implements Runnable {
                     }
 
                     sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
- 
+
                         ImageView openedView = new ImageView();
                         Date today = new Date();
                         openedView.setImage(color);
@@ -96,6 +96,7 @@ public class BoardMaker implements Runnable {
                         for (Node child : allNodes) {
                             child.setEffect(blur);
                         }
+
                         // Makes a stackpane and adds it to the blurred root
                         StackPane stackPane = new StackPane(openedView);
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
@@ -119,6 +120,7 @@ public class BoardMaker implements Runnable {
                             }
 
                         });
+
                         aPane.getChildren().addAll(stackPane);
 
                         System.out.println("Opening task from order:" + orderNumber);
@@ -160,10 +162,12 @@ public class BoardMaker implements Runnable {
                 for (Node child : allNodes) {
                     child.setEffect(null);
                 }
+                removeSmallTask(fPane, bTask.getOrderNumber());
 
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
+
         });
         return completeTask;
     }
@@ -175,6 +179,20 @@ public class BoardMaker implements Runnable {
         warning.setStrokeWidth(2);
         warning.setTranslateY(10);
         sPane.getChildren().add(warning);
+    }
+
+    private void removeSmallTask(FlowPane pane, String orderNumber) {
+        ObservableList<Node> allBoxes = pane.getChildren();
+        HBox toRemove = null;
+        for (Node box : allBoxes) {
+            HBox hBox = (HBox) box;
+            StackPane sPane = (StackPane) hBox.getChildren().get(0);
+            Label oNumber = (Label) sPane.getChildren().get(1);
+            if (oNumber.getText().contains(orderNumber)) {
+                toRemove = (HBox) box;
+            }
+        }
+        pane.getChildren().remove(toRemove);
     }
 
 }
