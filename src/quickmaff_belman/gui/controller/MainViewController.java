@@ -28,18 +28,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
-import quickmaff_belman.be.BluePainter;
-import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ColorfulPainter;
-import quickmaff_belman.be.GreenPainter;
 import quickmaff_belman.be.ITaskPainter;
-import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
-import quickmaff_belman.gui.model.Painter;
 
 /**
  * FXML Controller class
@@ -60,7 +55,8 @@ public class MainViewController implements Initializable
 
     private Model model;
     private Stage stage;
-    private ExecutorService executor;
+    private ExecutorService bMakerExecutor;
+    private ExecutorService fWatcherExecutor;
 
     @FXML
     private Label infoBar;
@@ -91,7 +87,8 @@ public class MainViewController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        executor = Executors.newFixedThreadPool(2);
+        bMakerExecutor = Executors.newSingleThreadExecutor();
+        fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
 
         startLabelResetter();
@@ -169,10 +166,10 @@ public class MainViewController implements Initializable
             // Setting up the board
             ColorfulPainter paint = new ColorfulPainter();
             BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint);
-            executor.submit(bMaker);
+            bMakerExecutor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
-            executor.submit(fWatcher);
+            fWatcherExecutor.submit(fWatcher);
         } catch (IOException ex)
         {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
@@ -262,6 +259,9 @@ public class MainViewController implements Initializable
 
     private void restartBoardMaker(ITaskPainter chosenFilter)
     {
-        
+      bMakerExecutor.shutdown();
+      bMakerExecutor.shutdownNow();
+      BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter);
+      bMakerExecutor.submit(bMaker);
     }
 }
