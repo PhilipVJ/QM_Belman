@@ -28,13 +28,18 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.BluePainter;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ColorfulPainter;
+import quickmaff_belman.be.GreenPainter;
 import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
+import quickmaff_belman.gui.model.Painter;
+
 
 /**
  * FXML Controller class
@@ -70,7 +75,10 @@ public class MainViewController implements Initializable {
     private Label departmentName;
     @FXML
     private StackPane display;
+    
+   
 
+    
     /**
      * Initializes the controller class.
      */
@@ -151,20 +159,7 @@ public class MainViewController implements Initializable {
         departmentName.setText(model.getDepartmentName());
     }
 
-    private void filtering(MouseEvent event) {
-        Language language = model.changeLanguage();
-
-        switch (language) {
-            case DANISH:
-                Image buttonImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
-                filter.setImage(buttonImage);
-                break;
-            case ENGLISH:
-                Image pressImage = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
-                filter.setImage(pressImage);
-                break;
-        }
-    }
+    
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -200,5 +195,41 @@ public class MainViewController implements Initializable {
         }
 
     }
+
+//    @FXML
+//    private void filtering(MouseEvent event, Painter painter)
+//    {
+//         ColorfulPainter paint = new ColorfulPainter();
+//        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paint);
+//        
+//        switch (painter) {
+//            case Green:
+//                GreenPainter gp = new GreenPainter();
+//                bMaker = new BoardMaker(flowPane, model, anchorPane, gp);
+//                Image greenImage = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
+//                filter.setImage(greenImage);
+//                break;
+//            case Yellow:
+//                YellowPainter yp = new YellowPainter();
+//                bMaker = new BoardMaker(flowPane, model, anchorPane, yp);
+//                Image yellowImage = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
+//                filter.setImage(yellowImage);
+//                break;
+//            case Red:
+//                Image redImage = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
+//                filter.setImage(redImage);
+//                break;
+//            case Blue:
+//                BluePainter bp = new BluePainter();
+//                bMaker = new BoardMaker(flowPane, model, anchorPane, bp);
+//                Image blueImage = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
+//                filter.setImage(blueImage);
+//                break;
+//            default:
+//                Image off = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
+//                filter.setImage(off);
+//                break;
+//        }
+//    }
 
 }
