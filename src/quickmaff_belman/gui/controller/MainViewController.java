@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.controller;
 
+import com.sun.javafx.property.adapter.PropertyDescriptor;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -48,8 +49,7 @@ import quickmaff_belman.gui.model.Model;
  *
  * @author Philip
  */
-public class MainViewController implements Initializable
-{
+public class MainViewController implements Initializable {
 
     @FXML
     private ImageView imgBackground;
@@ -87,14 +87,14 @@ public class MainViewController implements Initializable
     private Image yellowFilter;
     private Image blueFilter;
     private Image offFilter;
-    
+
     private BooleanProperty isLoading;
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
@@ -106,22 +106,38 @@ public class MainViewController implements Initializable
         redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
-        
+
         isLoading = new SimpleBooleanProperty(false);
+
+        isLoading.addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (isLoading.get()) {
+                    Platform.runLater(()->{
+                       infoBar.setText(model.getResourceBundle().getString("loading")); 
+                    });
+                    System.out.println(""+Thread.currentThread().getName());
+                    
+                }
+                else if (!isLoading.get())
+                {
+                     Platform.runLater(()->{
+                       infoBar.setText(""); 
+                    });
+                }
+            }
+        });
     }
 
-    public void setModel(Model model)
-    {
+    public void setModel(Model model) {
         this.model = model;
     }
 
     @FXML
-    private void changeLanguage(MouseEvent event)
-    {
+    private void changeLanguage(MouseEvent event) {
 
         Language language = model.changeLanguage();
-        switch (language)
-        {
+        switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
@@ -138,36 +154,30 @@ public class MainViewController implements Initializable
     /**
      * When the info label is updated it will be reset after 5 seconds
      */
-    private void startLabelResetter()
-    {
-        infoBar.textProperty().addListener(new ChangeListener<String>()
-        {
+    private void startLabelResetter() {
+        infoBar.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-            {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!isLoading.get()) {
+                    Runnable resetter = new Runnable() {
+                        @Override
+                        public void run() {
+                            Platform.runLater(()
+                                    -> {
+                                infoBar.setText("");
+                            });
+                        }
+                    };
+                    labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
+                }
 
-                Runnable resetter = new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        Platform.runLater(() ->
-                        {
-                            infoBar.setText("");
-                        });
-                    }
-                };
-                labelWatcher.schedule(resetter, 10, TimeUnit.SECONDS);
             }
-
         });
 
     }
 
-    public void initView()
-    {
-        try
-        {
+    public void initView() {
+        try {
             stage.setFullScreen(true);
             setGraphics();
             setAllText();
@@ -179,27 +189,22 @@ public class MainViewController implements Initializable
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             fWatcherExecutor.submit(fWatcher);
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
-        } catch (InterruptedException ex)
-        {
+        } catch (InterruptedException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
-    private void setAllText()
-    {
+    private void setAllText() {
         departmentName.setText(model.getDepartmentName());
     }
 
-    public void setStage(Stage stage)
-    {
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    private void setGraphics()
-    {
+    private void setGraphics() {
 
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
@@ -209,50 +214,40 @@ public class MainViewController implements Initializable
 
     }
 
-    public void checkForUnloadedFiles()
-    {
+    public void checkForUnloadedFiles() {
         int numberOfAddedFiles;
-        try
-        {
+        try {
             numberOfAddedFiles = model.checkForUnLoadedFiles();
-            if (numberOfAddedFiles > 0)
-            {
+            if (numberOfAddedFiles > 0) {
                 infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
             }
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
 
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             infoBar.setText(model.getResourceBundle().getString("sqlExceptionHeader"));
 
-        } catch (ParseException ex)
-        {
+        } catch (ParseException ex) {
             infoBar.setText(model.getResourceBundle().getString("parseExceptionHeader"));
         }
 
     }
 
     @FXML
-    private void filtering(MouseEvent event)
-    {
+    private void filtering(MouseEvent event) {
         restartBoardMaker(null);
-        if (filterOption == 5)
-        {
+        if (filterOption == 5) {
             filterOption = 1;
-        } else
-        {
+        } else {
             filterOption++;
         }
 
-        switch (filterOption)
-        {
+        switch (filterOption) {
             case 1:
                 filter.setImage(offFilter);
                 ITaskPainter colorfulPainter = new ColorfulPainter();
                 restartBoardMaker(colorfulPainter);
-                
+
                 break;
             case 2:
                 filter.setImage(greenFilter);
@@ -279,16 +274,15 @@ public class MainViewController implements Initializable
 
     }
 
-    private void restartBoardMaker(ITaskPainter chosenFilter)
-    {
+    private void restartBoardMaker(ITaskPainter chosenFilter) {
         // Shut down the current thread
-      bMakerExecutor.shutdown();
-      bMakerExecutor.shutdownNow();
-      // Make a new thread with a new runnable
-      bMakerExecutor = Executors.newSingleThreadExecutor();
-      flowPane.getChildren().clear();
-      infoBar.setText(model.getResourceBundle().getString("loading"));
-      BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
-      bMakerExecutor.submit(bMaker);
+        bMakerExecutor.shutdown();
+        bMakerExecutor.shutdownNow();
+        // Make a new thread with a new runnable
+        bMakerExecutor = Executors.newSingleThreadExecutor();
+        flowPane.getChildren().clear();
+        infoBar.setText(model.getResourceBundle().getString("loading"));
+        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
+        bMakerExecutor.submit(bMaker);
     }
 }
