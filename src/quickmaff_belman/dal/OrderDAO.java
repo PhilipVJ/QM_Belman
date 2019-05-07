@@ -83,7 +83,7 @@ public class OrderDAO {
         return readyForWork;
     }
     
-     public void setCompleteTask(int taskID) throws SQLServerException, SQLException
+     public void setCompleteTask(int taskID, String departmentName) throws SQLServerException, SQLException
     {
         Connection connection = null;
         
@@ -93,16 +93,29 @@ public class OrderDAO {
             connection.setAutoCommit(false);
             
         
-        String sql = "UPDATE DepartmentTask\n" +
+        String finishOrder = "UPDATE DepartmentTask\n" +
                     "set finishedOrder =1\n" +
                     "where taskID = (?)";
-        PreparedStatement pst = connection.prepareStatement(sql);
         
-            pst.setInt(1, taskID);
-            pst.executeUpdate();
+        String log = "INSERT INTO Log VALUES (?,?,?,?);";
+        
+        PreparedStatement pstOrder = connection.prepareStatement(finishOrder);
+        
+            pstOrder.setInt(1, taskID);
+            pstOrder.executeUpdate();
             connection.commit();
             
+        PreparedStatement pstLog = connection.prepareStatement(log);
+            Date date = new Date();
+            java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
             
+            pstLog.setDate(1, sqlDateLog);
+            pstLog.setString(2, "Task Processed");
+            pstLog.setString(3, ""+taskID);
+            pstLog.setString(4, ""+departmentName);
+            pstLog.executeUpdate();
+            
+            connection.commit();
         }catch (SQLException ex)
         {
             if (connection != null)

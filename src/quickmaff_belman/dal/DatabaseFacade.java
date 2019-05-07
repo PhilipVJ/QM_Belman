@@ -55,8 +55,8 @@ public class DatabaseFacade {
         
         return numberOfNewFilesAdded;
     }
-    public void setCompleteTask(int taskID) throws SQLException{
-         oDAO.setCompleteTask(taskID);
+    public void setCompleteTask(int taskID, String departmentName) throws SQLException{
+         oDAO.setCompleteTask(taskID, departmentName);
     } 
 
 

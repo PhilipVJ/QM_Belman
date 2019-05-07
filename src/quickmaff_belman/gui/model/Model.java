@@ -98,7 +98,7 @@ public class Model {
         return bMan.checkForUnLoadedFiles();
     }
     public void setCompleteTask(int taskID) throws SQLException{
-         bMan.setCompleteTask(taskID);
+         bMan.setCompleteTask(taskID, departmentName);
     }
 
 }
