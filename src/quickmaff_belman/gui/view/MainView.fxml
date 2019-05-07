@@ -61,9 +61,9 @@
             <Image url="@images/knapSprogDK.png" />
          </image>
       </ImageView>
-      <Label fx:id="departmentName" layoutX="42.0" layoutY="75.0" prefHeight="80.0" prefWidth="334.0">
+      <Label fx:id="departmentName" layoutX="96.0" layoutY="59.0" prefHeight="44.0" prefWidth="334.0">
          <font>
-            <Font size="31.0" />
+            <Font name="Arial" size="32.0" />
          </font></Label>
       <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
          <image>
