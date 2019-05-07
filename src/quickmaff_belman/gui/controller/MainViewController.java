@@ -233,6 +233,7 @@ public class MainViewController implements Initializable
     @FXML
     private void filtering(MouseEvent event)
     {
+        restartBoardMaker(null);
         if (filterOption == 5)
         {
             filterOption = 1;
@@ -247,11 +248,13 @@ public class MainViewController implements Initializable
                 filter.setImage(offFilter);
                 ITaskPainter colorfulPainter = new ColorfulPainter();
                 restartBoardMaker(colorfulPainter);
+                
                 break;
             case 2:
                 filter.setImage(greenFilter);
                 ITaskPainter greenPainter = new GreenPainter();
                 restartBoardMaker(greenPainter);
+                System.out.println("2");
                 break;
             case 3:
                 filter.setImage(yellowFilter);
@@ -269,13 +272,15 @@ public class MainViewController implements Initializable
                 restartBoardMaker(bluePainter);
                 break;
         }
-        System.out.println(filterOption);
+
     }
 
     private void restartBoardMaker(ITaskPainter chosenFilter)
     {
+        // Shut down the current thread
       bMakerExecutor.shutdown();
       bMakerExecutor.shutdownNow();
+      // Make a new thread with a new runnable
       bMakerExecutor = Executors.newSingleThreadExecutor();
       flowPane.getChildren().clear();
       BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter);
