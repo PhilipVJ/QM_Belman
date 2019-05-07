@@ -28,8 +28,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
+import quickmaff_belman.be.BluePainter;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ColorfulPainter;
+import quickmaff_belman.be.GreenPainter;
 import quickmaff_belman.be.ITaskPainter;
+import quickmaff_belman.be.RedPainter;
+import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
@@ -240,18 +245,28 @@ public class MainViewController implements Initializable
         {
             case 1:
                 filter.setImage(offFilter);
+                ITaskPainter colorfulPainter = new ColorfulPainter();
+                restartBoardMaker(colorfulPainter);
                 break;
             case 2:
                 filter.setImage(greenFilter);
+                ITaskPainter greenPainter = new GreenPainter();
+                restartBoardMaker(greenPainter);
                 break;
             case 3:
                 filter.setImage(yellowFilter);
+                ITaskPainter yellowPainter = new YellowPainter();
+                restartBoardMaker(yellowPainter);
                 break;
             case 4:
                 filter.setImage(redFilter);
+                ITaskPainter redPainter = new RedPainter();
+                restartBoardMaker(redPainter);
                 break;
             case 5:
                 filter.setImage(blueFilter);
+                ITaskPainter bluePainter = new BluePainter();
+                restartBoardMaker(bluePainter);
                 break;
         }
         System.out.println(filterOption);
@@ -261,6 +276,8 @@ public class MainViewController implements Initializable
     {
       bMakerExecutor.shutdown();
       bMakerExecutor.shutdownNow();
+      bMakerExecutor = Executors.newSingleThreadExecutor();
+      flowPane.getChildren().clear();
       BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter);
       bMakerExecutor.submit(bMaker);
     }

@@ -67,7 +67,7 @@
          </font></Label>
       <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#filtering" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
          <image>
-            <Image url="@images/filterknap1.png" />
+            <Image url="@images/filterknap1Off.png" />
          </image>
       </ImageView>
       <StackPane fx:id="display" layoutX="144.0" layoutY="829.0" prefHeight="186.0" prefWidth="1143.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0">
