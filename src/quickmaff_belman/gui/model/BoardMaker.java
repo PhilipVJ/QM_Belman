@@ -111,16 +111,16 @@ public class BoardMaker implements Runnable {
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-                        orderLabel.setFont(new Font("Arial", 30));   
+                        orderLabel.setFont(new Font("Arial", 30));                      
                         orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-                        orderLabel.setTranslateY(-200);
+                        orderLabel.setTranslateY(-300);
+                        orderLabel.setTranslateX(-200);
                         
-
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
-                        endDateLabel.setFont(new Font("Arial", 30));
+                        endDateLabel.setFont(new Font("Arial", 30));  
                         endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-                        endDateLabel.setTranslateY(-100);
-//                        endDateLabel.setGraphic(new ImageView(postItLine));
+                        endDateLabel.setTranslateY(-200);        
+                        endDateLabel.setTranslateX(-200);
 
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
                         completeTask.setTranslateY(250);
@@ -132,7 +132,9 @@ public class BoardMaker implements Runnable {
                         for (TaskStatus status : allStatus) {
                             textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
                         }
-                        statusLabel.setTranslateY(-300);
+                        statusLabel.setFont(new Font("Ariel",18));
+                        statusLabel.setTranslateY(-250);
+                        statusLabel.setTranslateX(230);
                         statusLabel.setText(textStatus);
                         
                        
