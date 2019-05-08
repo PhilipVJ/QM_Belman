@@ -113,14 +113,16 @@ public class BoardMaker implements Runnable {
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
                         orderLabel.setFont(new Font("Arial", 30));                      
                         orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+                        orderLabel.setPrefWidth(300);
                         orderLabel.setTranslateY(-300);
-                        orderLabel.setTranslateX(-200);
+                        orderLabel.setTranslateX(-150);
                         
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 30));  
                         endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+                        endDateLabel.setPrefWidth(300);
                         endDateLabel.setTranslateY(-200);        
-                        endDateLabel.setTranslateX(-200);
+                        endDateLabel.setTranslateX(-150);
 
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
                         completeTask.setTranslateY(250);
