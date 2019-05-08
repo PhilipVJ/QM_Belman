@@ -134,9 +134,6 @@ public class BoardMaker implements Runnable {
                         });
 
                         aPane.getChildren().addAll(stackPane);
-
-                        System.out.println("Opening task from order:" + orderNumber);
-
                     });
 
                     HBox box = new HBox(sPane);
