@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -63,17 +64,20 @@ public class BoardMaker implements Runnable {
 
         doneMark = new Image("/quickmaff_belman/gui/view/images/done.png");
         notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
-        postItBorder = new Image ("/quickmaff_belman/gui/view/images/postItBorder.png");
+        postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
 
     }
 
     @Override
     public void run() {
 
-        while (true) {
+        while (true)
+        {
             ArrayList<BoardTask> boardTasks;
-            try {
-                if (roundCounter == 0) {
+            try
+            {
+                if (roundCounter == 0)
+                {
                     isLoading.set(true);
                 }
 
@@ -81,12 +85,14 @@ public class BoardMaker implements Runnable {
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
 
-                for (BoardTask bTask : boardTasks) {
+                for (BoardTask bTask : boardTasks)
+                {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
                     Image color = paintStrategy.getColor(bTask);
 
-                    if (color == null) {
+                    if (color == null)
+                    {
                         continue;
                     }
 
@@ -100,7 +106,8 @@ public class BoardMaker implements Runnable {
 
                     sPane.getChildren().addAll(view, orderNumber, endDate);
                     // Adds a warning if the due date has passed
-                    if (bTask.passedEndDate() == true) {
+                    if (bTask.passedEndDate() == true)
+                    {
                         makeRedCirkel(sPane);
                     }
 
@@ -115,7 +122,8 @@ public class BoardMaker implements Runnable {
                             BoxBlur blur = new BoxBlur();
                             blur.setWidth(25);
                             blur.setHeight(25);
-                            for (Node child : allNodes) {
+                            for (Node child : allNodes)
+                            {
                                 child.setEffect(blur);
                             }
 
@@ -124,24 +132,21 @@ public class BoardMaker implements Runnable {
                             stackPane.prefWidthProperty().bind(aPane.widthProperty());
                             stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
-                            Label customerName = createCustomerLabel(bTask);  
+                            Label customerName = createCustomerLabel(bTask);
                             Label orderLabel = createOrderLabel(bTask);
                             Label endDateLabel = createEndDateLabel(bTask);
-                            
-                            
-                            
-                            
-                           
+
                             VBox vbox = new VBox();
                             ArrayList<HBox> allBoxes = new ArrayList<>();
 
                             ArrayList<TaskStatus> taskStatus = bTask.getOverview().getAllTaskStatus();
-                            for (TaskStatus status : taskStatus) {
+                            for (TaskStatus status : taskStatus)
+                            {
                                 Label statusLabel = new Label();
-                                statusLabel.setFont(new Font("Ariel",20));
+                                statusLabel.setFont(new Font("Ariel", 20));
                                 statusLabel.setText(status.getDepartmentName());
                                 ImageView view = new ImageView();
-                                if(status.getIsFinished())
+                                if (status.getIsFinished())
                                 {
                                     view.setImage(doneMark);
                                 }
@@ -150,11 +155,11 @@ public class BoardMaker implements Runnable {
                                     view.setImage(notDoneMark);
                                 }
                                 HBox box = new HBox();
-                                box.getChildren().addAll(statusLabel,view);
+                                box.getChildren().addAll(statusLabel, view);
                                 allBoxes.add(box);
                             }
                             vbox.getChildren().addAll(allBoxes);
-                            
+
                             ImageView postItBorderView = new ImageView();
                             postItBorderView.setImage(postItBorder);
                             postItBorderView.setTranslateX(-920);
@@ -165,21 +170,55 @@ public class BoardMaker implements Runnable {
                             stPane.setTranslateY(200);
                             stPane.setPrefHeight(250);
                             stPane.setPrefWidth(180);
+
+                            //Progress bar start 
+                            Label lblStart = new Label();
+                            lblStart.setText("Start");
+                            lblStart.setFont(new Font("Arial", 16));
+                            Label lblSlut = new Label();
+                            lblSlut.setText("Slut dato");
+                            lblSlut.setFont(new Font("Arial", 16));
                             
+                            double startDato = bTask.getStartDate().getTime();
+                            double slutDato = bTask.getEndDate().getTime();
+
+                            double estimeretTid = (slutDato - startDato) / (1000 * 60 * 60 * 24);
+                            double dagsDato = System.currentTimeMillis() / (1000 * 60 * 60 * 24);
+                            double dageBrugte = dagsDato - (startDato / (1000 * 60 * 60 * 24));
+                            double slut = dageBrugte / estimeretTid;
+
+                            ProgressBar pBar = new ProgressBar();
+                            pBar.setProgress(slut);
+
+                            lblStart.setTranslateX(-1458);
+                            lblStart.setTranslateY(75);
                             
-                            stPane.getChildren().addAll(postItBorderView,vbox);
+                            lblSlut.setTranslateX(-1257);
+                            lblSlut.setTranslateY(75);
+                            
+                            pBar.setPrefHeight(25);
+                            pBar.setPrefWidth(250);
+                            pBar.setTranslateX(-1350);
+                            pBar.setTranslateY(50);
+                            //Progress bar slut
+
+                            stPane.getChildren().addAll(lblStart, lblSlut, pBar, postItBorderView, vbox);
 
                             Button completeTask = completeTaskButton(bTask, stackPane, aPane);
 
-                            if (bTask.getReadyForWork() == true) {
+                            if (bTask.getReadyForWork() == true)
+                            {
                                 stackPane.getChildren().add(completeTask);
                             }
-                            
+
                             stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane);
-                            stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
-                                if (q.getButton() == MouseButton.SECONDARY) {
+                            stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->
+                            {
+                                if (q.getButton() == MouseButton.SECONDARY)
+                                {
                                     aPane.getChildren().remove(stackPane);
-                                    for (Node child : allNodes) {
+                                    for (Node child : allNodes)
+                                    {
                                         child.setEffect(null);
                                     }
                                 }
@@ -189,7 +228,6 @@ public class BoardMaker implements Runnable {
                             aPane.getChildren().addAll(stackPane);
                         }
 
-                        
                     });
 
                     HBox box = new HBox(sPane);
@@ -197,26 +235,34 @@ public class BoardMaker implements Runnable {
                     boxes.add(box);
                 }
 
-                Platform.runLater(() -> {
+                Platform.runLater(() ->
+                {
                     fPane.getChildren().clear();
                     fPane.getChildren().addAll(boxes);
                 });
-                if (roundCounter == 0) {
+                if (roundCounter == 0)
+                {
                     isLoading.set(false);
                 }
                 roundCounter++;
 
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex)
+            {
                 Logger.getLogger(BoardMaker.class.getName()).log(Level.SEVERE, null, ex);
             }
-            try {
+            try
+            {
                 Thread.sleep(5000);
-            } catch (InterruptedException ex) {
+            }
+            catch (InterruptedException ex)
+            {
                 return;
             }
 
         }
     }
+
     private Label createCustomerLabel(BoardTask bTask) {
         Label customerName = new Label(model.getResourceBundle().getString("CustomerName") + ": " + bTask.getCustomerName());
         customerName.setFont(new Font("Arial", 30));
@@ -247,7 +293,6 @@ public class BoardMaker implements Runnable {
         return endDateLabel;
     }
 
-
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
@@ -258,16 +303,21 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefHeight(60);
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
-        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-            try {
+        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e ->
+        {
+            try
+            {
                 model.setCompleteTask(bTask.getTaskID());
                 aPane.getChildren().remove(stackPane);
-                for (Node child : allNodes) {
+                for (Node child : allNodes)
+                {
                     child.setEffect(null);
                 }
                 removeSmallTask(fPane, bTask.getOrderNumber());
 
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex)
+            {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
 
@@ -288,11 +338,13 @@ public class BoardMaker implements Runnable {
     private void removeSmallTask(FlowPane pane, String orderNumber) {
         ObservableList<Node> allBoxes = pane.getChildren();
         HBox toRemove = null;
-        for (Node box : allBoxes) {
+        for (Node box : allBoxes)
+        {
             HBox hBox = (HBox) box;
             StackPane sPane = (StackPane) hBox.getChildren().get(0);
             Label oNumber = (Label) sPane.getChildren().get(1);
-            if (oNumber.getText().contains(orderNumber)) {
+            if (oNumber.getText().contains(orderNumber))
+            {
                 toRemove = (HBox) box;
             }
         }
