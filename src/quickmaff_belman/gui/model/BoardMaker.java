@@ -185,16 +185,18 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-            try {
-                model.setCompleteTask(bTask.getTaskID());
-                aPane.getChildren().remove(stackPane);
-                for (Node child : allNodes) {
-                    child.setEffect(null);
-                }
-                removeSmallTask(fPane, bTask.getOrderNumber());
+            if(bTask.getReadyForWork()==true){
+                try {
+                    model.setCompleteTask(bTask.getTaskID());
+                    aPane.getChildren().remove(stackPane);
+                    for (Node child : allNodes) {
+                        child.setEffect(null);
+                    }
+                    removeSmallTask(fPane, bTask.getOrderNumber());
 
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex, model.getResourceBundle());
+                } catch (SQLException ex) {
+                    ExceptionHandler.handleException(ex, model.getResourceBundle());
+                }
             }
 
         });
