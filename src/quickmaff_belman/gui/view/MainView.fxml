@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
@@ -65,11 +66,6 @@
          <font>
             <Font name="Arial" size="32.0" />
          </font></Label>
-      <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#filtering" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="100.0">
-         <image>
-            <Image url="@images/filterknap1Off.png" />
-         </image>
-      </ImageView>
       <StackPane fx:id="display" layoutX="144.0" layoutY="829.0" prefHeight="186.0" prefWidth="1143.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0">
          <children>
             <ImageView fitHeight="120.0" fitWidth="539.0" pickOnBounds="true" preserveRatio="true">
@@ -83,5 +79,19 @@
                </font></Label>
          </children>
       </StackPane>
+      <VBox fx:id="filterBox" alignment="CENTER" layoutX="1547.0" layoutY="837.0" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="100.0">
+         <children>
+            <ImageView fx:id="filter" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#setFilterOption" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/filterknap1Off.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="filterSwitch" fitHeight="74.0" fitWidth="82.0" onMouseClicked="#filter" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/on.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

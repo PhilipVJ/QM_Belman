@@ -31,6 +31,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ITaskPainter;
+import quickmaff_belman.be.TaskStatus;
 
 /**
  *
@@ -109,6 +110,7 @@ public class BoardMaker implements Runnable {
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
+
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
                         orderLabel.setFont(new Font("Arial", 50));
 //                        ImageView orderView = new ImageView(postItLine);
@@ -122,9 +124,17 @@ public class BoardMaker implements Runnable {
                         endDateLabel.setTranslateY(-100);
 //                        endDateLabel.setGraphic(new ImageView(postItLine));
                         
-                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+                        Label orderLabel = createOrderLabel(bTask);
+                        
+                        Label endDateLabel = createEndDateLabel(bTask);
 
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
+                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+                        
+                        Label statusLabel = createAllStatusLabel(bTask);
+                        
+                       
+
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask, statusLabel);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
                             if (q.getButton() == MouseButton.SECONDARY) {
                                 aPane.getChildren().remove(stackPane);
@@ -136,9 +146,6 @@ public class BoardMaker implements Runnable {
                         });
 
                         aPane.getChildren().addAll(stackPane);
-
-                        System.out.println("Opening task from order:" + orderNumber);
-
                     });
 
                     HBox box = new HBox(sPane);
@@ -167,27 +174,68 @@ public class BoardMaker implements Runnable {
         }
     }
 
+    private Label createOrderLabel(BoardTask bTask) {
+        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
+        orderLabel.setFont(new Font("Arial", 30));
+        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        orderLabel.setPrefWidth(300);
+        orderLabel.setTranslateY(-300);
+        orderLabel.setTranslateX(-150);
+        return orderLabel;
+    }
+
+    private Label createEndDateLabel(BoardTask bTask) {
+        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
+        endDateLabel.setFont(new Font("Arial", 30));
+        endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        endDateLabel.setPrefWidth(300);
+        endDateLabel.setTranslateY(-200);
+        endDateLabel.setTranslateX(-150);
+        return endDateLabel;
+    }
+
+    private Label createAllStatusLabel(BoardTask bTask) {
+        // Make overview
+        ArrayList<TaskStatus> allStatus = bTask.getOverview().getAllTaskStatus();
+        Label statusLabel = new Label();
+        String textStatus = "";
+        for (TaskStatus status : allStatus) {
+            textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
+        }
+        statusLabel.setFont(new Font("Ariel",18));
+        statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
+        statusLabel.setPrefHeight(250);
+        statusLabel.setPrefWidth(180);
+        statusLabel.setAlignment(Pos.CENTER);
+        statusLabel.setTranslateY(-250);
+        statusLabel.setTranslateX(230);
+        statusLabel.setText(textStatus);
+        return statusLabel;
+    }
+
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
-        completeTask.setTranslateY(0);
-        completeTask.setTranslateX(0);
+        completeTask.setTranslateY(250);
+        completeTask.setTranslateX(150);
         completeTask.setBlendMode(BlendMode.MULTIPLY);
         completeTask.setPrefHeight(60);
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-            try {
-                model.setCompleteTask(bTask.getTaskID());
-                aPane.getChildren().remove(stackPane);
-                for (Node child : allNodes) {
-                    child.setEffect(null);
-                }
-                removeSmallTask(fPane, bTask.getOrderNumber());
+            if(bTask.getReadyForWork()==true){
+                try {
+                    model.setCompleteTask(bTask.getTaskID());
+                    aPane.getChildren().remove(stackPane);
+                    for (Node child : allNodes) {
+                        child.setEffect(null);
+                    }
+                    removeSmallTask(fPane, bTask.getOrderNumber());
 
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex, model.getResourceBundle());
+                } catch (SQLException ex) {
+                    ExceptionHandler.handleException(ex, model.getResourceBundle());
+                }
             }
 
         });
