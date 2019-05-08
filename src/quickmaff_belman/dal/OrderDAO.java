@@ -105,7 +105,7 @@ public class OrderDAO {
         
             pstOrder.setInt(1, taskID);
             pstOrder.executeUpdate();
-            connection.commit();
+            
             
         PreparedStatement pstLog = connection.prepareStatement(log);
             Date date = new Date();
