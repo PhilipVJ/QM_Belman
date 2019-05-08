@@ -110,38 +110,13 @@ public class BoardMaker implements Runnable {
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
-                        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-                        orderLabel.setFont(new Font("Arial", 30));                      
-                        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-                        orderLabel.setPrefWidth(300);
-                        orderLabel.setTranslateY(-300);
-                        orderLabel.setTranslateX(-150);
+                        Label orderLabel = createOrderLabel(bTask);
                         
-                        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
-                        endDateLabel.setFont(new Font("Arial", 30));  
-                        endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-                        endDateLabel.setPrefWidth(300);
-                        endDateLabel.setTranslateY(-200);        
-                        endDateLabel.setTranslateX(-150);
+                        Label endDateLabel = createEndDateLabel(bTask);
 
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
-                        completeTask.setTranslateY(250);
-                        completeTask.setTranslateX(150);
-                        // Make overview
-                       ArrayList<TaskStatus> allStatus = bTask.getOverview().getAllTaskStatus();
-                       Label statusLabel = new Label();
-                       String textStatus = "";
-                        for (TaskStatus status : allStatus) {
-                            textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
-                        }
-                        statusLabel.setFont(new Font("Ariel",18));
-                        statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
-                        statusLabel.setPrefHeight(250);
-                        statusLabel.setPrefWidth(180);
-                        statusLabel.setAlignment(Pos.CENTER);
-                        statusLabel.setTranslateY(-250);
-                        statusLabel.setTranslateX(230);
-                        statusLabel.setText(textStatus);
+                        
+                        Label statusLabel = createAllStatusLabel(bTask);
                         
                        
 
@@ -185,12 +160,51 @@ public class BoardMaker implements Runnable {
         }
     }
 
+    private Label createOrderLabel(BoardTask bTask) {
+        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
+        orderLabel.setFont(new Font("Arial", 30));
+        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        orderLabel.setPrefWidth(300);
+        orderLabel.setTranslateY(-300);
+        orderLabel.setTranslateX(-150);
+        return orderLabel;
+    }
+
+    private Label createEndDateLabel(BoardTask bTask) {
+        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
+        endDateLabel.setFont(new Font("Arial", 30));
+        endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        endDateLabel.setPrefWidth(300);
+        endDateLabel.setTranslateY(-200);
+        endDateLabel.setTranslateX(-150);
+        return endDateLabel;
+    }
+
+    private Label createAllStatusLabel(BoardTask bTask) {
+        // Make overview
+        ArrayList<TaskStatus> allStatus = bTask.getOverview().getAllTaskStatus();
+        Label statusLabel = new Label();
+        String textStatus = "";
+        for (TaskStatus status : allStatus) {
+            textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
+        }
+        statusLabel.setFont(new Font("Ariel",18));
+        statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
+        statusLabel.setPrefHeight(250);
+        statusLabel.setPrefWidth(180);
+        statusLabel.setAlignment(Pos.CENTER);
+        statusLabel.setTranslateY(-250);
+        statusLabel.setTranslateX(230);
+        statusLabel.setText(textStatus);
+        return statusLabel;
+    }
+
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
-        completeTask.setTranslateY(0);
-        completeTask.setTranslateX(0);
+        completeTask.setTranslateY(250);
+        completeTask.setTranslateX(150);
         completeTask.setBlendMode(BlendMode.MULTIPLY);
         completeTask.setPrefHeight(60);
         completeTask.setPrefWidth(250);
