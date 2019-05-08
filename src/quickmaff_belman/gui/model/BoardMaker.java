@@ -135,6 +135,10 @@ public class BoardMaker implements Runnable {
                             textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
                         }
                         statusLabel.setFont(new Font("Ariel",18));
+                        statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
+                        statusLabel.setPrefHeight(250);
+                        statusLabel.setPrefWidth(180);
+                        statusLabel.setAlignment(Pos.CENTER);
                         statusLabel.setTranslateY(-250);
                         statusLabel.setTranslateX(230);
                         statusLabel.setText(textStatus);
