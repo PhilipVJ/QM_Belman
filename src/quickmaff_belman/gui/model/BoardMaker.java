@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -22,10 +23,12 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -46,12 +49,18 @@ public class BoardMaker implements Runnable {
     private final BooleanProperty isLoading;
     private int roundCounter = 0;
 
+    private Image doneMark;
+    private Image notDoneMark;
+
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
+
+        doneMark = new Image("/quickmaff_belman/gui/view/images/done.png");
+        notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
 
     }
 
@@ -92,48 +101,75 @@ public class BoardMaker implements Runnable {
                         makeRedCirkel(sPane);
                     }
 
-                    sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-
-                        ImageView openedView = new ImageView();
-                        Date today = new Date();
-                        openedView.setImage(color);
-                        // Blurs everything which exists in the root Pane
-                        ObservableList<Node> allNodes = aPane.getChildren();
-                        BoxBlur blur = new BoxBlur();
-                        blur.setWidth(25);
-                        blur.setHeight(25);
-                        for (Node child : allNodes) {
-                            child.setEffect(blur);
-                        }
-
-                        // Makes a stackpane and adds it to the blurred root
-                        StackPane stackPane = new StackPane(openedView);
-                        stackPane.prefWidthProperty().bind(aPane.widthProperty());
-                        stackPane.prefHeightProperty().bind(aPane.heightProperty());
-
-                        Label customerName = new Label();
-                        customerName.setText(bTask.getCustomerName());
-                        Label orderLabel = createOrderLabel(bTask);
-                        Label endDateLabel = createEndDateLabel(bTask);
-                        Label statusLabel = createAllStatusLabel(bTask);
-                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
-
-                        if (bTask.getReadyForWork() == true) {
-                            stackPane.getChildren().add(completeTask);
-                        }
-
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, statusLabel, customerName);
-                        stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
-                            if (q.getButton() == MouseButton.SECONDARY) {
-                                aPane.getChildren().remove(stackPane);
-                                for (Node child : allNodes) {
-                                    child.setEffect(null);
-                                }
+                    sPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            ImageView openedView = new ImageView();
+                            Date today = new Date();
+                            openedView.setImage(color);
+                            // Blurs everything which exists in the root Pane
+                            ObservableList<Node> allNodes = aPane.getChildren();
+                            BoxBlur blur = new BoxBlur();
+                            blur.setWidth(25);
+                            blur.setHeight(25);
+                            for (Node child : allNodes) {
+                                child.setEffect(blur);
                             }
 
-                        });
+                            // Makes a stackpane and adds it to the blurred root
+                            StackPane stackPane = new StackPane(openedView);
+                            stackPane.prefWidthProperty().bind(aPane.widthProperty());
+                            stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
-                        aPane.getChildren().addAll(stackPane);
+                            Label customerName = new Label();
+                            customerName.setText(bTask.getCustomerName());
+                            Label orderLabel = createOrderLabel(bTask);
+                            Label endDateLabel = createEndDateLabel(bTask);
+
+                            VBox vbox = new VBox();
+                            ArrayList<HBox> allBoxes = new ArrayList<>();
+
+                            ArrayList<TaskStatus> taskStatus = bTask.getOverview().getAllTaskStatus();
+                            for (TaskStatus status : taskStatus) {
+                                Label statusLabel = new Label();
+                                statusLabel.setText(status.getDepartmentName());
+                                ImageView view = new ImageView();
+                                if(status.getIsFinished())
+                                {
+                                    view.setImage(doneMark);
+                                }
+                                else
+                                {
+                                    view.setImage(notDoneMark);
+                                }
+                                HBox box = new HBox();
+                                box.getChildren().addAll(statusLabel,view);
+                                allBoxes.add(box);
+                            }
+                            vbox.getChildren().addAll(allBoxes);
+
+
+
+
+                            Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+
+                            if (bTask.getReadyForWork() == true) {
+                                stackPane.getChildren().add(completeTask);
+                            }
+
+                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, vbox);
+                            stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
+                                if (q.getButton() == MouseButton.SECONDARY) {
+                                    aPane.getChildren().remove(stackPane);
+                                    for (Node child : allNodes) {
+                                        child.setEffect(null);
+                                    }
+                                }
+
+                            });
+
+                            aPane.getChildren().addAll(stackPane);
+                        }
                     });
 
                     HBox box = new HBox(sPane);
@@ -186,25 +222,11 @@ public class BoardMaker implements Runnable {
         return endDateLabel;
     }
 
-    private Label createAllStatusLabel(BoardTask bTask) {
-        // Make overview
-        ArrayList<TaskStatus> allStatus = bTask.getOverview().getAllTaskStatus();
-        Label statusLabel = new Label();
-        String textStatus = "";
-        for (TaskStatus status : allStatus) {
-            textStatus += status.getDepartmentName() + "  " + status.getIsFinished() + "\n";
-        }
-        statusLabel.setFont(new Font("Ariel", 18));
-        statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
-        statusLabel.setPrefHeight(250);
-        statusLabel.setPrefWidth(180);
-        statusLabel.setAlignment(Pos.CENTER);
-        statusLabel.setTranslateY(-250);
-        statusLabel.setTranslateX(230);
-        statusLabel.setText(textStatus);
-        return statusLabel;
-    }
-
+//    private Label createAllStatusLabel(BoardTask bTask) {
+//        // Make overview
+//
+//        return statusLabel;
+//    }
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
