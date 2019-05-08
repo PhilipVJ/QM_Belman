@@ -16,14 +16,14 @@ public class BoardTask {
     private String orderNumber;
     private Date endDate;
     private final Date startDate;
-    private final boolean readyForWork;
     private int taskID;
+    private OrderOverview overview;
 
-    public BoardTask(String orderNumber, Date endDate, Date startDate, boolean readyForWork, int taskID) {
+    public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID) {
         this.orderNumber = orderNumber;
         this.endDate = endDate;
         this.startDate = startDate;
-        this.readyForWork = readyForWork;
+        this.overview = overview;
         this.taskID = taskID;
     }
 
@@ -56,9 +56,13 @@ public class BoardTask {
     }
 
     public boolean getReadyForWork() {
-        return readyForWork;
+        return overview.isReadyToWork();
     }
 
+    public OrderOverview getOverview()
+    {
+        return overview;
+    }
     public boolean passedEndDate() {
         Date today = new Date();
         if(today.after(endDate))

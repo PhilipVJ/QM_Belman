@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.OrderOverview;
 import quickmaff_belman.be.TaskStatus;
 
 public class OrderDAO {
@@ -42,16 +43,16 @@ public class OrderDAO {
                 String orderNumber = rs.getString("orderNumber");
                 Date endDate = rs.getDate("endDate");
                 Date startDate = rs.getDate("startDate");
-                boolean readyForWork = checkIfReadyForWork(orderNumber, department);
+                OrderOverview overview = getOverview(orderNumber, department);
                 int taskID = rs.getInt("taskID");
-                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, readyForWork, taskID);
+                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, overview, taskID);
                 allTasks.add(bTask);
             }
             return allTasks;
         }
     }
 
-    public boolean checkIfReadyForWork(String orderNumber, String departmentName) throws SQLServerException, SQLException {
+    public OrderOverview getOverview(String orderNumber, String departmentName) throws SQLServerException, SQLException {
         boolean readyForWork = true;
         ArrayList<TaskStatus> allTasks = new ArrayList<>();
         String sql = "select * from departmenttask where orderNumber=(?) order by startDate asc";
@@ -80,7 +81,8 @@ public class OrderDAO {
                 readyForWork=false;
             }
         }
-        return readyForWork;
+        OrderOverview overview = new OrderOverview(allTasks, readyForWork);
+        return overview;
     }
     
      public void setCompleteTask(int taskID, String departmentName) throws SQLServerException, SQLException

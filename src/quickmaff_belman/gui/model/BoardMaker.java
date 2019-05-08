@@ -31,6 +31,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.ITaskPainter;
+import quickmaff_belman.be.TaskStatus;
 
 /**
  *
@@ -121,8 +122,19 @@ public class BoardMaker implements Runnable {
 //                        endDateLabel.setGraphic(new ImageView(postItLine));
 
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+                        // Make overview
+                       ArrayList<TaskStatus> allStatus = bTask.getOverview().getAllTaskStatus();
+                       Label statusLabel = new Label();
+                       String textStatus = "";
+                        for (TaskStatus status : allStatus) {
+                            textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
+                        }
+                        statusLabel.setTranslateY(-300);
+                        statusLabel.setText(textStatus);
+                        
+                       
 
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask, statusLabel);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
                             if (q.getButton() == MouseButton.SECONDARY) {
                                 aPane.getChildren().remove(stackPane);
