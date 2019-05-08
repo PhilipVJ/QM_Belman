@@ -121,7 +121,7 @@ public class BoardMaker implements Runnable {
                         endDateLabel.setFont(new Font("Arial", 50));
                         endDateLabel.setTranslateY(-100);
 //                        endDateLabel.setGraphic(new ImageView(postItLine));
-
+                        
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
 
                         stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask);

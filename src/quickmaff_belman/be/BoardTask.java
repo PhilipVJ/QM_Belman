@@ -68,4 +68,12 @@ public class BoardTask {
         return false;
     }
 
+    @Override
+    public String toString()
+    {
+        return "BoardTask{" + "orderNumber=" + orderNumber + '}';
+    }
+    
+    
+    
 }

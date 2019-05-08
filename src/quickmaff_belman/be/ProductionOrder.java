@@ -20,7 +20,9 @@ public class ProductionOrder {
         this.orderNumber = orderNumber;
         this.dTasks = dTasks;
     }
-
+    
+    
+    
     public String getCustomerName() {
         return customerName;
     }

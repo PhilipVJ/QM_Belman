@@ -100,5 +100,9 @@ public class Model {
     public void setCompleteTask(int taskID) throws SQLException{
          bMan.setCompleteTask(taskID, departmentName);
     }
-
+    
+    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
+    {
+        return bMan.getCustomerName(orderNumber);
+    }
 }
