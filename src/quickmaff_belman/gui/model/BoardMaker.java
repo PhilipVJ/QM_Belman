@@ -113,14 +113,18 @@ public class BoardMaker implements Runnable {
                         Label orderLabel = createOrderLabel(bTask);
                         
                         Label endDateLabel = createEndDateLabel(bTask);
-
-                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
                         
                         Label statusLabel = createAllStatusLabel(bTask);
                         
-                       
+                        Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+                        
+                        if(bTask.getStartDate().before(today)){
+                            
+                        stackPane.getChildren().add(completeTask);
+                        
+                        }
 
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, completeTask, statusLabel);
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, statusLabel);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
                             if (q.getButton() == MouseButton.SECONDARY) {
                                 aPane.getChildren().remove(stackPane);
@@ -210,7 +214,6 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-            if(bTask.getReadyForWork()==true){
                 try {
                     model.setCompleteTask(bTask.getTaskID());
                     aPane.getChildren().remove(stackPane);
@@ -222,7 +225,6 @@ public class BoardMaker implements Runnable {
                 } catch (SQLException ex) {
                     ExceptionHandler.handleException(ex, model.getResourceBundle());
                 }
-            }
 
         });
         return completeTask;
