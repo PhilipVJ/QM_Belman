@@ -146,11 +146,10 @@ public class OrderDAO
         }
     }
 
-    public ArrayList<String> getCustomerName(String orderNumber) throws SQLServerException, SQLException
+    public String getCustomerName(String orderNumber) throws SQLServerException, SQLException
     {
-        ArrayList<String> names = new ArrayList<>();
         String sql = "Select customerName from ProductionOrder Where orderNumber = (?);";
-
+        String name = "";
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);)
         {
             
@@ -158,10 +157,10 @@ public class OrderDAO
             ResultSet rs = pst.executeQuery();
             while (rs.next())
             {
-                String name = rs.getString("customerName");
-                names.add(name);
+                name = rs.getString("customerName");
+                
             }
         }
-        return names;
+        return name;
     }
 }

@@ -59,10 +59,10 @@ public class DatabaseFacade {
          oDAO.setCompleteTask(taskID, departmentName);
     } 
 
-    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
-    {
-        return oDAO.getCustomerName(orderNumber);
-    }
+//    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
+//    {
+//        return oDAO.getCustomerName(orderNumber);
+//    }
 }
 
 

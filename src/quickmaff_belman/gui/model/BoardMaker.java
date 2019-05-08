@@ -163,7 +163,12 @@ public class BoardMaker implements Runnable {
 
         }
     }
-
+    
+//    private Label createCustomerLabel(BoardTask bTask)
+//    {
+//        Label customerLabel = new Label
+//    }
+    
     private Label createOrderLabel(BoardTask bTask) {
         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
         orderLabel.setFont(new Font("Arial", 30));
