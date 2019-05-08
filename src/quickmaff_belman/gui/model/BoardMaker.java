@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -111,12 +110,10 @@ public class BoardMaker implements Runnable {
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
 
                         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-                        orderLabel.setFont(new Font("Arial", 50));
-//                        ImageView orderView = new ImageView(postItLine);
-//                        orderView.setTranslateY(-200);
-//                        orderView
+                        orderLabel.setFont(new Font("Arial", 30));
+                        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
                         orderLabel.setTranslateY(-200);
-                        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItLine.png);");
+                        
 
                         Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
                         endDateLabel.setFont(new Font("Arial", 50));
