@@ -118,7 +118,7 @@ public class BoardMaker implements Runnable {
                         
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
                         
-                        if(bTask.getStartDate().before(today)){
+                        if(bTask.getStartDate().before(today)&& bTask.getReadyForWork() == true){
                             
                         stackPane.getChildren().add(completeTask);
                         
