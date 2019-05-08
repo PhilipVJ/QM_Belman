@@ -102,9 +102,4 @@ public class Model {
          bMan.setCompleteTask(taskID, departmentName);
     }
     
-//    public ArrayList<String> getCustomerName(BoardTask bTask) throws SQLException
-//    {
-//        
-//        return bMan.getCustomerName(bTask.getOrderNumber());
-//    }
 }

@@ -109,6 +109,9 @@ public class BoardMaker implements Runnable {
                         StackPane stackPane = new StackPane(openedView);
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
+                        
+                        Label customerName = new Label();
+                        customerName.setText(bTask.getCustomerName());
 
                         Label orderLabel = createOrderLabel(bTask);
                         
@@ -124,7 +127,7 @@ public class BoardMaker implements Runnable {
                         
                         }
 
-                        stackPane.getChildren().addAll(orderLabel, endDateLabel, statusLabel);
+                        stackPane.getChildren().addAll(orderLabel, endDateLabel, statusLabel, customerName);
                         stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q -> {
                             if (q.getButton() == MouseButton.SECONDARY) {
                                 aPane.getChildren().remove(stackPane);

@@ -50,7 +50,8 @@ public class OrderDAO
                 Date startDate = rs.getDate("startDate");
                 OrderOverview overview = getOverview(orderNumber, department);
                 int taskID = rs.getInt("taskID");
-                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, overview, taskID);
+                String customerName = getCustomerName(orderNumber);
+                BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, overview, taskID, customerName);
                 allTasks.add(bTask);
             }
             return allTasks;

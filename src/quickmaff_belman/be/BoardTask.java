@@ -18,13 +18,15 @@ public class BoardTask {
     private final Date startDate;
     private int taskID;
     private OrderOverview overview;
+    private String customerName;
 
-    public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID) {
+    public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID, String customerName) {
         this.orderNumber = orderNumber;
         this.endDate = endDate;
         this.startDate = startDate;
         this.overview = overview;
         this.taskID = taskID;
+        this.customerName = customerName;
     }
 
     public void setTaskID(int taskID) {
@@ -70,6 +72,11 @@ public class BoardTask {
             return true;
         }
         return false;
+    }
+    
+    public String getCustomerName()
+    {
+        return customerName;
     }
 
     @Override

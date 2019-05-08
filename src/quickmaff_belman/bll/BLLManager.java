@@ -42,8 +42,4 @@ public class BLLManager
          dFacade.setCompleteTask(taskID, departmentName);
     }
            
-//    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
-//    {
-//        return dFacade.getCustomerName(orderNumber);
-//    }
 }
