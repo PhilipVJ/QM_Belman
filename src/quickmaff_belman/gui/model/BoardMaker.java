@@ -45,6 +45,7 @@ public class BoardMaker implements Runnable {
     private final ITaskPainter paintStrategy;
     private final BooleanProperty isLoading;
     private int roundCounter = 0;
+
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading) {
         this.fPane = fPane;
         this.model = model;
@@ -60,8 +61,8 @@ public class BoardMaker implements Runnable {
         while (true) {
             ArrayList<BoardTask> boardTasks;
             try {
-                if(roundCounter==0){
-                isLoading.set(true);
+                if (roundCounter == 0) {
+                    isLoading.set(true);
                 }
 
                 boardTasks = model.getAllBoardTasks();
@@ -109,22 +110,16 @@ public class BoardMaker implements Runnable {
                         StackPane stackPane = new StackPane(openedView);
                         stackPane.prefWidthProperty().bind(aPane.widthProperty());
                         stackPane.prefHeightProperty().bind(aPane.heightProperty());
-                        
+
                         Label customerName = new Label();
                         customerName.setText(bTask.getCustomerName());
-
                         Label orderLabel = createOrderLabel(bTask);
-                        
                         Label endDateLabel = createEndDateLabel(bTask);
-                        
                         Label statusLabel = createAllStatusLabel(bTask);
-                        
                         Button completeTask = completeTaskButton(bTask, stackPane, aPane);
-                        
-                        if(bTask.getReadyForWork() == true){
-                            
-                        stackPane.getChildren().add(completeTask);
-                        
+
+                        if (bTask.getReadyForWork() == true) {
+                            stackPane.getChildren().add(completeTask);
                         }
 
                         stackPane.getChildren().addAll(orderLabel, endDateLabel, statusLabel, customerName);
@@ -150,8 +145,8 @@ public class BoardMaker implements Runnable {
                     fPane.getChildren().clear();
                     fPane.getChildren().addAll(boxes);
                 });
-                if(roundCounter==0){
-                isLoading.set(false);
+                if (roundCounter == 0) {
+                    isLoading.set(false);
                 }
                 roundCounter++;
 
@@ -166,12 +161,11 @@ public class BoardMaker implements Runnable {
 
         }
     }
-    
+
 //    private Label createCustomerLabel(BoardTask bTask)
 //    {
 //        Label customerLabel = new Label
 //    }
-    
     private Label createOrderLabel(BoardTask bTask) {
         Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
         orderLabel.setFont(new Font("Arial", 30));
@@ -198,9 +192,9 @@ public class BoardMaker implements Runnable {
         Label statusLabel = new Label();
         String textStatus = "";
         for (TaskStatus status : allStatus) {
-            textStatus+=status.getDepartmentName()+"  "+status.getIsFinished()+"\n";
+            textStatus += status.getDepartmentName() + "  " + status.getIsFinished() + "\n";
         }
-        statusLabel.setFont(new Font("Ariel",18));
+        statusLabel.setFont(new Font("Ariel", 18));
         statusLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItBorder.png);");
         statusLabel.setPrefHeight(250);
         statusLabel.setPrefWidth(180);
@@ -222,17 +216,17 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e -> {
-                try {
-                    model.setCompleteTask(bTask.getTaskID());
-                    aPane.getChildren().remove(stackPane);
-                    for (Node child : allNodes) {
-                        child.setEffect(null);
-                    }
-                    removeSmallTask(fPane, bTask.getOrderNumber());
-
-                } catch (SQLException ex) {
-                    ExceptionHandler.handleException(ex, model.getResourceBundle());
+            try {
+                model.setCompleteTask(bTask.getTaskID());
+                aPane.getChildren().remove(stackPane);
+                for (Node child : allNodes) {
+                    child.setEffect(null);
                 }
+                removeSmallTask(fPane, bTask.getOrderNumber());
+
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex, model.getResourceBundle());
+            }
 
         });
         return completeTask;

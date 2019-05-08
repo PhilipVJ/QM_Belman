@@ -61,25 +61,30 @@ public class OrderDAO
 
     public OrderOverview getOverview(String orderNumber, String departmentName) throws SQLServerException, SQLException {
         boolean readyForWork = true;
-        ArrayList<TaskStatus> allTasks = new ArrayList<>();
+        boolean foundThisDepartment=false;
+        ArrayList<TaskStatus> allPriorTasks = new ArrayList<>();
         String sql = "select * from departmenttask where orderNumber=(?) order by startDate asc";
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);)
         {
             pst.setString(1, orderNumber);
             ResultSet rs = pst.executeQuery();
-            while (rs.next())
+            while (rs.next() && foundThisDepartment==false)
             {
                 String dName = rs.getString("departmentName");
                 boolean done = rs.getBoolean("finishedOrder");
-                TaskStatus tStatus = new TaskStatus(dName, done);
-                allTasks.add(tStatus);
+                TaskStatus tStatus = new TaskStatus(dName, done);                
+                allPriorTasks.add(tStatus);
+                if(dName.equals(departmentName))
+                {
+                    foundThisDepartment=true;
+                }
             }
 
         }
         int indexOfDepartment = 0; // may change
-        for (int i = 0; i < allTasks.size(); i++)
+        for (int i = 0; i < allPriorTasks.size(); i++)
         {
-            if (allTasks.get(i).getDepartmentName().equals(departmentName))
+            if (allPriorTasks.get(i).getDepartmentName().equals(departmentName))
             {
                 indexOfDepartment = i;
             }
@@ -88,12 +93,12 @@ public class OrderDAO
 
         for (int i = 0; i < indexOfDepartment; i++)
         {
-            if (allTasks.get(i).getIsFinished() == false)
+            if (allPriorTasks.get(i).getIsFinished() == false)
             {
                 readyForWork = false;
             }
         }
-        OrderOverview overview = new OrderOverview(allTasks, readyForWork);
+        OrderOverview overview = new OrderOverview(allPriorTasks, readyForWork);
         return overview;
     }
 
