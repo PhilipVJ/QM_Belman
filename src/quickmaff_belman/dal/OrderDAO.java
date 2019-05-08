@@ -118,6 +118,7 @@ public class OrderDAO
             connection.commit();
 
             PreparedStatement pstLog = connection.prepareStatement(log);
+            
             Date date = new Date();
             java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
 
