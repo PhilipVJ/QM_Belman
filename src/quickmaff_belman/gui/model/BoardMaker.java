@@ -78,16 +78,14 @@ public class BoardMaker implements Runnable {
                 if (roundCounter == 0) {
                     isLoading.set(true);
                 }
-
                 boardTasks = model.getAllBoardTasks();
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
-
                 for (BoardTask bTask : boardTasks) {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
                     Image color = paintStrategy.getColor(bTask);
-
+                    // If the paintStrategy return null the board task shall not be made
                     if (color == null) {
                         continue;
                     }
@@ -121,112 +119,52 @@ public class BoardMaker implements Runnable {
                             }
 
                             // Makes a stackpane and adds it to the blurred root
-                            StackPane stackPane = new StackPane(openedView);
-                            stackPane.prefWidthProperty().bind(aPane.widthProperty());
-                            stackPane.prefHeightProperty().bind(aPane.heightProperty());
+                            StackPane bigPostIt = new StackPane(openedView);
+                            bigPostIt.prefWidthProperty().bind(aPane.widthProperty());
+                            bigPostIt.prefHeightProperty().bind(aPane.heightProperty());
 
                             Label customerName = createCustomerLabel(bTask);
                             Label orderLabel = createOrderLabel(bTask);
                             Label endDateLabel = createEndDateLabel(bTask);
 
                             // Makes the area where you can see the other departments process
-                            VBox vbox = makeDepartmentOverview();
+                            VBox vbox = makeDepartmentOverview(bTask);
 
-                            ImageView postItBorderView = new ImageView();
-                            postItBorderView.setImage(postItBorder);
-                            postItBorderView.setTranslateX(-920);
-                            postItBorderView.setTranslateY(-450);
+                            ImageView overView = new ImageView();
 
-                            StackPane stPane = new StackPane();
-                            stPane.setTranslateX(1150);
-                            stPane.setTranslateY(200);
-                            stPane.setPrefHeight(250);
-                            stPane.setPrefWidth(180);
+                            overView.setImage(postItBorder);
+                            overView.setTranslateX(200);
+                            overView.setTranslateY(-200);
+                            StackPane departmentArea = new StackPane();
+                            departmentArea.setPrefHeight(250);
+                            departmentArea.setPrefWidth(180);
+                            departmentArea.getChildren().addAll(overView, vbox);
 
-                            //Progress bar start 
-                            Label lblStart = new Label();
-                            lblStart.setText("Start");
-                            lblStart.setFont(new Font("Arial", 16));
-                            Label lblSlut = new Label();
-                            lblSlut.setText(model.getResourceBundle().getString("end"));
-                            lblSlut.setFont(new Font("Arial", 16));
-
-                            double startTime = bTask.getStartDate().getTime();
-                            Date endDate = bTask.getEndDate();
-                            Calendar calendar = Calendar.getInstance();
-                            calendar.setTimeInMillis(endDate.getTime());
-                            calendar.set(Calendar.HOUR_OF_DAY, 23);
-                            calendar.set(Calendar.MINUTE, 59);
-                 
-                            double endTime = calendar.getTimeInMillis();
-                            double totalTime = endTime - startTime;
-                            double currentTime = System.currentTimeMillis();
-                            double timePassedSinceStart = currentTime - startTime;
-                            double percantage = (timePassedSinceStart / totalTime);
-
-                            ProgressBar pBar = new ProgressBar();
-                            pBar.setProgress(percantage);
-                            lblStart.setTranslateX(-1458);
-                            lblStart.setTranslateY(75);
-
-                            lblSlut.setTranslateX(-1257);
-                            lblSlut.setTranslateY(75);
-
-                            pBar.setPrefHeight(25);
-                            pBar.setPrefWidth(250);
-                            pBar.setTranslateX(-1350);
-                            pBar.setTranslateY(50);
-                            //Progress bar slut
-
-                            stPane.getChildren().addAll(lblStart, lblSlut, pBar, postItBorderView, vbox);
+                            StackPane progressPane = makeProgressBar(bTask);
 
                             Button completeTask = null;
 
                             if (bTask.getReadyForWork() == true) {
-                                completeTask = completeTaskButton(bTask, stackPane, aPane);
-
+                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);
                             }
 
-                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane);
+                            bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, progressPane, departmentArea);
+                            // If a complete button has been made - it will beadded
                             if (completeTask != null) {
-                                stackPane.getChildren().add(completeTask);
+                                bigPostIt.getChildren().add(completeTask);
                             }
-                            stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
+                            // Go back to main view when right click is pressed
+                            bigPostIt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
                                     -> {
                                 if (q.getButton() == MouseButton.SECONDARY) {
-                                    aPane.getChildren().remove(stackPane);
+                                    aPane.getChildren().remove(bigPostIt);
                                     for (Node child : allNodes) {
                                         child.setEffect(null);
                                     }
                                 }
-
                             });
-
-                            aPane.getChildren().addAll(stackPane);
+                            aPane.getChildren().addAll(bigPostIt);
                         }
-
-                        private VBox makeDepartmentOverview() {
-                            VBox vbox = new VBox();
-                            ArrayList<HBox> allBoxes = new ArrayList<>();
-                            ArrayList<TaskStatus> taskStatus = bTask.getOverview().getAllTaskStatus();
-                            for (TaskStatus status : taskStatus) {
-                                Label statusLabel = new Label();
-                                statusLabel.setFont(new Font("Ariel", 20));
-                                statusLabel.setText(status.getDepartmentName());
-                                ImageView view = new ImageView();
-                                if (status.getIsFinished()) {
-                                    view.setImage(doneMark);
-                                } else {
-                                    view.setImage(notDoneMark);
-                                }
-                                HBox box = new HBox();
-                                box.getChildren().addAll(statusLabel, view);
-                                allBoxes.add(box);
-                            }
-                            vbox.getChildren().addAll(allBoxes);
-                            return vbox;
-                        }
-
                     });
 
                     HBox box = new HBox(sPane);
@@ -239,6 +177,7 @@ public class BoardMaker implements Runnable {
                     fPane.getChildren().clear();
                     fPane.getChildren().addAll(boxes);
                 });
+
                 if (roundCounter == 0) {
                     isLoading.set(false);
                 }
@@ -254,6 +193,75 @@ public class BoardMaker implements Runnable {
             }
 
         }
+    }
+
+    private StackPane makeProgressBar(BoardTask bTask) {
+        StackPane progressPane = new StackPane();
+        progressPane.setTranslateX(1150);
+        progressPane.setTranslateY(200);
+        progressPane.setPrefHeight(250);
+        progressPane.setPrefWidth(180);
+        Label lblStart = new Label();
+        lblStart.setText("Start");
+        lblStart.setFont(new Font("Arial", 16));
+        Label lblSlut = new Label();
+        lblSlut.setText(model.getResourceBundle().getString("end"));
+        lblSlut.setFont(new Font("Arial", 16));
+        double percantage = getPercentageTimeLeft(bTask);
+        ProgressBar pBar = new ProgressBar();
+        pBar.setProgress(percantage);
+        lblStart.setTranslateX(-1458);
+        lblStart.setTranslateY(75);
+        lblSlut.setTranslateX(-1257);
+        lblSlut.setTranslateY(75);
+        pBar.setPrefHeight(25);
+        pBar.setPrefWidth(250);
+        pBar.setTranslateX(-1350);
+        pBar.setTranslateY(50);
+        progressPane.getChildren().addAll(lblStart, lblSlut, pBar);
+        return progressPane;
+    }
+
+    private double getPercentageTimeLeft(BoardTask bTask) {
+        double startTime = bTask.getStartDate().getTime();
+        Date endDate = bTask.getEndDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(endDate.getTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        double endTime = calendar.getTimeInMillis();
+        double totalTime = endTime - startTime;
+        double currentTime = System.currentTimeMillis();
+        double timePassedSinceStart = currentTime - startTime;
+        double percantage = (timePassedSinceStart / totalTime);
+        return percantage;
+    }
+
+    private VBox makeDepartmentOverview(BoardTask bTask) {
+        VBox vbox = new VBox();
+        ArrayList<HBox> allBoxes = new ArrayList<>();
+        ArrayList<TaskStatus> taskStatus = bTask.getOverview().getAllTaskStatus();
+        for (TaskStatus status : taskStatus) {
+            Label statusLabel = new Label();
+            statusLabel.setFont(new Font("Ariel", 20));
+            statusLabel.setText(status.getDepartmentName());
+            ImageView view = new ImageView();
+            if (status.getIsFinished()) {
+                view.setImage(doneMark);
+            } else {
+                view.setImage(notDoneMark);
+            }
+            HBox box = new HBox();
+            box.getChildren().addAll(statusLabel, view);
+            allBoxes.add(box);
+        }
+        vbox.getChildren().addAll(allBoxes);
+        vbox.setMaxHeight(180);
+        vbox.setMaxWidth(180);
+        vbox.fillWidthProperty().set(false);
+        vbox.setTranslateX(220);
+        vbox.setTranslateY(-220);
+        return vbox;
     }
 
     private Label createCustomerLabel(BoardTask bTask) {
