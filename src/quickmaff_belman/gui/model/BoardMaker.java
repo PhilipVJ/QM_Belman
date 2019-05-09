@@ -213,7 +213,11 @@ public class BoardMaker implements Runnable {
                     
                             }
 
-                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane, completeTask);
+                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane);
+                            if(completeTask!=null)
+                            {
+                                stackPane.getChildren().add(completeTask);
+                            }
                             stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->
                             {
                                 if (q.getButton() == MouseButton.SECONDARY)
