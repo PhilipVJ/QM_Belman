@@ -13,17 +13,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -144,6 +152,7 @@ public class MainViewController implements Initializable {
             }
 
         });
+
     }
 
     public void setModel(Model model) {
@@ -202,18 +211,53 @@ public class MainViewController implements Initializable {
             stage.setFullScreen(true);
             setGraphics();
             setAllText();
-
             // Setting up the board
             BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, currentFilter, isLoading);
             bMakerExecutor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             fWatcherExecutor.submit(fWatcher);
+
+            // Makes the application go back to the login screen with a certain key combination
+            stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
+                @Override
+                public void run() {
+                    logOut();
+                }
+
+            });
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         } catch (InterruptedException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
+    }
+
+    private void logOut() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
+            Parent root = loader.load();
+            LoginController con = loader.getController();
+            con.setStage(stage);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setFullScreen(true);
+//            stage.show();
+            con.setGraphics();
+   
+            shutDownThreads();
+        } catch (IOException ex) {
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
+        }
+    }
+
+    private void shutDownThreads() {
+        bMakerExecutor.shutdown();
+        fWatcherExecutor.shutdown();
+        labelWatcher.shutdown();
+         bMakerExecutor.shutdownNow();
+        fWatcherExecutor.shutdownNow();
+        labelWatcher.shutdownNow();
     }
 
     private void setAllText() {

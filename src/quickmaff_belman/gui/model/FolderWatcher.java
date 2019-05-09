@@ -78,7 +78,7 @@ public class FolderWatcher implements Runnable {
 
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(FolderWatcher.class.getName()).log(Level.SEVERE, null, ex);
+            return;
         }
     }
 
