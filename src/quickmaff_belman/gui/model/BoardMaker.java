@@ -204,14 +204,15 @@ public class BoardMaker implements Runnable {
 
                             stPane.getChildren().addAll(lblStart, lblSlut, pBar, postItBorderView, vbox);
 
-                            Button completeTask = completeTaskButton(bTask, stackPane, aPane);
+                            Button completeTask = null;
 
                             if (bTask.getReadyForWork() == true)
                             {
-                                stackPane.getChildren().add(completeTask);
+                                completeTask = completeTaskButton(bTask, stackPane, aPane);
+                    
                             }
 
-                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane);
+                            stackPane.getChildren().addAll(orderLabel, endDateLabel, customerName, stPane, completeTask);
                             stackPane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q ->
                             {
                                 if (q.getButton() == MouseButton.SECONDARY)
@@ -305,6 +306,8 @@ public class BoardMaker implements Runnable {
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e ->
         {
+            System.out.println("typing");
+                    
             try
             {
                 model.setCompleteTask(bTask.getTaskID());
