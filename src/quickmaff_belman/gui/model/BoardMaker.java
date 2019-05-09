@@ -176,7 +176,7 @@ public class BoardMaker implements Runnable {
                             lblStart.setText("Start");
                             lblStart.setFont(new Font("Arial", 16));
                             Label lblSlut = new Label();
-                            lblSlut.setText("Slut dato");
+                            lblSlut.setText(model.getResourceBundle().getString("endDate"));
                             lblSlut.setFont(new Font("Arial", 16));
                             
                             double startTime = bTask.getStartDate().getTime();
