@@ -179,17 +179,18 @@ public class BoardMaker implements Runnable {
                             lblSlut.setText("Slut dato");
                             lblSlut.setFont(new Font("Arial", 16));
                             
-                            double startDato = bTask.getStartDate().getTime();
-                            double slutDato = bTask.getEndDate().getTime();
+                            double startTime = bTask.getStartDate().getTime();
+                            double endTime = bTask.getEndDate().getTime();
 
-                            double estimeretTid = (slutDato - startDato) / (1000 * 60 * 60 * 24);
-                            double dagsDato = System.currentTimeMillis() / (1000 * 60 * 60 * 24);
-                            double dageBrugte = dagsDato - (startDato / (1000 * 60 * 60 * 24));
-                            double slut = dageBrugte / estimeretTid;
-
+                            double totalTime = endTime - startTime;
+                            
+                            double currentTime = System.currentTimeMillis();
+                           double timePassedSinceStart = currentTime-startTime;
+                           double percantage = (timePassedSinceStart/totalTime);
+                       
+                     
                             ProgressBar pBar = new ProgressBar();
-                            pBar.setProgress(slut);
-
+                            pBar.setProgress(percantage);
                             lblStart.setTranslateX(-1458);
                             lblStart.setTranslateY(75);
                             
