@@ -54,7 +54,6 @@ public class FolderWatcher implements Runnable {
                         boolean checkStatus = model.checkForDuplicateFile(wrappedFile);
                         if (checkStatus == false) {
                             model.loadJSONfile(wrappedFile);
-                            System.out.println("LOADED FILE");
                             setLabel(model.getResourceBundle().getString("loadfile"));
                         } else {
                             setLabel(model.getResourceBundle().getString("duplicateFile"));
@@ -66,9 +65,10 @@ public class FolderWatcher implements Runnable {
                     } catch (ParseException ex) {
                         setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
                     }
-                    watchKey.reset();
                 }
+                watchKey.reset();
             }
+
         } catch (InterruptedException ex) {
             return;
         }

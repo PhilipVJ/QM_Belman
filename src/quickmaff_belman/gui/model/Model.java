@@ -28,7 +28,6 @@ public class Model {
     private static final String PROP_FILE = "src/resources/config.properties";
     private final Properties properties;
     private int timeOffset;
-    private String orderNumber;
 
     public Model(BLLManager bMan) throws FileNotFoundException, IOException {
         this.bMan = bMan;
