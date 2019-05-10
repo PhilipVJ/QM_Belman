@@ -12,11 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.DepartmentTask;
 import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
-
 
 /**
  *
@@ -47,11 +47,14 @@ public class DbUpdateDAO {
         return false;
     }
 
-    public void updateDatabaseWithJSON(ArrayList<Worker> allWorkers, ArrayList<ProductionOrder> pOrder, FileWrapper fileW) throws SQLException {
+    public void updateDatabaseWithJSON(DataContainer container, FileWrapper fileW) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
         String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?,?);";
         String sqlLog = "INSERT INTO Log VALUES (?,?,?,?);";
+
+        ArrayList<Worker> allWorkers = container.getAllWorkers();
+        ArrayList<ProductionOrder> allOrders = container.getAllProductionOrders();
 
         PreparedStatement pstLog;
         PreparedStatement pstWorker;
@@ -65,7 +68,7 @@ public class DbUpdateDAO {
 
             pstWorker = connection.prepareStatement(sqlWorker);
             pstOrder = connection.prepareStatement(sqlOrder);
-            pstDep = connection.prepareStatement(sqlDep, Statement.RETURN_GENERATED_KEYS);
+            pstDep = connection.prepareStatement(sqlDep);
             pstLog = connection.prepareStatement(sqlLog);
 
             connection.setAutoCommit(false);
@@ -78,10 +81,7 @@ public class DbUpdateDAO {
                 pstWorker.addBatch();
             }
 
-            pstWorker.executeBatch();
-
-
-            for (ProductionOrder poOrder : pOrder) {
+            for (ProductionOrder poOrder : allOrders) {
                 java.sql.Date sqlDateDel = new java.sql.Date(poOrder.getDeliveryTime().getTime());
                 pstOrder.setString(1, poOrder.getOrderNumber());
                 pstOrder.setString(2, poOrder.getCustomerName());
@@ -111,14 +111,15 @@ public class DbUpdateDAO {
             pstLog.setString(2, "updateActivity");
             pstLog.setString(3, "" + fileW.hashCode());
             pstLog.setString(4, null);
+            
+            pstWorker.executeBatch();
             pstLog.executeUpdate();
-
             pstOrder.executeBatch();
             pstDep.executeBatch();
             connection.commit();
 
         } catch (SQLException ex) {
-            
+
             if (connection != null) {
                 connection.rollback();
             }

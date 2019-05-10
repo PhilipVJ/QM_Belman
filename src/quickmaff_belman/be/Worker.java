@@ -7,10 +7,9 @@ package quickmaff_belman.be;
 
 public class Worker {
 
-
-    private long salaryNumber;
-    private String intitials;
-    private String name;
+    private final long salaryNumber;
+    private final String intitials;
+    private final String name;
 
     public Worker(long salaryNumber, String intitials, String name) {
 
@@ -23,25 +22,16 @@ public class Worker {
         return salaryNumber;
     }
 
-
-
     public String getIntitials() {
         return intitials;
     }
-
 
     public String getName() {
         return name;
     }
 
-
     @Override
     public String toString() {
-        return "Worker{" + "salaryNumber=" + salaryNumber + ", intitials=" + intitials + ", name=" + name + '}';
+        return "salaryNumber=" + salaryNumber + ", name=" + name +", intitials=" + intitials;
     }
-
-
-    
-    
-
 }

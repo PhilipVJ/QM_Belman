@@ -224,6 +224,7 @@ public class BoardMaker implements Runnable {
 
     private double getPercentageTimeLeft(BoardTask bTask) {
         double startTime = bTask.getStartDate().getTime();
+        System.out.println(""+bTask.getStartDate().getTime());
         Date endDate = bTask.getEndDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(endDate.getTime());

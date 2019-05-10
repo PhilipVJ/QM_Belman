@@ -13,8 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -70,7 +68,6 @@ public class MainViewController implements Initializable {
     private Model model;
     private Stage stage;
     private ExecutorService bMakerExecutor;
-    private ExecutorService fWatcherExecutor;
 
     @FXML
     private Label infoBar;
@@ -105,6 +102,8 @@ public class MainViewController implements Initializable {
 
     private Image filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
     private Image filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
+
+    private ExecutorService fWatcherExecutor;
 
     /**
      * Initializes the controller class.
@@ -228,8 +227,6 @@ public class MainViewController implements Initializable {
             });
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
-        } catch (InterruptedException ex) {
-            ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
@@ -244,7 +241,7 @@ public class MainViewController implements Initializable {
             stage.setFullScreen(true);
 //            stage.show();
             con.setGraphics();
-   
+
             shutDownThreads();
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
@@ -255,7 +252,7 @@ public class MainViewController implements Initializable {
         bMakerExecutor.shutdown();
         fWatcherExecutor.shutdown();
         labelWatcher.shutdown();
-         bMakerExecutor.shutdownNow();
+        bMakerExecutor.shutdownNow();
         fWatcherExecutor.shutdownNow();
         labelWatcher.shutdownNow();
     }

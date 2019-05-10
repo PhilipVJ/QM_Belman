@@ -34,7 +34,7 @@ public class DatabaseFacade {
 
     public void loadJSONFile(FileWrapper file) throws IOException, SQLException, FileNotFoundException, ParseException {
         DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
-        uDAO.updateDatabaseWithJSON(con.getAllWorkers(), con.getAllProductionOrders(), file);
+        uDAO.updateDatabaseWithJSON(con, file);
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {

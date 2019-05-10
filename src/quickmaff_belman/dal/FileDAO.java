@@ -29,10 +29,9 @@ public class FileDAO {
         
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
+        DataContainer dCon;
 
-        Object obj=null;
-        obj = new JSONParser().parse(new FileReader(filepath));
-        
+        Object obj = new JSONParser().parse(new FileReader(filepath));
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
@@ -78,7 +77,7 @@ public class FileDAO {
             ProductionOrder productionOrder = new ProductionOrder(customerName, deliveryTime, orderNumber, allDepartmentTasks);
             allProductionOrders.add(productionOrder);
         }
-        DataContainer dCon = new DataContainer(allWorkers, allProductionOrders);
+        dCon = new DataContainer(allWorkers, allProductionOrders);
         return dCon;
     }
 
