@@ -211,7 +211,7 @@ public class MainViewController implements Initializable {
             setGraphics();
             setAllText();
             // Setting up the board
-            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, currentFilter, isLoading);
+            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, currentFilter, isLoading,infoBar);
             bMakerExecutor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
@@ -335,7 +335,7 @@ public class MainViewController implements Initializable {
         bMakerExecutor = Executors.newSingleThreadExecutor();
         flowPane.getChildren().clear();
         infoBar.setText(model.getResourceBundle().getString("loading"));
-        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, chosenFilter, isLoading,infoBar);
         bMakerExecutor.submit(bMaker);
     }
 
@@ -348,12 +348,9 @@ public class MainViewController implements Initializable {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-
                     filterSwitch.setImage(filterGlowOff);
-
                 });
             }
-
         };
         thread.schedule(run, 1, TimeUnit.SECONDS);
         restartBoardMaker(currentFilter);

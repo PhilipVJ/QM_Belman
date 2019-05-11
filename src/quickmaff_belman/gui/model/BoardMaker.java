@@ -27,7 +27,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -52,20 +51,25 @@ public class BoardMaker implements Runnable {
     private final BooleanProperty isLoading;
     private int roundCounter = 0;
 
-    private Image doneMark;
-    private Image notDoneMark;
-    private Image postItBorder;
+    private final Image doneMark;
+    private final Image notDoneMark;
+    private final Image postItBorder;
+    private final Label display;
+    private final LabelMaker labelMaker;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
+        this.display = display;
 
         doneMark = new Image("/quickmaff_belman/gui/view/images/done.png");
         notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
         postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
+
+        labelMaker = new LabelMaker();
 
     }
 
@@ -123,9 +127,9 @@ public class BoardMaker implements Runnable {
                             bigPostIt.prefWidthProperty().bind(aPane.widthProperty());
                             bigPostIt.prefHeightProperty().bind(aPane.heightProperty());
 
-                            Label customerName = createCustomerLabel(bTask);
-                            Label orderLabel = createOrderLabel(bTask);
-                            Label endDateLabel = createEndDateLabel(bTask);
+                            Label customerName = labelMaker.createCustomerLabel(bTask, model.getResourceBundle());
+                            Label orderLabel = labelMaker.createOrderLabel(bTask, model.getResourceBundle());
+                            Label endDateLabel = labelMaker.createEndDateLabel(bTask, model.getResourceBundle());
 
                             // Makes the area where you can see the other departments process
                             VBox vbox = makeDepartmentOverview(bTask);
@@ -201,19 +205,15 @@ public class BoardMaker implements Runnable {
         progressPane.setTranslateY(200);
         progressPane.setPrefHeight(250);
         progressPane.setPrefWidth(180);
-        Label lblStart = new Label();
-        lblStart.setText("Start");
-        lblStart.setFont(new Font("Arial", 16));
-        Label lblSlut = new Label();
-        lblSlut.setText(model.getResourceBundle().getString("end"));
-        lblSlut.setFont(new Font("Arial", 16));
+
+        Label lblStart = labelMaker.makeStartLabel();
+
+        Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
+
         double percantage = getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
-        lblStart.setTranslateX(-1458);
-        lblStart.setTranslateY(75);
-        lblSlut.setTranslateX(-1257);
-        lblSlut.setTranslateY(75);
+
         pBar.setPrefHeight(25);
         pBar.setPrefWidth(250);
         pBar.setTranslateX(-1350);
@@ -224,12 +224,12 @@ public class BoardMaker implements Runnable {
 
     private double getPercentageTimeLeft(BoardTask bTask) {
         double startTime = bTask.getStartDate().getTime();
-        System.out.println(""+bTask.getStartDate().getTime());
         Date endDate = bTask.getEndDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(endDate.getTime());
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
+        
         double endTime = calendar.getTimeInMillis();
         double totalTime = endTime - startTime;
         double currentTime = System.currentTimeMillis();
@@ -265,36 +265,6 @@ public class BoardMaker implements Runnable {
         return vbox;
     }
 
-    private Label createCustomerLabel(BoardTask bTask) {
-        Label customerName = new Label(model.getResourceBundle().getString("CustomerName") + ": " + bTask.getCustomerName());
-        customerName.setFont(new Font("Arial", 30));
-        customerName.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        customerName.setPrefWidth(350);
-        customerName.setTranslateY(-100);
-        customerName.setTranslateX(-150);
-        return customerName;
-    }
-
-    private Label createOrderLabel(BoardTask bTask) {
-        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-        orderLabel.setFont(new Font("Arial", 30));
-        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        orderLabel.setPrefWidth(350);
-        orderLabel.setTranslateY(-300);
-        orderLabel.setTranslateX(-150);
-        return orderLabel;
-    }
-
-    private Label createEndDateLabel(BoardTask bTask) {
-        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + bTask.getEndDate());
-        endDateLabel.setFont(new Font("Arial", 30));
-        endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        endDateLabel.setPrefWidth(350);
-        endDateLabel.setTranslateY(-200);
-        endDateLabel.setTranslateX(-150);
-        return endDateLabel;
-    }
-
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
@@ -307,8 +277,6 @@ public class BoardMaker implements Runnable {
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
                 -> {
-            System.out.println("typing");
-
             try {
                 model.setCompleteTask(bTask.getTaskID());
                 aPane.getChildren().remove(stackPane);
@@ -316,11 +284,11 @@ public class BoardMaker implements Runnable {
                     child.setEffect(null);
                 }
                 removeSmallTask(fPane, bTask.getOrderNumber());
+                writeOnDisplay(model.getResourceBundle().getString("completeTask"));
 
             } catch (SQLException ex) {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
-
         });
         return completeTask;
     }
@@ -347,6 +315,15 @@ public class BoardMaker implements Runnable {
             }
         }
         pane.getChildren().remove(toRemove);
+    }
+
+    private void writeOnDisplay(String toWrite) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                display.setText(toWrite);
+            }
+        });
     }
 
 }

@@ -16,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quickmaff_belman.gui.controller.LoginController;
+import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Utility;
 
 /**
@@ -48,6 +49,7 @@ public class QuickMaff_Belman extends Application {
 
             stage.show();
             con.setGraphics();
+            
 
         } catch (IOException ex) {
             Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil");
