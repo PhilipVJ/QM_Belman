@@ -17,8 +17,8 @@ public class BoardTask {
     private Date endDate;
     private final Date startDate;
     private int taskID;
-    private OrderOverview overview;
-    private String customerName;
+    private final OrderOverview overview;
+    private final String customerName;
 
     public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID, String customerName) {
         this.orderNumber = orderNumber;

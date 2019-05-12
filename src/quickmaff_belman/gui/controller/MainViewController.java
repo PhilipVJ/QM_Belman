@@ -347,9 +347,7 @@ public class MainViewController implements Initializable {
         Runnable run = new Runnable() {
             @Override
             public void run() {
-                Platform.runLater(() -> {
                     filterSwitch.setImage(filterGlowOff);
-                });
             }
         };
         thread.schedule(run, 1, TimeUnit.SECONDS);

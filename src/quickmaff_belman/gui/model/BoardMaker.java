@@ -50,12 +50,11 @@ public class BoardMaker implements Runnable {
     private final ITaskPainter paintStrategy;
     private final BooleanProperty isLoading;
     private int roundCounter = 0;
-
-    private final Image doneMark;
-    private final Image notDoneMark;
-    private final Image postItBorder;
+    private final Image doneMark = new Image("/quickmaff_belman/gui/view/images/done.png");
+    private final Image notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
+    private final Image postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
     private final Label display;
-    private final LabelMaker labelMaker;
+    private final LabelMaker labelMaker = new LabelMaker();
 
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display) {
         this.fPane = fPane;
@@ -64,12 +63,6 @@ public class BoardMaker implements Runnable {
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
         this.display = display;
-
-        doneMark = new Image("/quickmaff_belman/gui/view/images/done.png");
-        notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
-        postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
-
-        labelMaker = new LabelMaker();
 
     }
 
@@ -93,7 +86,6 @@ public class BoardMaker implements Runnable {
                     if (color == null) {
                         continue;
                     }
-
                     view.setImage(color);
                     Label orderNumber = new Label(bTask.getOrderNumber());
                     orderNumber.setFont(new Font("Arial", 15));
@@ -153,7 +145,7 @@ public class BoardMaker implements Runnable {
                             }
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, progressPane, departmentArea);
-                            // If a complete button has been made - it will beadded
+                            // If a complete button has been made - it will be added
                             if (completeTask != null) {
                                 bigPostIt.getChildren().add(completeTask);
                             }
@@ -188,7 +180,7 @@ public class BoardMaker implements Runnable {
                 roundCounter++;
 
             } catch (SQLException ex) {
-                Logger.getLogger(BoardMaker.class.getName()).log(Level.SEVERE, null, ex);
+                ExceptionHandler.handleException(ex, model.getResourceBundle());
             }
             try {
                 Thread.sleep(5000);
