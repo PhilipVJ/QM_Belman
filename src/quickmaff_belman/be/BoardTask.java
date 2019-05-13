@@ -65,6 +65,19 @@ public class BoardTask {
     {
         return overview;
     }
+    
+    public String getShortenedCustomerName()
+    {
+        if(customerName.length()<=12)
+        {
+            return customerName;
+        }
+        else
+        {
+            String shortenedName=customerName.substring(0, 9)+"...";
+            return shortenedName;
+        }
+    }
     public boolean passedEndDate() {
         Date today = new Date();
         if(today.after(endDate))

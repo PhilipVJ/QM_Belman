@@ -87,14 +87,23 @@ public class BoardMaker implements Runnable {
                         continue;
                     }
                     view.setImage(color);
+
+                    Label customerName = new Label(bTask.getShortenedCustomerName());
+                    customerName.setTranslateY(-25);
+                    customerName.setFont(new Font("Arial", 15));
+
                     Label orderNumber = new Label(bTask.getOrderNumber());
-                    orderNumber.setFont(new Font("Arial", 15));
-                    Label endDate = new Label("\n\n" + bTask.getEndDate());
+                    orderNumber.setFont(new Font("Arial", 17));
+                    orderNumber.setTranslateY(-5);
+
+                    Label endDate = new Label(bTask.getEndDate().toString());
+                    endDate.setFont(new Font("Arial", 15));
+                    endDate.setTranslateY(15);
 
                     view.setPreserveRatio(true);
                     view.setFitWidth(160);
 
-                    sPane.getChildren().addAll(view, orderNumber, endDate);
+                    sPane.getChildren().addAll(view, orderNumber, endDate, customerName);
                     // Adds a warning if the due date has passed
                     if (bTask.passedEndDate() == true) {
                         makeRedCirkel(sPane);
@@ -221,7 +230,7 @@ public class BoardMaker implements Runnable {
         calendar.setTimeInMillis(endDate.getTime());
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
-        
+
         double endTime = calendar.getTimeInMillis();
         double totalTime = endTime - startTime;
         double currentTime = System.currentTimeMillis();
@@ -286,12 +295,13 @@ public class BoardMaker implements Runnable {
     }
 
     private void makeRedCirkel(StackPane sPane) {
-        Circle warning = new Circle(50);
+        Circle warning = new Circle(55);
         warning.setStroke(Color.RED);
         warning.setFill(Color.TRANSPARENT);
         warning.setStrokeWidth(2);
         warning.setTranslateY(-5);
-        warning.setTranslateX(-5);
+
+ 
         sPane.getChildren().add(warning);
     }
 
