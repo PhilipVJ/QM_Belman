@@ -64,4 +64,15 @@ public class LabelMaker {
         return lblStart;
     }
 
+    public Label createActiveWorkerLabel(BoardTask bTask, ResourceBundle resourceBundle) {
+        Label activeWorker = new Label();
+        activeWorker.setText(resourceBundle.getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
+        activeWorker.setFont(new Font("Arial", 30));
+        activeWorker.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        activeWorker.setPrefWidth(350);
+        activeWorker.setTranslateY(0);
+        activeWorker.setTranslateX(-150);
+        return activeWorker;
+    }
+
 }

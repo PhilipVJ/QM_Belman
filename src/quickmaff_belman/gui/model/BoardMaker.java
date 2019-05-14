@@ -138,6 +138,12 @@ public class BoardMaker implements Runnable {
                             Label customerName = labelMaker.createCustomerLabel(bTask, model.getResourceBundle());
                             Label orderLabel = labelMaker.createOrderLabel(bTask, model.getResourceBundle());
                             Label endDateLabel = labelMaker.createEndDateLabel(bTask, model.getResourceBundle());
+                            
+                            Label activeWorker = null;
+                            if(bTask.getActiveWorker()!=null)
+                            {
+                               activeWorker = labelMaker.createActiveWorkerLabel(bTask, model.getResourceBundle());
+                            }
 
                             // Makes the area where you can see the other departments process
                             VBox vbox = makeDepartmentOverview(bTask);
@@ -169,6 +175,10 @@ public class BoardMaker implements Runnable {
                                 
                                 bigPostIt.getChildren().addAll(completeTask, progressPane);
                                 
+                            }
+                            if(activeWorker!=null)
+                            {
+                                bigPostIt.getChildren().add(activeWorker);
                             }
                             // Go back to main view when right click is pressed
                             bigPostIt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
