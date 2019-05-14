@@ -2,7 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -93,5 +95,9 @@
             </ImageView>
          </children>
       </VBox>
+      <TextField fx:id="searchbar" layoutX="1503.0" layoutY="824.0" />
+      <RadioButton fx:id="activeWorkers" layoutX="1420.0" layoutY="871.0" mnemonicParsing="false" />
+      <RadioButton fx:id="nonActiveWorkers" layoutX="1420.0" layoutY="912.0" mnemonicParsing="false" />
+      <RadioButton fx:id="showAll" layoutX="1420.0" layoutY="952.0" mnemonicParsing="false" />
    </children>
 </AnchorPane>

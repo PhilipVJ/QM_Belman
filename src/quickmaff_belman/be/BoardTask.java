@@ -19,6 +19,7 @@ public class BoardTask {
     private int taskID;
     private final OrderOverview overview;
     private final String customerName;
+    private Worker activeWorker;
 
     public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID, String customerName) {
         this.orderNumber = orderNumber;
@@ -95,8 +96,22 @@ public class BoardTask {
     @Override
     public String toString()
     {
-        return "BoardTask{" + "orderNumber=" + orderNumber + '}';
+        return orderNumber+"," + endDate + "," + startDate + "," + customerName;
     }
+
+    public Worker getActiveWorker()
+    {
+        return activeWorker;
+    }
+
+    public void setActiveWorker(Worker activeWorker)
+    {
+        this.activeWorker = activeWorker;
+    }
+    
+    
+
+
     
     
     

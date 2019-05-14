@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -35,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.ITaskPainter;
 import quickmaff_belman.be.TaskStatus;
 
@@ -55,14 +54,16 @@ public class BoardMaker implements Runnable {
     private final Image postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
     private final Label display;
     private final LabelMaker labelMaker = new LabelMaker();
+    private Filter filter;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
         this.display = display;
+        this.filter=filter;
 
     }
 
@@ -70,6 +71,7 @@ public class BoardMaker implements Runnable {
     public void run() {
 
         while (true) {
+            System.out.println(""+filter.getwFilter());
             ArrayList<BoardTask> boardTasks;
             try {
                 if (roundCounter == 0) {
@@ -81,6 +83,12 @@ public class BoardMaker implements Runnable {
                 for (BoardTask bTask : boardTasks) {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
+                    //Filters the BoardTask on searchword and worker filter
+                    if(filter.validBoardTask(bTask)==false)
+                    {
+                        continue;
+                    }
+                    
                     Image color = paintStrategy.getColor(bTask);
                     // If the paintStrategy return null the board task shall not be made
                     if (color == null) {
