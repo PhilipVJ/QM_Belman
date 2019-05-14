@@ -424,7 +424,6 @@ public class MainViewController implements Initializable
     private void filter(MouseEvent event)
     {
         String searchWord = searchbar.getText();
-        System.out.println("" + searchWord);
         chosenFilter = new Filter(wOption, searchWord);
         filterSwitch.setImage(filterGlow);
         //Make the switch turn of its glow after 1 second

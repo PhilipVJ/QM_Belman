@@ -71,7 +71,6 @@ public class BoardMaker implements Runnable {
     public void run() {
 
         while (true) {
-            System.out.println(""+filter.getwFilter());
             ArrayList<BoardTask> boardTasks;
             try {
                 if (roundCounter == 0) {

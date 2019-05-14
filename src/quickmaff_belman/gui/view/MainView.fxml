@@ -10,13 +10,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="800.0" prefWidth="900.0" stylesheets="@css/Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="quickmaff_belman.gui.controller.MainViewController">
    <children>
-      <ImageView fx:id="imgBackground" fitHeight="1080.0" fitWidth="1920.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fx:id="imgBackground" fitHeight="1080.0" fitWidth="1920.0" layoutY="-14.0" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@images/BelmanBG.png" />
          </image>
@@ -81,23 +82,38 @@
                </font></Label>
          </children>
       </StackPane>
-      <VBox fx:id="filterBox" alignment="CENTER" layoutX="1547.0" layoutY="837.0" prefHeight="200.0" prefWidth="100.0" spacing="15.0" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="90.0">
+      <VBox alignment="CENTER" layoutX="1490.0" layoutY="829.0" prefHeight="220.0" prefWidth="424.0" style="-fx-background-color: grey; -fx-border-color: black;" AnchorPane.rightAnchor="90.0">
          <children>
-            <ImageView fx:id="filter" fitHeight="117.0" fitWidth="117.0" onMouseClicked="#setFilterOption" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/filterknap1Off.png" />
-               </image>
-            </ImageView>
+            <HBox prefHeight="133.0" prefWidth="350.0" spacing="10.0">
+               <children>
+                  <VBox prefHeight="133.0" prefWidth="356.0" spacing="10.0">
+                     <children>
+                        <TextField fx:id="searchbar" prefHeight="31.0" prefWidth="257.0" />
+                        <RadioButton fx:id="activeWorkers" mnemonicParsing="false" />
+                        <RadioButton fx:id="nonActiveWorkers" mnemonicParsing="false" />
+                        <RadioButton fx:id="showAll" mnemonicParsing="false" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="filterBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                     <children>
+                        <ImageView fx:id="filter" fitHeight="117.0" fitWidth="117.0" onMouseClicked="#setFilterOption" pickOnBounds="true" preserveRatio="true" translateY="-7.0">
+                           <image>
+                              <Image url="@images/filterknap1Off.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             <ImageView fx:id="filterSwitch" fitHeight="74.0" fitWidth="82.0" onMouseClicked="#filter" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/on.png" />
                </image>
             </ImageView>
          </children>
+         <padding>
+            <Insets left="7.0" right="7.0" />
+         </padding>
       </VBox>
-      <TextField fx:id="searchbar" layoutX="1420.0" layoutY="824.0" prefHeight="31.0" prefWidth="277.0" />
-      <RadioButton fx:id="activeWorkers" layoutX="1420.0" layoutY="871.0" mnemonicParsing="false" />
-      <RadioButton fx:id="nonActiveWorkers" layoutX="1420.0" layoutY="912.0" mnemonicParsing="false" />
-      <RadioButton fx:id="showAll" layoutX="1420.0" layoutY="952.0" mnemonicParsing="false" />
    </children>
 </AnchorPane>

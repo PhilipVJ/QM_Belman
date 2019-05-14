@@ -41,11 +41,9 @@ class BelTimer
     {
         if (taskNumber.contains("3"))
         {
-            System.out.println("No active worker");
             return null;
         }
         int randomNumber = random.nextInt(5);
-        System.out.println("found person");
         return allWorkers.get(randomNumber);
     }
 }
