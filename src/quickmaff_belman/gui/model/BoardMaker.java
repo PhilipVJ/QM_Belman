@@ -152,18 +152,23 @@ public class BoardMaker implements Runnable {
                             departmentArea.setPrefWidth(180);
                             departmentArea.getChildren().addAll(overView, vbox);
 
-                            StackPane progressPane = makeProgressBar(bTask);
+//                            StackPane progressPane = makeProgressBar(bTask);
 
                             Button completeTask = null;
 
                             if (bTask.getReadyForWork() == true) {
+                                
                                 completeTask = completeTaskButton(bTask, bigPostIt, aPane);
+                                
                             }
 
-                            bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, progressPane, departmentArea);
+                            bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
                             // If a complete button has been made - it will be added
                             if (completeTask != null) {
-                                bigPostIt.getChildren().add(completeTask);
+                                StackPane progressPane = makeProgressBar(bTask);
+                                
+                                bigPostIt.getChildren().addAll(completeTask, progressPane);
+                                
                             }
                             // Go back to main view when right click is pressed
                             bigPostIt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
