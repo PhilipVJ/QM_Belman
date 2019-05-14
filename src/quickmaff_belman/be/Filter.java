@@ -43,8 +43,10 @@ public class Filter
     {
         boolean containsSearchWord = false;
         boolean matchesWorkFilter = false;
+        String lowerCaseString = task.toString().toLowerCase();
+        String lowerCaseSearchWord = searchWord.toLowerCase();
         
-        if (task.toString().contains(searchWord))
+        if (lowerCaseString.contains(lowerCaseSearchWord))
         {
             containsSearchWord = true;
         }

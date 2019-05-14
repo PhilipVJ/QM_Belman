@@ -129,6 +129,7 @@ public class MainViewController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        searchbar.setFocusTraversable(false);
         // Make the filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
         activeWorkers.setToggleGroup(radioGroup);
@@ -138,8 +139,6 @@ public class MainViewController implements Initializable
         
         //Adds a listener to the group
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
-        
-     
 
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
@@ -324,6 +323,8 @@ public class MainViewController implements Initializable
         activeWorkers.setText(model.getResourceBundle().getString("activeWorkersRadio"));
         nonActiveWorkers.setText(model.getResourceBundle().getString("nonActiveWorkersRadio"));
         showAll.setText(model.getResourceBundle().getString("disable"));
+
+        searchbar.setPromptText(model.getResourceBundle().getString("search"));
         
     }
 

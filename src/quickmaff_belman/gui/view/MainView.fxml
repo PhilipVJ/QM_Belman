@@ -95,7 +95,7 @@
             </ImageView>
          </children>
       </VBox>
-      <TextField fx:id="searchbar" layoutX="1503.0" layoutY="824.0" />
+      <TextField fx:id="searchbar" layoutX="1420.0" layoutY="824.0" prefHeight="31.0" prefWidth="277.0" />
       <RadioButton fx:id="activeWorkers" layoutX="1420.0" layoutY="871.0" mnemonicParsing="false" />
       <RadioButton fx:id="nonActiveWorkers" layoutX="1420.0" layoutY="912.0" mnemonicParsing="false" />
       <RadioButton fx:id="showAll" layoutX="1420.0" layoutY="952.0" mnemonicParsing="false" />
