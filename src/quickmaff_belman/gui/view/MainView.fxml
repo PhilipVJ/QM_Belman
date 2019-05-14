@@ -82,7 +82,7 @@
                </font></Label>
          </children>
       </StackPane>
-      <VBox alignment="CENTER" layoutX="1490.0" layoutY="829.0" prefHeight="220.0" prefWidth="424.0" style="-fx-background-color: grey; -fx-border-color: black;" AnchorPane.rightAnchor="90.0">
+      <VBox alignment="CENTER" layoutX="1490.0" layoutY="829.0" prefHeight="220.0" prefWidth="424.0" style="-fx-background-color: grey; -fx-border-color: black;" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="90.0">
          <children>
             <HBox prefHeight="133.0" prefWidth="350.0" spacing="10.0">
                <children>
