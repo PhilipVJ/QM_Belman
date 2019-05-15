@@ -5,30 +5,48 @@
  */
 package quickmaff_belman.gui.controller;
 
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -46,6 +64,7 @@ import quickmaff_belman.be.ColorfulPainter;
 import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.GreenPainter;
 import quickmaff_belman.be.ITaskPainter;
+import quickmaff_belman.be.Logs;
 import quickmaff_belman.be.RedPainter;
 import quickmaff_belman.be.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
@@ -90,7 +109,21 @@ public class MainViewController implements Initializable
     private Label departmentName;
     @FXML
     private StackPane display;
+    
+    @FXML
+    private TableView<Logs> tvLog;
+    @FXML
+    private TableColumn<Logs, Integer> logIDCol;    
+    @FXML
+    private TableColumn<Logs, Date> activityDateCol;    
+    @FXML
+    private TableColumn<Logs, String> activityCol;   
+    @FXML
+    private TableColumn<Logs, Integer> descriptionCol;  
+    @FXML
+    private TableColumn<Logs, String> departmentNameCol;
 
+    
     private int filterOption = 1;
 
     private Image greenFilter;
@@ -122,6 +155,10 @@ public class MainViewController implements Initializable
     private RadioButton nonActiveWorkers;
     @FXML
     private RadioButton showAll;
+    @FXML
+    private StackPane stackPaneTv;
+    
+
 
     /**
      * Initializes the controller class.
@@ -129,6 +166,7 @@ public class MainViewController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        
         searchbar.setFocusTraversable(false);
         // Make the filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
@@ -157,7 +195,8 @@ public class MainViewController implements Initializable
 
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
         filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
-
+        logTvColumns();
+        testie();
         isLoading = new SimpleBooleanProperty(false);
 
         isLoading.addListener(new ChangeListener<Boolean>()
@@ -190,7 +229,22 @@ public class MainViewController implements Initializable
             }
 
         });
+        
+    }
 
+    private void logTvColumns() {
+        logIDCol.setCellValueFactory(
+                new PropertyValueFactory("logID"));
+        activityDateCol.setCellValueFactory(
+                new PropertyValueFactory("activityDate"));
+        activityCol.setCellValueFactory(
+                new PropertyValueFactory("activity"));
+        descriptionCol.setCellValueFactory(
+                new PropertyValueFactory("description"));
+        departmentNameCol.setCellValueFactory(
+                new PropertyValueFactory("departmentName"));
+        
+        
     }
 
     public void setModel(Model model)
@@ -255,7 +309,7 @@ public class MainViewController implements Initializable
 
     }
 
-    public void initView()
+    public void initView() throws SQLException
     {
         try
         {
@@ -269,6 +323,8 @@ public class MainViewController implements Initializable
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             fWatcherExecutor.submit(fWatcher);
+            
+            
 
             // Makes the application go back to the login screen with a certain key combination
             stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable()
@@ -280,6 +336,8 @@ public class MainViewController implements Initializable
                 }
 
             });
+            
+            
         } catch (IOException ex)
         {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
@@ -465,6 +523,49 @@ public class MainViewController implements Initializable
         int indexOfComma = newVal.toString().indexOf(",");
         String fxId = newVal.toString().substring(indexOfEquals + 1, indexOfComma);
         return fxId;
+    }
+
+    
+    private void makeLogTv() throws SQLException{
+       
+        logIDCol.setText("Log ID");       
+        activityDateCol.setText(model.getResourceBundle().getString("activityDate"));
+        activityCol.setText(model.getResourceBundle().getString("activity"));
+        descriptionCol.setText(model.getResourceBundle().getString("description"));
+        departmentNameCol.setText(model.getResourceBundle().getString("departmentName"));
+        
+        ArrayList<Logs> logs = model.getAllLogs();
+        ObservableList<Logs> tvLogs = FXCollections.observableArrayList(logs);
+        
+        tvLog.setItems(tvLogs);
+        
+       
+        stackPaneTv.toFront();
+    }
+    public void clearLogTv(){
+        tvLog.getItems().clear();
+        stackPaneTv.toBack();
+    }
+    
+    private void testie(){
+        anchorPane.setOnKeyPressed(
+                event ->{
+                    switch(event.getCode()){
+                        case F11:
+                    {
+                        try {
+                            makeLogTv();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        break;
+                    }    
+                        case F12:
+                            clearLogTv();
+                            break;
+                    }
+                }
+        );
     }
 
 }

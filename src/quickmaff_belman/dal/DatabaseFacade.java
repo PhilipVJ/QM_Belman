@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.Logs;
 import quickmaff_belman.be.Worker;
 
 public class DatabaseFacade {
@@ -67,6 +68,10 @@ public class DatabaseFacade {
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{
          oDAO.setCompleteTask(taskID, departmentName);
     } 
+    
+    public ArrayList<Logs> getAllLogs() throws SQLException{
+        return oDAO.getAllLogs();
+    }
 
 //    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
 //    {

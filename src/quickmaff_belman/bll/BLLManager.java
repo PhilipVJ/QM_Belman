@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.Logs;
 import quickmaff_belman.dal.DatabaseFacade;
 
 public class BLLManager
@@ -40,6 +41,9 @@ public class BLLManager
     }
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{
          dFacade.setCompleteTask(taskID, departmentName);
+    }
+    public ArrayList<Logs> getAllLogs() throws SQLException{
+        return dFacade.getAllLogs();
     }
            
 }
