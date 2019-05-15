@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -36,6 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
+import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.ITaskPainter;
 import quickmaff_belman.be.TaskStatus;
 
@@ -56,14 +55,16 @@ public class BoardMaker implements Runnable {
     private final Image postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
     private final Label display;
     private final LabelMaker labelMaker = new LabelMaker();
+    private Filter filter;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
         this.display = display;
+        this.filter=filter;
 
     }
 
@@ -82,12 +83,19 @@ public class BoardMaker implements Runnable {
                 for (BoardTask bTask : boardTasks) {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
-                    Image color = paintStrategy.getColor(bTask);
-                    // If the paintStrategy return null the board task shall not be made
+                    //Filters the BoardTask on searchword and worker filter
+                    if(filter.validBoardTask(bTask)==false)
+                    {
+                        continue;
+                    }
+                    
+                    ImageContainer color = paintStrategy.getColor(bTask);
+            
+                    // If the paintStrategy returns null the board task shall not be made
                     if (color == null) {
                         continue;
                     }
-                    view.setImage(color);
+                    view.setImage(color.getImage());
 
                     Label customerName = new Label(bTask.getShortenedCustomerName());
                     customerName.setTranslateY(-25);
@@ -114,7 +122,7 @@ public class BoardMaker implements Runnable {
                         @Override
                         public void handle(MouseEvent e) {
                             ImageView openedView = new ImageView();
-                            openedView.setImage(color);
+                            openedView.setImage(color.getImage());
                             // Blurs everything which exists in the root Pane
                             ObservableList<Node> allNodes = aPane.getChildren();
                             BoxBlur blur = new BoxBlur();
@@ -132,6 +140,12 @@ public class BoardMaker implements Runnable {
                             Label customerName = labelMaker.createCustomerLabel(bTask, model.getResourceBundle());
                             Label orderLabel = labelMaker.createOrderLabel(bTask, model.getResourceBundle());
                             Label endDateLabel = labelMaker.createEndDateLabel(bTask, model.getResourceBundle());
+                            
+                            Label activeWorker = null;
+                            if(bTask.getActiveWorker()!=null)
+                            {
+                               activeWorker = labelMaker.createActiveWorkerLabel(bTask, model.getResourceBundle());
+                            }
 
                             // Makes the area where you can see the other departments process
                             VBox vbox = makeDepartmentOverview(bTask);
@@ -146,18 +160,29 @@ public class BoardMaker implements Runnable {
                             departmentArea.setPrefWidth(180);
                             departmentArea.getChildren().addAll(overView, vbox);
 
-                            StackPane progressPane = makeProgressBar(bTask);
-
+                            
                             Button completeTask = null;
 
-                            if (bTask.getReadyForWork() == true) {
-                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);
+                            if (color.getColor()==PostItColor.GREEN) {
+                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);             
                             }
 
-                            bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, progressPane, departmentArea);
+                            bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
+                           
+                            //Insert the progressbar into the post-it greens and yellows 
+                            if (color.getColor()!=PostItColor.BLUE) 
+                            {
+                                StackPane progressPane = makeProgressBar(bTask);
+                                bigPostIt.getChildren().add(progressPane);
+                            }
+                            
                             // If a complete button has been made - it will be added
-                            if (completeTask != null) {
-                                bigPostIt.getChildren().add(completeTask);
+                            if (completeTask != null) {                                
+                                bigPostIt.getChildren().addAll(completeTask);                               
+                            }
+                            if(activeWorker!=null)
+                            {
+                                bigPostIt.getChildren().add(activeWorker);
                             }
                             // Go back to main view when right click is pressed
                             bigPostIt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
@@ -211,7 +236,8 @@ public class BoardMaker implements Runnable {
         Label lblStart = labelMaker.makeStartLabel();
 
         Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
-
+        lblSlut.setTranslateX(-1240);
+        
         double percantage = getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);

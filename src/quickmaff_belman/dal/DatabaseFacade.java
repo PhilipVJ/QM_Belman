@@ -13,18 +13,22 @@ import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.Logs;
+import quickmaff_belman.be.Worker;
 
 public class DatabaseFacade {
 
     private final FileDAO fDAO;
     private final OrderDAO oDAO;
     private final DbUpdateDAO uDAO;
+    private final BelTimer bTimer;
 
     public DatabaseFacade() throws IOException {
         DbConnection con = DbConnection.getInstance();
         fDAO = new FileDAO();
         oDAO = new OrderDAO(con);
         uDAO = new DbUpdateDAO(con);
+        bTimer = new BelTimer();
     }
 
     public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException {
@@ -38,7 +42,13 @@ public class DatabaseFacade {
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
-        return oDAO.getAllBoardTasks(departmentName, offset);
+        ArrayList<BoardTask>allBoardTasks = oDAO.getAllBoardTasks(departmentName, offset);
+        for (BoardTask boardTask : allBoardTasks)
+        {
+            Worker worker = bTimer.getActiveWorker(boardTask.getOrderNumber());
+            boardTask.setActiveWorker(worker);
+        }
+        return allBoardTasks;
     }
     
     public int checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException
@@ -58,6 +68,10 @@ public class DatabaseFacade {
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{
          oDAO.setCompleteTask(taskID, departmentName);
     } 
+    
+    public ArrayList<Logs> getAllLogs() throws SQLException{
+        return oDAO.getAllLogs();
+    }
 
 //    public ArrayList<String> getCustomerName(String orderNumber) throws SQLException
 //    {

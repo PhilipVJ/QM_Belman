@@ -64,6 +64,7 @@ public class LabelMaker {
         lblStart.setTranslateY(75);
         return lblStart;
     }
+<<<<<<< HEAD
     public Label makeWarningTxtLabel(ResourceBundle bundle)
     {
         Label lblWarning = new Label(bundle.getString("warning"));
@@ -89,4 +90,18 @@ public class LabelMaker {
         lblHeader.setRotate(10);
         return lblHeader;
     }
+=======
+
+    public Label createActiveWorkerLabel(BoardTask bTask, ResourceBundle resourceBundle) {
+        Label activeWorker = new Label();
+        activeWorker.setText(resourceBundle.getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
+        activeWorker.setFont(new Font("Arial", 30));
+        activeWorker.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        activeWorker.setPrefWidth(350);
+        activeWorker.setTranslateY(0);
+        activeWorker.setTranslateX(-150);
+        return activeWorker;
+    }
+
+>>>>>>> d7f34086c73803dc92aea2efb160052fdff4a92a
 }

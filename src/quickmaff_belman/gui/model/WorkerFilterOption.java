@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package quickmaff_belman.be;
-
-import quickmaff_belman.gui.model.ImageContainer;
+package quickmaff_belman.gui.model;
 
 /**
  *
  * @author Philip
  */
-public interface ITaskPainter {
-    
-ImageContainer getColor(BoardTask task);
-    
+public enum WorkerFilterOption
+{
+    ACTIVEWORKERS,NONACTIVEWORKERS,SHOWALL
 }

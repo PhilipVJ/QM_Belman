@@ -7,11 +7,14 @@ package quickmaff_belman.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -133,9 +136,10 @@ public class LoginController implements Initializable {
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         stage.show();
-                        con.initView();
+                        con.initView();                       
                         con.checkForUnloadedFiles();
-                    } catch (IOException ex) {
+                        
+                    } catch (IOException | SQLException ex) {
                         ExceptionHandler.handleException(ex,model.getResourceBundle());
                     }
                 });
