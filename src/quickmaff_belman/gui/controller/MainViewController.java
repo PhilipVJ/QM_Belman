@@ -196,7 +196,7 @@ public class MainViewController implements Initializable
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
         filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
         logTvColumns();
-        testie();
+        addKeybindToLogTv();
         isLoading = new SimpleBooleanProperty(false);
 
         isLoading.addListener(new ChangeListener<Boolean>()
@@ -547,7 +547,7 @@ public class MainViewController implements Initializable
         stackPaneTv.toBack();
     }
     
-    private void testie(){
+    private void addKeybindToLogTv(){
         anchorPane.setOnKeyPressed(
                 event ->{
                     switch(event.getCode()){
