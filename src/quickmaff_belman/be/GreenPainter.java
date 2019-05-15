@@ -22,7 +22,7 @@ public class GreenPainter implements ITaskPainter {
 
         if (task.getReadyForWork() == true) {
             ImageContainer container = new ImageContainer(greenPostIt, PostItColor.GREEN);
-           return container;
+            return container;
         }
         return null;
 

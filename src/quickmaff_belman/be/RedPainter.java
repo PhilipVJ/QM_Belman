@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.be;
 
-import java.util.Date;
 import javafx.scene.image.Image;
 import quickmaff_belman.gui.model.ImageContainer;
 import quickmaff_belman.gui.model.PostItColor;
@@ -14,36 +13,28 @@ import quickmaff_belman.gui.model.PostItColor;
  *
  * @author Caspe
  */
-public class RedPainter implements ITaskPainter
-{
+public class RedPainter implements ITaskPainter {
+
     private final Image yellowPostIt = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
-    private final Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
     private final Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
-    
+
     @Override
-    public ImageContainer getColor(BoardTask task)
-    {
-        if(!task.passedEndDate())
-        {
+    public ImageContainer getColor(BoardTask task) {
+        // If the task hasn't passed its enddate - it shall not be made
+        if (task.passedEndDate() == false) {
             return null;
         }
-          Date today = new Date();
-
-        if (task.getStartDate().after(today)) {
-            ImageContainer container = new ImageContainer(bluePostIt, PostItColor.BLUE);
+        ImageContainer container;
+        
+        if (task.getReadyForWork() == true) {
+            container = new ImageContainer(greenPostIt, PostItColor.GREEN);
             return container;
-        } // If they are ready to start working on they will be made green                  
-        else if (task.getReadyForWork() == true) {
-            ImageContainer container = new ImageContainer(greenPostIt, PostItColor.GREEN);
-           return container;
 
-        } // If the tasks start date is prior to today, but isn't ready to start work on yet
-        // it will become a yellow post
-        else {
-            ImageContainer container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
-           return container;
-                  
-        }    
+        } else {
+            container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
+            return container;
+
+        }
     }
-    
+
 }

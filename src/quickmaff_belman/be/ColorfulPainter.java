@@ -24,19 +24,20 @@ public class ColorfulPainter implements ITaskPainter {
     public ImageContainer getColor(BoardTask task) {
 
         Date today = new Date();
+        ImageContainer container;
 
         if (task.getStartDate().after(today)) {
-            ImageContainer container = new ImageContainer(bluePostIt, PostItColor.BLUE);
+            container = new ImageContainer(bluePostIt, PostItColor.BLUE);
             return container;
         } // If they are ready to start working on they will be made green                  
         else if (task.getReadyForWork() == true) {
-          ImageContainer container = new ImageContainer(greenPostIt, PostItColor.GREEN);
+           container = new ImageContainer(greenPostIt, PostItColor.GREEN);
             return container;
 
         } // If the tasks start date is prior to today, but isn't ready to start work on yet
         // it will become a yellow post
         else {
-            ImageContainer container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
+            container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
            return container;
                   
         }

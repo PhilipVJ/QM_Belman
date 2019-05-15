@@ -20,7 +20,7 @@ public class ImageContainer {
         this.image = image;
         this.color = color;
     }
-
+    
     public Image getImage() {
         return image;
     }
@@ -28,5 +28,10 @@ public class ImageContainer {
     public PostItColor getColor() {
         return color;
     }
+    
+
+    
+    
+    
 
 }

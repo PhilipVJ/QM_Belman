@@ -90,7 +90,7 @@ public class BoardMaker implements Runnable {
                     
                     ImageContainer color = paintStrategy.getColor(bTask);
             
-                    // If the paintStrategy return null the board task shall not be made
+                    // If the paintStrategy returns null the board task shall not be made
                     if (color == null) {
                         continue;
                     }
