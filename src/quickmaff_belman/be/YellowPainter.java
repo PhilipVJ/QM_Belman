@@ -7,6 +7,8 @@ package quickmaff_belman.be;
 
 import java.util.Date;
 import javafx.scene.image.Image;
+import quickmaff_belman.gui.model.ImageContainer;
+import quickmaff_belman.gui.model.PostItColor;
 
 /**
  *
@@ -14,15 +16,16 @@ import javafx.scene.image.Image;
  */
 public class YellowPainter implements ITaskPainter{
 
-     private final Image gulPostIt = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
+     private final Image yellowPostIt = new Image("/quickmaff_belman/gui/view/images/postit_yellow.png");
      
     @Override
-    public Image getColor(BoardTask task) {
+    public ImageContainer getColor(BoardTask task) {
     
         Date today = new Date();
         if(!task.getStartDate().after(today) && !task.getReadyForWork())
         {
-           return gulPostIt;
+           ImageContainer container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
+           return container;
         }      
         return null;
         

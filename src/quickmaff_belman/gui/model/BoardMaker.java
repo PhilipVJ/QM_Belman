@@ -88,12 +88,13 @@ public class BoardMaker implements Runnable {
                         continue;
                     }
                     
-                    Image color = paintStrategy.getColor(bTask);
+                    ImageContainer color = paintStrategy.getColor(bTask);
+            
                     // If the paintStrategy return null the board task shall not be made
                     if (color == null) {
                         continue;
                     }
-                    view.setImage(color);
+                    view.setImage(color.getImage());
 
                     Label customerName = new Label(bTask.getShortenedCustomerName());
                     customerName.setTranslateY(-25);
@@ -120,7 +121,7 @@ public class BoardMaker implements Runnable {
                         @Override
                         public void handle(MouseEvent e) {
                             ImageView openedView = new ImageView();
-                            openedView.setImage(color);
+                            openedView.setImage(color.getImage());
                             // Blurs everything which exists in the root Pane
                             ObservableList<Node> allNodes = aPane.getChildren();
                             BoxBlur blur = new BoxBlur();
@@ -161,25 +162,21 @@ public class BoardMaker implements Runnable {
                             
                             Button completeTask = null;
 
-                            if (bTask.getReadyForWork() == true) {
-                                
-                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);
-                                
+                            if (color.getColor()==PostItColor.GREEN) {
+                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);             
                             }
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
                            
                             //Insert the progressbar into the post-it greens and yellows 
-                            Date thisDate = new Date();
-                            if (!bTask.getStartDate().after(thisDate) && !bTask.getReadyForWork() || bTask.getReadyForWork() == true) 
+                            if (color.getColor()!=PostItColor.BLUE) 
                             {
                                 StackPane progressPane = makeProgressBar(bTask);
                                 bigPostIt.getChildren().add(progressPane);
                             }
                             
                             // If a complete button has been made - it will be added
-                            if (completeTask != null) {
-                                
+                            if (completeTask != null) {                                
                                 bigPostIt.getChildren().addAll(completeTask);                               
                             }
                             if(activeWorker!=null)
