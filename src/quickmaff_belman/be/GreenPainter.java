@@ -6,6 +6,8 @@
 package quickmaff_belman.be;
 
 import javafx.scene.image.Image;
+import quickmaff_belman.gui.model.ImageContainer;
+import quickmaff_belman.gui.model.PostItColor;
 
 /**
  *
@@ -16,10 +18,11 @@ public class GreenPainter implements ITaskPainter {
     private final Image greenPostIt = new Image("/quickmaff_belman/gui/view/images/postit_green.png");
 
     @Override
-    public Image getColor(BoardTask task) {
+    public ImageContainer getColor(BoardTask task) {
 
         if (task.getReadyForWork() == true) {
-           return greenPostIt;
+            ImageContainer container = new ImageContainer(greenPostIt, PostItColor.GREEN);
+            return container;
         }
         return null;
 

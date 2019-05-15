@@ -7,6 +7,8 @@ package quickmaff_belman.be;
 
 import java.util.Date;
 import javafx.scene.image.Image;
+import quickmaff_belman.gui.model.ImageContainer;
+import quickmaff_belman.gui.model.PostItColor;
 
 /**
  *
@@ -17,11 +19,13 @@ public class BluePainter implements ITaskPainter {
     private final Image bluePostIt = new Image("/quickmaff_belman/gui/view/images/postit_blue.png");
 
     @Override
-    public Image getColor(BoardTask task) {
+    public ImageContainer getColor(BoardTask task) {
         
         Date today = new Date();
         if (task.getStartDate().after(today)) {
-            return bluePostIt;
+            ImageContainer container = new ImageContainer(bluePostIt, PostItColor.BLUE);
+            return container;
+            
         }
         return null;
     }

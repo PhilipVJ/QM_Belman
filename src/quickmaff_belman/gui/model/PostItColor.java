@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package quickmaff_belman.be;
-
-import quickmaff_belman.gui.model.ImageContainer;
+package quickmaff_belman.gui.model;
 
 /**
  *
  * @author Philip
  */
-public interface ITaskPainter {
+public enum PostItColor {
     
-ImageContainer getColor(BoardTask task);
+YELLOW,BLUE,GREEN
     
 }
