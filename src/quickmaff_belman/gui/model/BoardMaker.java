@@ -15,6 +15,7 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -267,7 +268,6 @@ public class BoardMaker implements Runnable {
     }
 
     private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
-        ObservableList<Node> allNodes = aPane.getChildren();
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
         completeTask.setTranslateY(250);
@@ -277,20 +277,10 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
-                -> {
-            try {
-                model.setCompleteTask(bTask.getTaskID());
-                aPane.getChildren().remove(stackPane);
-                for (Node child : allNodes) {
-                    child.setEffect(null);
-                }
-                removeSmallTask(fPane, bTask.getOrderNumber());
-                writeOnDisplay(model.getResourceBundle().getString("completeTask"));
-
-            } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex, model.getResourceBundle());
-            }
-        });
+            -> {
+            StackPane popUp = popUp(bTask, stackPane, aPane);
+            stackPane.getChildren().add(popUp);
+               });
         return completeTask;
     }
 
@@ -301,7 +291,6 @@ public class BoardMaker implements Runnable {
         warning.setStrokeWidth(2);
         warning.setTranslateY(-5);
 
- 
         sPane.getChildren().add(warning);
     }
 
@@ -327,5 +316,64 @@ public class BoardMaker implements Runnable {
             }
         });
     }
-
+    
+    private StackPane popUp(BoardTask bTask, StackPane stackPane, AnchorPane aPane)
+    {
+        StackPane popUp = new StackPane();
+        ObservableList<Node> allNodes = aPane.getChildren();
+        
+        Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+        ImageView view = new ImageView(pic);
+        view.setImage(pic);
+        view.setFitHeight(570);
+        view.setFitWidth(530);
+        view.setRotate(10);
+        
+        Label txt = labelMaker.makeWarningTxtLabel(model.getResourceBundle());
+        Label header = labelMaker.makeWarningHeader(model.getResourceBundle());
+        
+        Button cancelBtn = new Button(model.getResourceBundle().getString("cancel"));
+        cancelBtn.setFont(new Font("Ariel", 25));
+        cancelBtn.setTranslateY(158);
+        cancelBtn.setTranslateX(60);
+        cancelBtn.setBlendMode(BlendMode.MULTIPLY);
+        cancelBtn.setRotate(11);
+        cancelBtn.setPrefHeight(60);
+        cancelBtn.setPrefWidth(150);
+        cancelBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonCancel.png);");
+        
+        Button acceptBtn = new Button(model.getResourceBundle().getString("accept"));
+        acceptBtn.setFont(new Font("Ariel", 25));
+        acceptBtn.setTranslateY(110);
+        acceptBtn.setTranslateX(-165);
+        acceptBtn.setRotate(12);
+        acceptBtn.setBlendMode(BlendMode.MULTIPLY);
+        acceptBtn.setPrefHeight(60);
+        acceptBtn.setPrefWidth(100);
+        acceptBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonAccept.png);");
+        
+        popUp.getChildren().addAll(view, txt, cancelBtn, acceptBtn, header);
+        
+        acceptBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
+            ->  {
+                    try
+                    {
+                        model.setCompleteTask(bTask.getTaskID());
+                        aPane.getChildren().remove(stackPane);
+                        for (Node child : allNodes) {
+                        child.setEffect(null);
+                        }
+                        removeSmallTask(fPane, bTask.getOrderNumber());
+                        writeOnDisplay(model.getResourceBundle().getString("completeTask"));
+                    } catch (SQLException ex) {
+                    ExceptionHandler.handleException(ex, model.getResourceBundle());
+                    }
+                });
+        
+        cancelBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
+            ->  {
+                    popUp.getChildren().removeAll(view, txt, cancelBtn, acceptBtn, header);
+                });
+        return popUp;
+    }
 }

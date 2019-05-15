@@ -7,6 +7,7 @@ package quickmaff_belman.gui.model;
 
 import java.util.ResourceBundle;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
 
@@ -63,5 +64,29 @@ public class LabelMaker {
         lblStart.setTranslateY(75);
         return lblStart;
     }
-
+    public Label makeWarningTxtLabel(ResourceBundle bundle)
+    {
+        Label lblWarning = new Label(bundle.getString("warning"));
+        lblWarning.setFont(new Font("Arial", 20));
+        lblWarning.setWrapText(true);
+        lblWarning.setPrefHeight(100);
+        lblWarning.setPrefWidth(350);
+        lblWarning.setTranslateX(-5);
+        lblWarning.setTranslateY(-30);
+        lblWarning.setRotate(11);
+        lblWarning.setBlendMode(BlendMode.MULTIPLY);
+        lblWarning.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItLabel.png);");
+        return lblWarning;
+    }
+    
+    public Label makeWarningHeader(ResourceBundle bundle)
+    {
+        Label lblHeader = new Label(bundle.getString("warnHeader"));
+        lblHeader.setFont(new Font("Arial", 50));
+        lblHeader.setStyle("-fx-font-weight: bold");
+        lblHeader.setTranslateX(30);
+        lblHeader.setTranslateY(-160);
+        lblHeader.setRotate(10);
+        return lblHeader;
+    }
 }
