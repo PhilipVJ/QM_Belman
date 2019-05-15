@@ -158,8 +158,12 @@ public class BoardMaker implements Runnable {
                             departmentArea.setPrefWidth(180);
                             departmentArea.getChildren().addAll(overView, vbox);
 
-//                            StackPane progressPane = makeProgressBar(bTask);
-
+                            if (bTask.getReadyForWork() || bTask.getReadyForWork() != true) 
+                            {
+                                StackPane progressPane = makeProgressBar(bTask);
+                                bigPostIt.getChildren().add(progressPane);
+                            }
+                            
                             Button completeTask = null;
 
                             if (bTask.getReadyForWork() == true) {
@@ -171,10 +175,8 @@ public class BoardMaker implements Runnable {
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
                             // If a complete button has been made - it will be added
                             if (completeTask != null) {
-                                StackPane progressPane = makeProgressBar(bTask);
                                 
-                                bigPostIt.getChildren().addAll(completeTask, progressPane);
-                                
+                                bigPostIt.getChildren().addAll(completeTask);                               
                             }
                             if(activeWorker!=null)
                             {
@@ -232,7 +234,8 @@ public class BoardMaker implements Runnable {
         Label lblStart = labelMaker.makeStartLabel();
 
         Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
-
+        lblSlut.setTranslateX(-1240);
+        
         double percantage = getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
