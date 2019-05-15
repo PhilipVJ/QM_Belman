@@ -158,11 +158,6 @@ public class BoardMaker implements Runnable {
                             departmentArea.setPrefWidth(180);
                             departmentArea.getChildren().addAll(overView, vbox);
 
-                            if (bTask.getReadyForWork() || bTask.getReadyForWork() != true) 
-                            {
-                                StackPane progressPane = makeProgressBar(bTask);
-                                bigPostIt.getChildren().add(progressPane);
-                            }
                             
                             Button completeTask = null;
 
@@ -173,6 +168,14 @@ public class BoardMaker implements Runnable {
                             }
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
+                           
+                            //Insert the progressbar into the post-it greens and yellows 
+                            if (bTask.getReadyForWork() || bTask.getReadyForWork() != true) 
+                            {
+                                StackPane progressPane = makeProgressBar(bTask);
+                                bigPostIt.getChildren().add(progressPane);
+                            }
+                            
                             // If a complete button has been made - it will be added
                             if (completeTask != null) {
                                 
