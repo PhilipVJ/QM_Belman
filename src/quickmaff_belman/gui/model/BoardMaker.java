@@ -270,7 +270,7 @@ public class BoardMaker implements Runnable {
         return vbox;
     }
 
-    private Button completeTaskButton(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
+    private Button completeTaskButton(BoardTask bTask, StackPane bigPostIt, AnchorPane aPane) {
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
         completeTask.setTranslateY(250);
@@ -281,8 +281,8 @@ public class BoardMaker implements Runnable {
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
                 -> {
-            StackPane popUp = popUp(bTask, stackPane, aPane);
-            stackPane.getChildren().add(popUp);
+            StackPane popUp = popUp(bTask, bigPostIt);
+            bigPostIt.getChildren().add(popUp);
         });
         return completeTask;
     }
@@ -320,7 +320,7 @@ public class BoardMaker implements Runnable {
         });
     }
 
-    private StackPane popUp(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
+    private StackPane popUp(BoardTask bTask, StackPane stackPane) {
         StackPane popUp = new StackPane();
         ObservableList<Node> allNodes = aPane.getChildren();
 
@@ -373,7 +373,7 @@ public class BoardMaker implements Runnable {
 
         cancelBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
                 -> {
-            popUp.getChildren().removeAll(view, txt, cancelBtn, acceptBtn, header);
+            stackPane.getChildren().removeAll(popUp);
         });
         return popUp;
     }
