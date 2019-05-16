@@ -20,7 +20,7 @@ public class GreenPainter implements ITaskPainter {
 
     @Override
     public ImageContainer getColor(BoardTask task) {
-
+        
         if (task.getReadyForWork() == true) {
             ImageContainer container = new ImageContainer(greenPostIt, PostItColor.GREEN);
             return container;

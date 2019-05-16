@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -52,8 +51,10 @@ public class BoardMaker implements Runnable {
     private final Image notDoneMark = new Image("/quickmaff_belman/gui/view/images/notdone.png");
     private final Image postItBorder = new Image("/quickmaff_belman/gui/view/images/postItBorder.png");
     private final Label display;
-    private final LabelMaker labelMaker = new LabelMaker();
-    private Filter filter;
+    private final LabelMaker labelMaker;
+    private final Filter filter;
+    private final ButtonMaker bMaker;
+    private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
 
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter) {
         this.fPane = fPane;
@@ -63,6 +64,9 @@ public class BoardMaker implements Runnable {
         this.isLoading = isLoading;
         this.display = display;
         this.filter = filter;
+        
+        bMaker = new ButtonMaker(model);
+        labelMaker = new LabelMaker(model.getResourceBundle());
 
     }
 
@@ -134,13 +138,13 @@ public class BoardMaker implements Runnable {
                             bigPostIt.prefWidthProperty().bind(aPane.widthProperty());
                             bigPostIt.prefHeightProperty().bind(aPane.heightProperty());
 
-                            Label customerName = labelMaker.createCustomerLabel(bTask, model.getResourceBundle());
-                            Label orderLabel = labelMaker.createOrderLabel(bTask, model.getResourceBundle());
-                            Label endDateLabel = labelMaker.createEndDateLabel(bTask, model.getResourceBundle());
+                            Label customerName = labelMaker.createCustomerLabel(bTask);
+                            Label orderLabel = labelMaker.createOrderLabel(bTask);
+                            Label endDateLabel = labelMaker.createEndDateLabel(bTask);
 
                             Label activeWorker = null;
                             if (bTask.getActiveWorker() != null) {
-                                activeWorker = labelMaker.createActiveWorkerLabel(bTask, model.getResourceBundle());
+                                activeWorker = labelMaker.createActiveWorkerLabel(bTask);
                             }
 
                             // Makes the area where you can see the other departments process
@@ -159,7 +163,13 @@ public class BoardMaker implements Runnable {
                             Button completeTask = null;
 
                             if (color.getColor() == PostItColor.GREEN) {
-                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);
+                                completeTask = bMaker.makeCompleteTaskButton();
+                                completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, k
+                                        -> {
+                                    StackPane popUp = popUp(bTask, bigPostIt);
+                                    bigPostIt.getChildren().add(popUp);
+                                });
+
                             }
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
@@ -228,7 +238,7 @@ public class BoardMaker implements Runnable {
 
         Label lblStart = labelMaker.makeStartLabel();
 
-        Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
+        Label lblSlut = labelMaker.makeEndLabel();
         lblSlut.setTranslateX(-1240);
 
         double percantage = Utility.getPercentageTimeLeft(bTask);
@@ -270,23 +280,6 @@ public class BoardMaker implements Runnable {
         return vbox;
     }
 
-    private Button completeTaskButton(BoardTask bTask, StackPane bigPostIt, AnchorPane aPane) {
-        Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
-        completeTask.setFont(new Font("Ariel", 25));
-        completeTask.setTranslateY(250);
-        completeTask.setTranslateX(150);
-        completeTask.setBlendMode(BlendMode.MULTIPLY);
-        completeTask.setPrefHeight(60);
-        completeTask.setPrefWidth(250);
-        completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
-        completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
-                -> {
-            StackPane popUp = popUp(bTask, bigPostIt);
-            bigPostIt.getChildren().add(popUp);
-        });
-        return completeTask;
-    }
-
     private void makeRedCirkel(StackPane sPane) {
         Circle warning = new Circle(55);
         warning.setStroke(Color.RED);
@@ -324,35 +317,17 @@ public class BoardMaker implements Runnable {
         StackPane popUp = new StackPane();
         ObservableList<Node> allNodes = aPane.getChildren();
 
-        Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
         ImageView view = new ImageView(pic);
         view.setImage(pic);
         view.setFitHeight(570);
         view.setFitWidth(530);
         view.setRotate(10);
 
-        Label txt = labelMaker.makeWarningTxtLabel(model.getResourceBundle());
-        Label header = labelMaker.makeWarningHeader(model.getResourceBundle());
+        Label txt = labelMaker.makeWarningTxtLabel();
+        Label header = labelMaker.makeWarningHeader();
 
-        Button cancelBtn = new Button(model.getResourceBundle().getString("no"));
-        cancelBtn.setFont(new Font("Ariel", 25));
-        cancelBtn.setTranslateY(158);
-        cancelBtn.setTranslateX(60);
-        cancelBtn.setBlendMode(BlendMode.MULTIPLY);
-        cancelBtn.setRotate(11);
-        cancelBtn.setPrefHeight(60);
-        cancelBtn.setPrefWidth(150);
-        cancelBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonCancel.png);");
-
-        Button acceptBtn = new Button(model.getResourceBundle().getString("yes"));
-        acceptBtn.setFont(new Font("Ariel", 25));
-        acceptBtn.setTranslateY(110);
-        acceptBtn.setTranslateX(-165);
-        acceptBtn.setRotate(12);
-        acceptBtn.setBlendMode(BlendMode.MULTIPLY);
-        acceptBtn.setPrefHeight(60);
-        acceptBtn.setPrefWidth(100);
-        acceptBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonAccept.png);");
+        Button cancelBtn = bMaker.makeCancelButton();
+        Button acceptBtn = bMaker.makeAcceptButton();
 
         popUp.getChildren().addAll(view, txt, cancelBtn, acceptBtn, header);
 

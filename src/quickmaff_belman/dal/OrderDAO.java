@@ -49,7 +49,7 @@ public class OrderDAO
                 String orderNumber = rs.getString("orderNumber");
                 Date endDate = rs.getDate("endDate");
                 Date startDate = rs.getDate("startDate");
-                OrderOverview overview = getOverview(orderNumber, department);
+                OrderOverview overview = getOverview(orderNumber, department,startDate);
                 int taskID = rs.getInt("taskID");
                 String customerName = getCustomerName(orderNumber);
                 BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, overview, taskID, customerName);
@@ -60,7 +60,7 @@ public class OrderDAO
     }
 
 
-    public OrderOverview getOverview(String orderNumber, String departmentName) throws SQLServerException, SQLException {
+    public OrderOverview getOverview(String orderNumber, String departmentName, Date startDate) throws SQLServerException, SQLException {
         boolean readyForWork = true;
         boolean foundThisDepartment=false;
         ArrayList<TaskStatus> allPriorTasks = new ArrayList<>();
@@ -99,6 +99,13 @@ public class OrderDAO
                 readyForWork = false;
             }
         }
+        Date date = new Date();
+        if(startDate.after(date))
+        {
+            readyForWork=false;
+        }
+        
+        
         OrderOverview overview = new OrderOverview(allPriorTasks, readyForWork);
         return overview;
     }

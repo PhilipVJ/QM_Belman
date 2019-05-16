@@ -16,8 +16,16 @@ import quickmaff_belman.be.BoardTask;
  * @author Philip
  */
 public class LabelMaker {
+    
+    private ResourceBundle bundle;
 
-    public Label createCustomerLabel(BoardTask bTask, ResourceBundle bundle) {
+    public LabelMaker(ResourceBundle bundle) {
+        this.bundle = bundle;
+    }
+    
+    
+
+    public Label createCustomerLabel(BoardTask bTask) {
         Label customerName = new Label(bundle.getString("CustomerName") + ": " + bTask.getCustomerName());
         customerName.setFont(new Font("Arial", 30));
         customerName.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
@@ -27,7 +35,7 @@ public class LabelMaker {
         return customerName;
     }
 
-    public Label createOrderLabel(BoardTask bTask, ResourceBundle bundle) {
+    public Label createOrderLabel(BoardTask bTask) {
         Label orderLabel = new Label(bundle.getString("order") + ": " + bTask.getOrderNumber());
         orderLabel.setFont(new Font("Arial", 30));
         orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
@@ -37,7 +45,7 @@ public class LabelMaker {
         return orderLabel;
     }
 
-    public Label createEndDateLabel(BoardTask bTask, ResourceBundle bundle) {
+    public Label createEndDateLabel(BoardTask bTask) {
         Label endDateLabel = new Label(bundle.getString("endDate") + ": " + Utility.dateConverter(bTask.getEndDate()));
         endDateLabel.setFont(new Font("Arial", 30));
         endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
@@ -47,7 +55,7 @@ public class LabelMaker {
         return endDateLabel;
     }
 
-    public Label makeEndLabel(ResourceBundle bundle) {
+    public Label makeEndLabel() {
         Label lblSlut = new Label();
         lblSlut.setText(bundle.getString("end"));
         lblSlut.setFont(new Font("Arial", 16));
@@ -65,7 +73,7 @@ public class LabelMaker {
         return lblStart;
     }
     
-    public Label makeWarningTxtLabel(ResourceBundle bundle)
+    public Label makeWarningTxtLabel()
     {
         Label lblWarning = new Label(bundle.getString("warning"));
         lblWarning.setFont(new Font("Arial", 20));
@@ -80,7 +88,7 @@ public class LabelMaker {
         return lblWarning;
     }
     
-    public Label makeWarningHeader(ResourceBundle bundle)
+    public Label makeWarningHeader()
     {
         Label lblHeader = new Label(bundle.getString("warnHeader"));
         lblHeader.setFont(new Font("Arial", 50));
@@ -91,9 +99,9 @@ public class LabelMaker {
         return lblHeader;
     }
 
-    public Label createActiveWorkerLabel(BoardTask bTask, ResourceBundle resourceBundle) {
+    public Label createActiveWorkerLabel(BoardTask bTask) {
         Label activeWorker = new Label();
-        activeWorker.setText(resourceBundle.getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
+        activeWorker.setText(bundle.getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
         activeWorker.setFont(new Font("Arial", 30));
         activeWorker.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         activeWorker.setPrefWidth(350);
