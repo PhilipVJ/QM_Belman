@@ -6,8 +6,6 @@
 package quickmaff_belman.gui.model;
 
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
@@ -28,10 +26,18 @@ public class Clock implements Runnable {
     public void run() {
         while (true) {
             cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minutes = cal.get(Calendar.MINUTE);
 
-            String time = hour + ":" + minutes;
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int sec = cal.get(Calendar.SECOND);
+            int minutes = cal.get(Calendar.MINUTE);
+            String seconds = "";
+            if (sec < 10) {
+                seconds= "0" + sec;
+            } else {
+                seconds += sec;
+            }
+            String time = hour + ":" + minutes + ":"+seconds;
+
             String weekAndDay = Utility.dateConverter(cal.getTime());
 
             Platform.runLater(()
@@ -40,7 +46,7 @@ public class Clock implements Runnable {
             }
             );
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 return;
             }
