@@ -334,7 +334,7 @@ public class BoardMaker implements Runnable {
         Label txt = labelMaker.makeWarningTxtLabel(model.getResourceBundle());
         Label header = labelMaker.makeWarningHeader(model.getResourceBundle());
 
-        Button cancelBtn = new Button(model.getResourceBundle().getString("cancel"));
+        Button cancelBtn = new Button(model.getResourceBundle().getString("no"));
         cancelBtn.setFont(new Font("Ariel", 25));
         cancelBtn.setTranslateY(158);
         cancelBtn.setTranslateX(60);
@@ -344,7 +344,7 @@ public class BoardMaker implements Runnable {
         cancelBtn.setPrefWidth(150);
         cancelBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonCancel.png);");
 
-        Button acceptBtn = new Button(model.getResourceBundle().getString("accept"));
+        Button acceptBtn = new Button(model.getResourceBundle().getString("yes"));
         acceptBtn.setFont(new Font("Ariel", 25));
         acceptBtn.setTranslateY(110);
         acceptBtn.setTranslateX(-165);
