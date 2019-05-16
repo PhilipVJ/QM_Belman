@@ -141,5 +141,10 @@
             <Insets bottom="5.0" left="5.0" top="5.0" />
          </padding>
       </HBox>
+      <Label fx:id="clock" alignment="TOP_RIGHT" layoutX="1553.0" layoutY="932.0" prefHeight="86.0" prefWidth="277.0" AnchorPane.bottomAnchor="60.0" AnchorPane.rightAnchor="90.0">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

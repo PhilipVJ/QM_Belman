@@ -59,7 +59,6 @@ public final class Utility {
         } else {
             output += (day - 1) + "]";
         }
-        System.out.println("" + output);
         return output;
     }
 

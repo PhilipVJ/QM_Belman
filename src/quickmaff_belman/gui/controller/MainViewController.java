@@ -5,9 +5,6 @@
  */
 package quickmaff_belman.gui.controller;
 
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -27,11 +24,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -42,11 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -56,7 +47,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.taskpainter.BluePainter;
@@ -68,6 +58,7 @@ import quickmaff_belman.be.Logs;
 import quickmaff_belman.be.taskpainter.RedPainter;
 import quickmaff_belman.be.taskpainter.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
+import quickmaff_belman.gui.model.Clock;
 import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
@@ -135,8 +126,6 @@ public class MainViewController implements Initializable
 
     private BooleanProperty isLoading;
     @FXML
-    private VBox filterBox;
-    @FXML
     private ImageView filterSwitch;
 
     private ITaskPainter paintFilter;
@@ -146,6 +135,7 @@ public class MainViewController implements Initializable
     private Image filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
 
     private ExecutorService fWatcherExecutor;
+    private ExecutorService clockExecutor;
 
     private WorkerFilterOption wOption;
     @FXML
@@ -158,6 +148,8 @@ public class MainViewController implements Initializable
     private RadioButton showAll;
     @FXML
     private StackPane stackPaneTv;
+    @FXML
+    private Label clock;
     
 
 
@@ -182,6 +174,7 @@ public class MainViewController implements Initializable
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
+        clockExecutor = Executors.newSingleThreadExecutor();
 
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
@@ -325,8 +318,9 @@ public class MainViewController implements Initializable
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             fWatcherExecutor.submit(fWatcher);
             
-            
-
+            Clock clockSetter = new Clock(clock);
+            clockExecutor.submit(clockSetter);
+                    
             // Makes the application go back to the login screen with a certain key combination
             stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable()
             {
@@ -374,6 +368,10 @@ public class MainViewController implements Initializable
         bMakerExecutor.shutdownNow();
         fWatcherExecutor.shutdownNow();
         labelWatcher.shutdownNow();
+        clockExecutor.shutdown();
+        clockExecutor.shutdownNow();
+       
+        
     }
 
     private void setAllText()
