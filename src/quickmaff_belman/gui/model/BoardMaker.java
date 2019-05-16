@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -56,6 +57,8 @@ public class BoardMaker implements Runnable {
     private final ButtonMaker bMaker;
     private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
 
+    private HBox toRemove = null;
+
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter) {
         this.fPane = fPane;
         this.model = model;
@@ -64,7 +67,7 @@ public class BoardMaker implements Runnable {
         this.isLoading = isLoading;
         this.display = display;
         this.filter = filter;
-        
+
         bMaker = new ButtonMaker(model);
         labelMaker = new LabelMaker(model.getResourceBundle());
 
@@ -89,14 +92,12 @@ public class BoardMaker implements Runnable {
                     if (filter.validBoardTask(bTask) == false) {
                         continue;
                     }
-
-                    ImageContainer color = paintStrategy.getColor(bTask);
-
+                    ImageContainer con = paintStrategy.getColor(bTask);
                     // If the paintStrategy returns null the board task shall not be made
-                    if (color == null) {
+                    if (con == null) {
                         continue;
                     }
-                    view.setImage(color.getImage());
+                    view.setImage(con.getImage());
 
                     Label customerName = new Label(bTask.getShortenedCustomerName());
                     customerName.setTranslateY(-25);
@@ -123,7 +124,7 @@ public class BoardMaker implements Runnable {
                         @Override
                         public void handle(MouseEvent e) {
                             ImageView openedView = new ImageView();
-                            openedView.setImage(color.getImage());
+                            openedView.setImage(con.getImage());
                             // Blurs everything which exists in the root Pane
                             ObservableList<Node> allNodes = aPane.getChildren();
                             BoxBlur blur = new BoxBlur();
@@ -162,7 +163,7 @@ public class BoardMaker implements Runnable {
 
                             Button completeTask = null;
 
-                            if (color.getColor() == PostItColor.GREEN) {
+                            if (con.getColor() == PostItColor.GREEN) {
                                 completeTask = bMaker.makeCompleteTaskButton();
                                 completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, k
                                         -> {
@@ -175,7 +176,7 @@ public class BoardMaker implements Runnable {
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
 
                             //Insert the progressbar into the post-it greens and yellows 
-                            if (color.getColor() != PostItColor.BLUE) {
+                            if (con.getColor() != PostItColor.BLUE) {
                                 StackPane progressPane = makeProgressBar(bTask);
                                 bigPostIt.getChildren().add(progressPane);
                             }
@@ -191,7 +192,8 @@ public class BoardMaker implements Runnable {
                             bigPostIt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
                                     -> {
                                 if (q.getButton() == MouseButton.SECONDARY) {
-                                    aPane.getChildren().remove(bigPostIt);
+                                    removeNodeInJavaFXThread(aPane, bigPostIt);
+                                
                                     for (Node child : allNodes) {
                                         child.setEffect(null);
                                     }
@@ -290,9 +292,9 @@ public class BoardMaker implements Runnable {
         sPane.getChildren().add(warning);
     }
 
-    private void removeSmallTask(FlowPane pane, String orderNumber) {
-        ObservableList<Node> allBoxes = pane.getChildren();
-        HBox toRemove = null;
+    private void removeSmallTask(String orderNumber) {
+        ObservableList<Node> allBoxes = fPane.getChildren();
+
         for (Node box : allBoxes) {
             HBox hBox = (HBox) box;
             StackPane sPane = (StackPane) hBox.getChildren().get(0);
@@ -301,15 +303,17 @@ public class BoardMaker implements Runnable {
                 toRemove = (HBox) box;
             }
         }
-        pane.getChildren().remove(toRemove);
+
+        removeNodeInJavaFXThread(fPane, toRemove);
+        
+        toRemove=null;
+
     }
 
     private void writeOnDisplay(String toWrite) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                display.setText(toWrite);
-            }
+        Platform.runLater(() -> {
+            display.setText(toWrite);
+
         });
     }
 
@@ -335,11 +339,12 @@ public class BoardMaker implements Runnable {
                 -> {
             try {
                 model.setCompleteTask(bTask.getTaskID());
-                aPane.getChildren().remove(stackPane);
+                removeNodeInJavaFXThread(aPane,stackPane);
+   
                 for (Node child : allNodes) {
                     child.setEffect(null);
                 }
-                removeSmallTask(fPane, bTask.getOrderNumber());
+                removeSmallTask(bTask.getOrderNumber());
                 writeOnDisplay(model.getResourceBundle().getString("completeTask"));
             } catch (SQLException ex) {
                 ExceptionHandler.handleException(ex, model.getResourceBundle());
@@ -348,8 +353,16 @@ public class BoardMaker implements Runnable {
 
         cancelBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
                 -> {
-            stackPane.getChildren().removeAll(popUp);
+            removeNodeInJavaFXThread(stackPane, popUp);
         });
         return popUp;
+    }
+    
+    public void removeNodeInJavaFXThread(Pane container, Node toRemove)
+    {
+        Platform.runLater(()->
+        {
+            container.getChildren().remove(toRemove);
+        });
     }
 }
