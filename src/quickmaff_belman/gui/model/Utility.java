@@ -48,4 +48,19 @@ public final class Utility {
         return percantage;
     }
 
+    public static String dateConverter(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String output = "[";
+        output += cal.get(Calendar.WEEK_OF_YEAR) + ":";
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        if (day == 1) {
+            output += "7]";
+        } else {
+            output += (day - 1) + "]";
+        }
+        System.out.println("" + output);
+        return output;
+    }
+
 }

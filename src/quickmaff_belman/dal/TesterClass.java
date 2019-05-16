@@ -19,13 +19,15 @@ public class TesterClass {
      */
     public static void main(String[] args) throws IOException, SQLException 
     {
-        DbConnection con = DbConnection.getInstance();
-        OrderDAO od = new OrderDAO(con);
-       
+
         
-        System.out.println(od.getCustomerName("1000"));
+        
+        
+        
         
         
     }
+    
+
     
 }

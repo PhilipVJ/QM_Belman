@@ -102,7 +102,7 @@ public class BoardMaker implements Runnable {
                     orderNumber.setFont(new Font("Arial", 17));
                     orderNumber.setTranslateY(-5);
 
-                    Label endDate = new Label(bTask.getEndDate().toString());
+                    Label endDate = new Label(Utility.dateConverter(bTask.getEndDate()));
                     endDate.setFont(new Font("Arial", 15));
                     endDate.setTranslateY(15);
 

@@ -38,7 +38,7 @@ public class LabelMaker {
     }
 
     public Label createEndDateLabel(BoardTask bTask, ResourceBundle bundle) {
-        Label endDateLabel = new Label(bundle.getString("endDate") + ": " + bTask.getEndDate());
+        Label endDateLabel = new Label(bundle.getString("endDate") + ": " + Utility.dateConverter(bTask.getEndDate()));
         endDateLabel.setFont(new Font("Arial", 30));
         endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         endDateLabel.setPrefWidth(350);
