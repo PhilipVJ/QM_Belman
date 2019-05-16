@@ -39,6 +39,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import static javafx.scene.control.TableView.CONSTRAINED_RESIZE_POLICY;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -64,7 +65,7 @@ import quickmaff_belman.be.taskpainter.ColorfulPainter;
 import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.taskpainter.GreenPainter;
 import quickmaff_belman.be.taskpainter.ITaskPainter;
-import quickmaff_belman.be.Logs;
+import quickmaff_belman.be.Log;
 import quickmaff_belman.be.taskpainter.RedPainter;
 import quickmaff_belman.be.taskpainter.YellowPainter;
 import quickmaff_belman.gui.model.BoardMaker;
@@ -111,20 +112,8 @@ public class MainViewController implements Initializable
     @FXML
     private StackPane display;
     
-    @FXML
-    private TableView<Logs> tvLog;
-    @FXML
-    private TableColumn<Logs, Integer> logIDCol;    
-    @FXML
-    private TableColumn<Logs, Date> activityDateCol;    
-    @FXML
-    private TableColumn<Logs, String> activityCol;   
-    @FXML
-    private TableColumn<Logs, Integer> descriptionCol;  
-    @FXML
-    private TableColumn<Logs, String> departmentNameCol;
-
-    
+    private TableView<Log> tvLog;
+   
     private int filterOption = 1;
 
     private Image greenFilter;
@@ -134,8 +123,6 @@ public class MainViewController implements Initializable
     private Image offFilter;
 
     private BooleanProperty isLoading;
-    @FXML
-    private VBox filterBox;
     @FXML
     private ImageView filterSwitch;
 
@@ -156,8 +143,8 @@ public class MainViewController implements Initializable
     private RadioButton nonActiveWorkers;
     @FXML
     private RadioButton showAll;
-    @FXML
-    private StackPane stackPaneTv;
+    
+    private StackPane stackPane;
     
 
 
@@ -196,7 +183,7 @@ public class MainViewController implements Initializable
 
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
         filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
-        logTvColumns();
+        
         addKeybindToLogTv();
         isLoading = new SimpleBooleanProperty(false);
 
@@ -230,21 +217,6 @@ public class MainViewController implements Initializable
             }
 
         });
-        
-    }
-
-    private void logTvColumns() {
-        logIDCol.setCellValueFactory(
-                new PropertyValueFactory("logID"));
-        activityDateCol.setCellValueFactory(
-                new PropertyValueFactory("activityDate"));
-        activityCol.setCellValueFactory(
-                new PropertyValueFactory("activity"));
-        descriptionCol.setCellValueFactory(
-                new PropertyValueFactory("description"));
-        departmentNameCol.setCellValueFactory(
-                new PropertyValueFactory("departmentName"));
-        
         
     }
 
@@ -520,24 +492,53 @@ public class MainViewController implements Initializable
 
    
     private void makeLogTv() throws SQLException{
-       
+        
+        TableColumn<Log, Integer> logIDCol = new TableColumn<>("Log ID");
+        logIDCol.setCellValueFactory(
+                new PropertyValueFactory("logID"));
+        
+        TableColumn<Log, Date> activityDateCol = new TableColumn<>("activityDate");
+        activityDateCol.setCellValueFactory(
+                new PropertyValueFactory("activityDate"));
+        
+        TableColumn<Log, String> activityCol = new TableColumn<>("activity");
+        activityCol.setCellValueFactory(
+                new PropertyValueFactory("activity"));
+        
+        TableColumn<Log, String> descriptionCol = new TableColumn<>("description");
+        descriptionCol.setCellValueFactory(
+                new PropertyValueFactory("description"));
+        
+        TableColumn<Log, String> departmentNameCol = new TableColumn<>("departmentName");
+        departmentNameCol.setCellValueFactory(
+                new PropertyValueFactory("departmentName"));
+     
         logIDCol.setText("Log ID");       
         activityDateCol.setText(model.getResourceBundle().getString("activityDate"));
         activityCol.setText(model.getResourceBundle().getString("activity"));
         descriptionCol.setText(model.getResourceBundle().getString("description"));
         departmentNameCol.setText(model.getResourceBundle().getString("departmentName"));
         
-        ArrayList<Logs> logs = model.getAllLogs();
-        ObservableList<Logs> tvLogs = FXCollections.observableArrayList(logs);
-        
+        ArrayList<Log> logs = model.getAllLogs();
+        ObservableList<Log> tvLogs = FXCollections.observableArrayList(logs);
+        tvLog = new TableView<>();
         tvLog.setItems(tvLogs);
+        tvLog.getColumns().addAll(logIDCol,activityDateCol,activityCol,descriptionCol,departmentNameCol);
+        tvLog.columnResizePolicyProperty().set(CONSTRAINED_RESIZE_POLICY);
         
-       
-        stackPaneTv.toFront();
+        stackPane  = new StackPane();
+        stackPane.getChildren().add(tvLog);
+        
+        stackPane.prefHeightProperty().bind(anchorPane.heightProperty());
+        stackPane.prefWidthProperty().bind(anchorPane.widthProperty());               
+        anchorPane.getChildren().add(stackPane);
+   
     }
+    
     public void clearLogTv(){
-        tvLog.getItems().clear();
-        stackPaneTv.toBack();
+        anchorPane.getChildren().remove(stackPane);
+        
+        
     }
     
     private void addKeybindToLogTv(){

@@ -17,7 +17,7 @@ import java.util.Set;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.FileWrapper;
-import quickmaff_belman.be.Logs;
+import quickmaff_belman.be.Log;
 import quickmaff_belman.bll.BLLManager;
 
 public class Model {
@@ -101,7 +101,7 @@ public class Model {
     public void setCompleteTask(int taskID) throws SQLException{
          bMan.setCompleteTask(taskID, departmentName);
     }
-    public ArrayList<Logs> getAllLogs() throws SQLException{
+    public ArrayList<Log> getAllLogs() throws SQLException{
         return bMan.getAllLogs();
     }
     

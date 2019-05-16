@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import quickmaff_belman.be.BoardTask;
-import quickmaff_belman.be.Logs;
+import quickmaff_belman.be.Log;
 import quickmaff_belman.be.OrderOverview;
 import quickmaff_belman.be.TaskStatus;
 
@@ -178,9 +178,9 @@ public class OrderDAO
         return name;
     }
     
-    public ArrayList<Logs> getAllLogs() throws SQLServerException, SQLException
+    public ArrayList<Log> getAllLogs() throws SQLServerException, SQLException
     {
-        ArrayList<Logs> allLogs = new ArrayList<>();
+        ArrayList<Log> allLogs = new ArrayList<>();
         
 
         String sql = "SELECT * FROM Log";
@@ -193,9 +193,9 @@ public class OrderDAO
                 int logID = rs.getInt("logID");
                 Date date = rs.getDate("activityDate");
                 String activity = rs.getString("activity");
-                int description = rs.getInt("description");
+                String description = rs.getString("description");
                 String departmentName = rs.getString("departmentName");
-                Logs log = new Logs(logID,date,activity,description,departmentName);
+                Log log = new Log(logID,date,activity,description,departmentName);
                 allLogs.add(log);
                 
             }

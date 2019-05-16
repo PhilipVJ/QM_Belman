@@ -12,15 +12,15 @@ import java.util.Date;
  *
  * @author Anders
  */
-public class Logs{
+public class Log{
     
-    private int logID;
-    private Date activityDate;
-    private String activity;
-    private int description;
-    private String departmentName;
+    private final int logID;
+    private final Date activityDate;
+    private final String activity;
+    private final String description;
+    private final String departmentName;
 
-    public Logs(int logID, Date activityDate, String activity, int description, String departmentName) {
+    public Log(int logID, Date activityDate, String activity, String description, String departmentName) {
         this.logID = logID;
         this.activityDate = activityDate;
         this.activity = activity;
@@ -40,35 +40,12 @@ public class Logs{
         return activity;
     }
 
-    public int getDescription() {
+    public String getDescription() {
         return description;
     }
 
     public String getDepartmentName() {
         return departmentName;
     }
-
-    public void setLogID(int logID) {
-        this.logID = logID;
-    }
-
-    public void setActivityDate(Date activityDate) {
-        this.activityDate = activityDate;
-    }
-
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
-
-    public void setDescription(int description) {
-        this.description = description;
-    }
-
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
-    }
-    
-    
-
     
 }
