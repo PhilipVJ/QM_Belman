@@ -9,10 +9,10 @@ import java.util.Date;
 
 public class DepartmentTask {
 
-    private Date startDate;
-    private Date endDate;
-    private boolean finishedOrder;
-    private String departmentName;
+    private final Date startDate;
+    private final Date endDate;
+    private final boolean finishedOrder;
+    private final String departmentName;
     private String orderNumber;
 
     public DepartmentTask(Date startDate, Date endDate, boolean finishedOrder, String departmentName) {

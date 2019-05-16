@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.model;
 
+import quickmaff_belman.be.ImageContainer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javafx.application.Platform;
@@ -32,7 +33,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.Filter;
-import quickmaff_belman.be.ITaskPainter;
+import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.TaskStatus;
 
 /**
@@ -61,7 +62,7 @@ public class BoardMaker implements Runnable {
         this.paintStrategy = strategy;
         this.isLoading = isLoading;
         this.display = display;
-        this.filter=filter;
+        this.filter = filter;
 
     }
 
@@ -81,13 +82,12 @@ public class BoardMaker implements Runnable {
                     view = new ImageView();
                     StackPane sPane = new StackPane();
                     //Filters the BoardTask on searchword and worker filter
-                    if(filter.validBoardTask(bTask)==false)
-                    {
+                    if (filter.validBoardTask(bTask) == false) {
                         continue;
                     }
-                    
+
                     ImageContainer color = paintStrategy.getColor(bTask);
-            
+
                     // If the paintStrategy returns null the board task shall not be made
                     if (color == null) {
                         continue;
@@ -137,11 +137,10 @@ public class BoardMaker implements Runnable {
                             Label customerName = labelMaker.createCustomerLabel(bTask, model.getResourceBundle());
                             Label orderLabel = labelMaker.createOrderLabel(bTask, model.getResourceBundle());
                             Label endDateLabel = labelMaker.createEndDateLabel(bTask, model.getResourceBundle());
-                            
+
                             Label activeWorker = null;
-                            if(bTask.getActiveWorker()!=null)
-                            {
-                               activeWorker = labelMaker.createActiveWorkerLabel(bTask, model.getResourceBundle());
+                            if (bTask.getActiveWorker() != null) {
+                                activeWorker = labelMaker.createActiveWorkerLabel(bTask, model.getResourceBundle());
                             }
 
                             // Makes the area where you can see the other departments process
@@ -157,28 +156,25 @@ public class BoardMaker implements Runnable {
                             departmentArea.setPrefWidth(180);
                             departmentArea.getChildren().addAll(overView, vbox);
 
-                            
                             Button completeTask = null;
 
-                            if (color.getColor()==PostItColor.GREEN) {
-                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);             
+                            if (color.getColor() == PostItColor.GREEN) {
+                                completeTask = completeTaskButton(bTask, bigPostIt, aPane);
                             }
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
-                           
+
                             //Insert the progressbar into the post-it greens and yellows 
-                            if (color.getColor()!=PostItColor.BLUE) 
-                            {
+                            if (color.getColor() != PostItColor.BLUE) {
                                 StackPane progressPane = makeProgressBar(bTask);
                                 bigPostIt.getChildren().add(progressPane);
                             }
-                            
+
                             // If a complete button has been made - it will be added
-                            if (completeTask != null) {                                
-                                bigPostIt.getChildren().addAll(completeTask);                               
+                            if (completeTask != null) {
+                                bigPostIt.getChildren().addAll(completeTask);
                             }
-                            if(activeWorker!=null)
-                            {
+                            if (activeWorker != null) {
                                 bigPostIt.getChildren().add(activeWorker);
                             }
                             // Go back to main view when right click is pressed
@@ -234,7 +230,7 @@ public class BoardMaker implements Runnable {
 
         Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
         lblSlut.setTranslateX(-1240);
-        
+
         double percantage = Utility.getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
@@ -284,10 +280,10 @@ public class BoardMaker implements Runnable {
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
         completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
-            -> {
+                -> {
             StackPane popUp = popUp(bTask, stackPane, aPane);
             stackPane.getChildren().add(popUp);
-               });
+        });
         return completeTask;
     }
 
@@ -323,22 +319,21 @@ public class BoardMaker implements Runnable {
             }
         });
     }
-    
-    private StackPane popUp(BoardTask bTask, StackPane stackPane, AnchorPane aPane)
-    {
+
+    private StackPane popUp(BoardTask bTask, StackPane stackPane, AnchorPane aPane) {
         StackPane popUp = new StackPane();
         ObservableList<Node> allNodes = aPane.getChildren();
-        
+
         Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
         ImageView view = new ImageView(pic);
         view.setImage(pic);
         view.setFitHeight(570);
         view.setFitWidth(530);
         view.setRotate(10);
-        
+
         Label txt = labelMaker.makeWarningTxtLabel(model.getResourceBundle());
         Label header = labelMaker.makeWarningHeader(model.getResourceBundle());
-        
+
         Button cancelBtn = new Button(model.getResourceBundle().getString("cancel"));
         cancelBtn.setFont(new Font("Ariel", 25));
         cancelBtn.setTranslateY(158);
@@ -348,7 +343,7 @@ public class BoardMaker implements Runnable {
         cancelBtn.setPrefHeight(60);
         cancelBtn.setPrefWidth(150);
         cancelBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonCancel.png);");
-        
+
         Button acceptBtn = new Button(model.getResourceBundle().getString("accept"));
         acceptBtn.setFont(new Font("Ariel", 25));
         acceptBtn.setTranslateY(110);
@@ -358,29 +353,28 @@ public class BoardMaker implements Runnable {
         acceptBtn.setPrefHeight(60);
         acceptBtn.setPrefWidth(100);
         acceptBtn.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButtonAccept.png);");
-        
+
         popUp.getChildren().addAll(view, txt, cancelBtn, acceptBtn, header);
-        
+
         acceptBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
-            ->  {
-                    try
-                    {
-                        model.setCompleteTask(bTask.getTaskID());
-                        aPane.getChildren().remove(stackPane);
-                        for (Node child : allNodes) {
-                        child.setEffect(null);
-                        }
-                        removeSmallTask(fPane, bTask.getOrderNumber());
-                        writeOnDisplay(model.getResourceBundle().getString("completeTask"));
-                    } catch (SQLException ex) {
-                    ExceptionHandler.handleException(ex, model.getResourceBundle());
-                    }
-                });
-        
+                -> {
+            try {
+                model.setCompleteTask(bTask.getTaskID());
+                aPane.getChildren().remove(stackPane);
+                for (Node child : allNodes) {
+                    child.setEffect(null);
+                }
+                removeSmallTask(fPane, bTask.getOrderNumber());
+                writeOnDisplay(model.getResourceBundle().getString("completeTask"));
+            } catch (SQLException ex) {
+                ExceptionHandler.handleException(ex, model.getResourceBundle());
+            }
+        });
+
         cancelBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, e
-            ->  {
-                    popUp.getChildren().removeAll(view, txt, cancelBtn, acceptBtn, header);
-                });
+                -> {
+            popUp.getChildren().removeAll(view, txt, cancelBtn, acceptBtn, header);
+        });
         return popUp;
     }
 }

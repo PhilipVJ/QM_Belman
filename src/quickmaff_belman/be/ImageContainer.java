@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package quickmaff_belman.gui.model;
+package quickmaff_belman.be;
 
 import javafx.scene.image.Image;
+import quickmaff_belman.gui.model.PostItColor;
 
 /**
  *
