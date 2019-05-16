@@ -72,8 +72,7 @@ import quickmaff_belman.gui.model.WorkerFilterOption;
  *
  * @author Philip
  */
-public class MainViewController implements Initializable
-{
+public class MainViewController implements Initializable {
 
     @FXML
     private ImageView imgBackground;
@@ -83,50 +82,16 @@ public class MainViewController implements Initializable
     private FlowPane flowPane;
     @FXML
     private ImageView filter;
-
-    private Model model;
-    private Stage stage;
-    private ExecutorService bMakerExecutor;
-
     @FXML
     private Label infoBar;
-
-    private ScheduledExecutorService labelWatcher;
     @FXML
     private AnchorPane anchorPane;
-    @FXML
-    private ImageView logo;
     @FXML
     private ScrollPane scrollPane;
     @FXML
     private Label departmentName;
     @FXML
-    private StackPane display;
-    
-    private TableView<Log> tvLog;
-   
-    private int filterOption = 1;
-
-    private Image greenFilter;
-    private Image redFilter;
-    private Image yellowFilter;
-    private Image blueFilter;
-    private Image offFilter;
-
-    private BooleanProperty isLoading;
-    @FXML
     private ImageView filterSwitch;
-
-    private ITaskPainter paintFilter;
-    private Filter chosenFilter;
-
-    private Image filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
-    private Image filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
-
-    private ExecutorService fWatcherExecutor;
-    private ExecutorService clockExecutor;
-
-    private WorkerFilterOption wOption;
     @FXML
     private TextField searchbar;
     @FXML
@@ -135,24 +100,37 @@ public class MainViewController implements Initializable
     private RadioButton nonActiveWorkers;
     @FXML
     private RadioButton showAll;
-
-    
-    private StackPane stackPane;
-
-    
     @FXML
     private Label clock;
 
-    
+    private Model model;
+    private Stage stage;
+    private TableView<Log> tvLog;
+    private int filterOption = 1;
+    private Image greenFilter;
+    private Image redFilter;
+    private Image yellowFilter;
+    private Image blueFilter;
+    private Image offFilter;
+    private BooleanProperty isLoading;
+    private ITaskPainter paintFilter;
+    private Filter chosenFilter;
+    private Image filterGlow;
+    private Image filterGlowOff;
+    private ExecutorService fWatcherExecutor;
+    private ExecutorService clockExecutor;
+    private ExecutorService bMakerExecutor;
+    private ScheduledExecutorService labelWatcher;
 
+    private WorkerFilterOption wOption;
+    private StackPane stackPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        
+    public void initialize(URL url, ResourceBundle rb) {
+
         searchbar.setFocusTraversable(false);
         // Make the filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
@@ -160,7 +138,7 @@ public class MainViewController implements Initializable
         nonActiveWorkers.setToggleGroup(radioGroup);
         showAll.setSelected(true);
         showAll.setToggleGroup(radioGroup);
-        
+
         //Adds a listener to the group
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
 
@@ -168,10 +146,10 @@ public class MainViewController implements Initializable
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
         clockExecutor = Executors.newSingleThreadExecutor();
-
+        // Sets the filters to default
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
-
+        
         startLabelResetter();
         //set Images
         greenFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
@@ -179,36 +157,27 @@ public class MainViewController implements Initializable
         redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
-
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
         filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
-        
-        addKeybindToLogTv();
+
+        addKeybindToLogView();
         isLoading = new SimpleBooleanProperty(false);
 
-        isLoading.addListener(new ChangeListener<Boolean>()
-        {
+        isLoading.addListener(new ChangeListener<Boolean>() {
             @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
-            {
-                if (isLoading.get())
-                {
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (isLoading.get()) {
                     Platform.runLater(()
-                            ->
-                    {
+                            -> {
                         infoBar.setText(model.getResourceBundle().getString("loading"));
                     });
 
-                } else if (!isLoading.get())
-                {
+                } else if (!isLoading.get()) {
                     Platform.runLater(()
-                            ->
-                    {
-                        if (flowPane.getChildren().isEmpty())
-                        {
+                            -> {
+                        if (flowPane.getChildren().isEmpty()) {
                             infoBar.setText(model.getResourceBundle().getString("noTasks"));
-                        } else
-                        {
+                        } else {
                             infoBar.setText("");
                         }
                     });
@@ -216,26 +185,18 @@ public class MainViewController implements Initializable
             }
 
         });
-        
+
     }
 
-    public void setModel(Model model)
-    {
+    public void setModel(Model model) {
         this.model = model;
     }
 
-    private void checkForEmptyFlowPane()
-    {
-
-    }
-
     @FXML
-    private void changeLanguage(MouseEvent event)
-    {
+    private void changeLanguage(MouseEvent event) {
 
         Language language = model.changeLanguage();
-        switch (language)
-        {
+        switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
                 languageSwitch.setImage(daImage);
@@ -252,23 +213,16 @@ public class MainViewController implements Initializable
     /**
      * When the info label is updated it will be reset after 5 seconds
      */
-    private void startLabelResetter()
-    {
-        infoBar.textProperty().addListener(new ChangeListener<String>()
-        {
+    private void startLabelResetter() {
+        infoBar.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue)
-            {
-                if (!isLoading.get())
-                {
-                    Runnable resetter = new Runnable()
-                    {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!isLoading.get()) {
+                    Runnable resetter = new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             Platform.runLater(()
-                                    ->
-                            {
+                                    -> {
                                 infoBar.setText("");
                             });
                         }
@@ -278,13 +232,10 @@ public class MainViewController implements Initializable
 
             }
         });
-
     }
 
-    public void initView() throws SQLException
-    {
-        try
-        {
+    public void initView() {
+        try {
             stage.setFullScreen(true);
             setGraphics();
             setAllText();
@@ -295,32 +246,25 @@ public class MainViewController implements Initializable
             // Start the FolderWatcher looking for changes in the JSON folder
             FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
             fWatcherExecutor.submit(fWatcher);
-            
+
             Clock clockSetter = new Clock(clock);
             clockExecutor.submit(clockSetter);
-                    
+
             // Makes the application go back to the login screen with a certain key combination
-            stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable()
-            {
+            stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     logOut();
                 }
-
             });
-            
-            
-        } catch (IOException ex)
-        {
+
+        } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
-    private void logOut()
-    {
-        try
-        {
+    private void logOut() {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
             Parent root = loader.load();
             LoginController con = loader.getController();
@@ -328,18 +272,14 @@ public class MainViewController implements Initializable
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setFullScreen(true);
-//            stage.show();
             con.setGraphics();
-
             shutDownThreads();
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
-    private void shutDownThreads()
-    {
+    private void shutDownThreads() {
         bMakerExecutor.shutdown();
         fWatcherExecutor.shutdown();
         labelWatcher.shutdown();
@@ -348,75 +288,54 @@ public class MainViewController implements Initializable
         labelWatcher.shutdownNow();
         clockExecutor.shutdown();
         clockExecutor.shutdownNow();
-       
-        
     }
 
-    private void setAllText()
-    {
+    private void setAllText() {
         departmentName.setText(model.getDepartmentName());
         activeWorkers.setText(model.getResourceBundle().getString("activeWorkersRadio"));
         nonActiveWorkers.setText(model.getResourceBundle().getString("nonActiveWorkersRadio"));
         showAll.setText(model.getResourceBundle().getString("disable"));
-
         searchbar.setPromptText(model.getResourceBundle().getString("search"));
-        
     }
 
-    public void setStage(Stage stage)
-    {
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    private void setGraphics()
-    {
-
+    private void setGraphics() {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
-
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty().subtract(20));
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-
     }
 
-    public void checkForUnloadedFiles()
-    {
+    public void checkForUnloadedFiles() {
         int numberOfAddedFiles;
-        try
-        {
+        try {
             numberOfAddedFiles = model.checkForUnLoadedFiles();
-            if (numberOfAddedFiles > 0)
-            {
+            if (numberOfAddedFiles > 0) {
                 infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
             }
-        } catch (IOException ex)
-        {
+        } catch (IOException ex) {
             infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
 
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             infoBar.setText(model.getResourceBundle().getString("sqlExceptionHeader"));
 
-        } catch (ParseException ex)
-        {
+        } catch (ParseException ex) {
             infoBar.setText(model.getResourceBundle().getString("parseExceptionHeader"));
         }
-
     }
 
     @FXML
-    private void setFilterOption(MouseEvent event)
-    {
-        if (filterOption == 5)
-        {
+    private void setFilterOption(MouseEvent event) {
+        if (filterOption == 5) {
             filterOption = 1;
-        } else
-        {
+        } else {
             filterOption++;
         }
 
-        switch (filterOption)
-        {
+        switch (filterOption) {
             case 1:
                 filter.setImage(offFilter);
                 paintFilter = new ColorfulPainter();
@@ -438,17 +357,16 @@ public class MainViewController implements Initializable
                 paintFilter = new BluePainter();
                 break;
         }
-
     }
 
-    private void restartBoardMaker()
-    {
+    private void restartBoardMaker() {
 
         // Shut down the current thread
         bMakerExecutor.shutdown();
         bMakerExecutor.shutdownNow();
         // Make a new thread with a new runnable
         bMakerExecutor = Executors.newSingleThreadExecutor();
+
         flowPane.getChildren().clear();
         infoBar.setText(model.getResourceBundle().getString("loading"));
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, chosenFilter);
@@ -456,19 +374,21 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void filter(MouseEvent event)
-    {
+    private void filter(MouseEvent event) {
         String searchWord = searchbar.getText();
         chosenFilter = new Filter(wOption, searchWord);
         filterSwitch.setImage(filterGlow);
         //Make the switch turn of its glow after 1 second
         ScheduledExecutorService thread = Executors.newScheduledThreadPool(1);
-        Runnable run = new Runnable()
-        {
+        Runnable run = new Runnable() {
             @Override
-            public void run()
-            {
-                filterSwitch.setImage(filterGlowOff);
+            public void run() {
+                Platform.runLater(()
+                        -> {
+                    filterSwitch.setImage(filterGlowOff);
+                }
+                );
+
             }
         };
         thread.schedule(run, 1, TimeUnit.SECONDS);
@@ -476,12 +396,10 @@ public class MainViewController implements Initializable
 
     }
 
-    private void changeWorkerFilterOption(Toggle newVal)
-    {
+    private void changeWorkerFilterOption(Toggle newVal) {
         String fxId = Utility.getFXIDfromToggle(newVal);
 
-        switch (fxId)
-        {
+        switch (fxId) {
             case "activeWorkers":
                 wOption = WorkerFilterOption.ACTIVEWORKERS;
                 break;
@@ -494,76 +412,64 @@ public class MainViewController implements Initializable
         }
     }
 
-   
-    private void makeLogTv() throws SQLException{
-        
-        TableColumn<Log, Integer> logIDCol = new TableColumn<>("Log ID");
-        logIDCol.setCellValueFactory(
-                new PropertyValueFactory("logID"));
-        
-        TableColumn<Log, Date> activityDateCol = new TableColumn<>("activityDate");
-        activityDateCol.setCellValueFactory(
-                new PropertyValueFactory("activityDate"));
-        
-        TableColumn<Log, String> activityCol = new TableColumn<>("activity");
-        activityCol.setCellValueFactory(
-                new PropertyValueFactory("activity"));
-        
-        TableColumn<Log, String> descriptionCol = new TableColumn<>("description");
-        descriptionCol.setCellValueFactory(
-                new PropertyValueFactory("description"));
-        
-        TableColumn<Log, String> departmentNameCol = new TableColumn<>("departmentName");
-        departmentNameCol.setCellValueFactory(
-                new PropertyValueFactory("departmentName"));
-     
-        logIDCol.setText("Log ID");       
-        activityDateCol.setText(model.getResourceBundle().getString("activityDate"));
-        activityCol.setText(model.getResourceBundle().getString("activity"));
-        descriptionCol.setText(model.getResourceBundle().getString("description"));
-        departmentNameCol.setText(model.getResourceBundle().getString("departmentName"));
-        
-        ArrayList<Log> logs = model.getAllLogs();
-        ObservableList<Log> tvLogs = FXCollections.observableArrayList(logs);
-        tvLog = new TableView<>();
-        tvLog.setItems(tvLogs);
-        tvLog.getColumns().addAll(logIDCol,activityDateCol,activityCol,descriptionCol,departmentNameCol);
-        tvLog.columnResizePolicyProperty().set(CONSTRAINED_RESIZE_POLICY);
-        
-        stackPane  = new StackPane();
-        stackPane.getChildren().add(tvLog);
-        
-        stackPane.prefHeightProperty().bind(anchorPane.heightProperty());
-        stackPane.prefWidthProperty().bind(anchorPane.widthProperty());               
-        anchorPane.getChildren().add(stackPane);
-   
+    private void makeLogView() {
+
+        try {
+            TableColumn<Log, Integer> logIDCol = new TableColumn<>("Log ID");
+            logIDCol.setCellValueFactory(new PropertyValueFactory("logID"));
+
+            TableColumn<Log, Date> activityDateCol = new TableColumn<>("activityDate");
+            activityDateCol.setCellValueFactory(new PropertyValueFactory("activityDate"));
+
+            TableColumn<Log, String> activityCol = new TableColumn<>("activity");
+            activityCol.setCellValueFactory(new PropertyValueFactory("activity"));
+
+            TableColumn<Log, String> descriptionCol = new TableColumn<>("description");
+            descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
+
+            TableColumn<Log, String> departmentNameCol = new TableColumn<>("departmentName");
+            departmentNameCol.setCellValueFactory(new PropertyValueFactory("departmentName"));
+
+            activityDateCol.setText(model.getResourceBundle().getString("activityDate"));
+            activityCol.setText(model.getResourceBundle().getString("activity"));
+            descriptionCol.setText(model.getResourceBundle().getString("description"));
+            departmentNameCol.setText(model.getResourceBundle().getString("departmentName"));
+
+            ArrayList<Log> logs = model.getAllLogs();
+            ObservableList<Log> tvLogs = FXCollections.observableArrayList(logs);
+            tvLog = new TableView<>();
+            tvLog.setItems(tvLogs);
+            tvLog.getColumns().addAll(logIDCol, activityDateCol, activityCol, descriptionCol, departmentNameCol);
+            tvLog.columnResizePolicyProperty().set(CONSTRAINED_RESIZE_POLICY);
+
+            stackPane = new StackPane();
+            stackPane.getChildren().add(tvLog);
+
+            stackPane.prefHeightProperty().bind(anchorPane.heightProperty());
+            stackPane.prefWidthProperty().bind(anchorPane.widthProperty());
+            anchorPane.getChildren().add(stackPane);
+        } catch (SQLException ex) {
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
+        }
     }
-    
-    public void clearLogTv(){
+
+    public void clearLogView() {
         anchorPane.getChildren().remove(stackPane);
-        
-        
     }
-    
-    private void addKeybindToLogTv(){
+
+    private void addKeybindToLogView() {
         anchorPane.setOnKeyPressed(
-                event ->{
-                    switch(event.getCode()){
-                        case F11:
-                    {
-                        try {
-                            makeLogTv();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                event -> {
+                    switch (event.getCode()) {
+                        case F11: {
+                            makeLogView();
+                            break;
                         }
-                        break;
-                    }    
                         case F12:
-                            clearLogTv();
+                            clearLogView();
                             break;
                     }
                 }
         );
     }
-
 }

@@ -39,7 +39,6 @@ public final class Utility {
         calendar.setTimeInMillis(endDate.getTime());
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
-
         double endTime = calendar.getTimeInMillis();
         double totalTime = endTime - startTime;
         double currentTime = System.currentTimeMillis();

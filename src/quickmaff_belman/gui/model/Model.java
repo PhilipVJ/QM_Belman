@@ -75,7 +75,6 @@ public class Model {
             rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
             return Language.DANISH;
         }
-
     }
 
     public ResourceBundle getResourceBundle() {

@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.gui.model;
 
-import java.util.ResourceBundle;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.text.Font;
@@ -17,16 +16,14 @@ import quickmaff_belman.be.BoardTask;
  */
 public class LabelMaker {
     
-    private ResourceBundle bundle;
+    private Model model;
 
-    public LabelMaker(ResourceBundle bundle) {
-        this.bundle = bundle;
+    public LabelMaker(Model model) {
+        this.model = model;
     }
     
-    
-
     public Label createCustomerLabel(BoardTask bTask) {
-        Label customerName = new Label(bundle.getString("CustomerName") + ": " + bTask.getCustomerName());
+        Label customerName = new Label(model.getResourceBundle().getString("CustomerName") + ": " + bTask.getCustomerName());
         customerName.setFont(new Font("Arial", 30));
         customerName.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         customerName.setPrefWidth(350);
@@ -36,7 +33,7 @@ public class LabelMaker {
     }
 
     public Label createOrderLabel(BoardTask bTask) {
-        Label orderLabel = new Label(bundle.getString("order") + ": " + bTask.getOrderNumber());
+        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
         orderLabel.setFont(new Font("Arial", 30));
         orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         orderLabel.setPrefWidth(350);
@@ -46,7 +43,7 @@ public class LabelMaker {
     }
 
     public Label createEndDateLabel(BoardTask bTask) {
-        Label endDateLabel = new Label(bundle.getString("endDate") + ": " + Utility.dateConverter(bTask.getEndDate()));
+        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + Utility.dateConverter(bTask.getEndDate()));
         endDateLabel.setFont(new Font("Arial", 30));
         endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         endDateLabel.setPrefWidth(350);
@@ -57,7 +54,7 @@ public class LabelMaker {
 
     public Label makeEndLabel() {
         Label lblSlut = new Label();
-        lblSlut.setText(bundle.getString("end"));
+        lblSlut.setText(model.getResourceBundle().getString("end"));
         lblSlut.setFont(new Font("Arial", 16));
         lblSlut.setTranslateX(-1257);
         lblSlut.setTranslateY(75);
@@ -75,7 +72,7 @@ public class LabelMaker {
     
     public Label makeWarningTxtLabel()
     {
-        Label lblWarning = new Label(bundle.getString("warning"));
+        Label lblWarning = new Label(model.getResourceBundle().getString("warning"));
         lblWarning.setFont(new Font("Arial", 20));
         lblWarning.setWrapText(true);
         lblWarning.setPrefHeight(100);
@@ -90,7 +87,7 @@ public class LabelMaker {
     
     public Label makeWarningHeader()
     {
-        Label lblHeader = new Label(bundle.getString("warnHeader"));
+        Label lblHeader = new Label(model.getResourceBundle().getString("warnHeader"));
         lblHeader.setFont(new Font("Arial", 50));
         lblHeader.setStyle("-fx-font-weight: bold");
         lblHeader.setTranslateX(30);
@@ -101,7 +98,7 @@ public class LabelMaker {
 
     public Label createActiveWorkerLabel(BoardTask bTask) {
         Label activeWorker = new Label();
-        activeWorker.setText(bundle.getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
+        activeWorker.setText(model.getResourceBundle().getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
         activeWorker.setFont(new Font("Arial", 30));
         activeWorker.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
         activeWorker.setPrefWidth(350);

@@ -69,7 +69,7 @@ public class BoardMaker implements Runnable {
         this.filter = filter;
 
         bMaker = new ButtonMaker(model);
-        labelMaker = new LabelMaker(model.getResourceBundle());
+        labelMaker = new LabelMaker(model);
 
     }
 

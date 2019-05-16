@@ -132,7 +132,7 @@ public class LoginController implements Initializable {
                         con.initView();
                         con.checkForUnloadedFiles();
 
-                    } catch (IOException | SQLException ex) {
+                    } catch (IOException ex) {
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     }
                 });
