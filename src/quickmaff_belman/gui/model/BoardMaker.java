@@ -7,13 +7,10 @@ package quickmaff_belman.gui.model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -238,7 +235,7 @@ public class BoardMaker implements Runnable {
         Label lblSlut = labelMaker.makeEndLabel(model.getResourceBundle());
         lblSlut.setTranslateX(-1240);
         
-        double percantage = getPercentageTimeLeft(bTask);
+        double percantage = Utility.getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
 
@@ -248,22 +245,6 @@ public class BoardMaker implements Runnable {
         pBar.setTranslateY(50);
         progressPane.getChildren().addAll(lblStart, lblSlut, pBar);
         return progressPane;
-    }
-
-    private double getPercentageTimeLeft(BoardTask bTask) {
-        double startTime = bTask.getStartDate().getTime();
-        Date endDate = bTask.getEndDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(endDate.getTime());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-
-        double endTime = calendar.getTimeInMillis();
-        double totalTime = endTime - startTime;
-        double currentTime = System.currentTimeMillis();
-        double timePassedSinceStart = currentTime - startTime;
-        double percantage = (timePassedSinceStart / totalTime);
-        return percantage;
     }
 
     private VBox makeDepartmentOverview(BoardTask bTask) {

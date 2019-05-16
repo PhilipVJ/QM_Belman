@@ -13,8 +13,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +24,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -45,11 +42,8 @@ import quickmaff_belman.gui.model.Model;
 public class LoginController implements Initializable {
 
     @FXML
-    private AnchorPane anPane;
-    @FXML
     private ImageView imgBackground;
-    @FXML
-    private VBox vebox;
+
     @FXML
     private ImageView imgBelmanLogo;
     @FXML
@@ -69,9 +63,9 @@ public class LoginController implements Initializable {
         try {
             model = new Model(new BLLManager(new DatabaseFacade()));
         } catch (IOException ex) {
-            ExceptionHandler.handleException(ex,model.getResourceBundle());
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
-            createButtons();
+        createButtons();
     }
 
     public void setStage(Stage stage) {
@@ -81,7 +75,6 @@ public class LoginController implements Initializable {
     public void createButtons() {
         try {
             ArrayList<String> depNames = model.getDepartmentNames();
-            
             for (String depName : depNames) {
                 Button newButton = new Button();
                 VBox vbox = new VBox();
@@ -105,17 +98,17 @@ public class LoginController implements Initializable {
                         newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2On.png);");
                         openMainView();
                     } catch (IOException ex) {
-                        ExceptionHandler.handleException(ex,model.getResourceBundle());
+                        ExceptionHandler.handleException(ex, model.getResourceBundle());
                     }
                 });
                 vbox.getChildren().addAll(newButton, lbl);
                 flowPane.getChildren().addAll(vbox);
                 flowPane.setHgap(38);
                 flowPane.setVgap(-5);
-                
+
             }
         } catch (IOException ex) {
-            ExceptionHandler.handleException(ex,model.getResourceBundle());
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
 
@@ -136,18 +129,16 @@ public class LoginController implements Initializable {
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         stage.show();
-                        con.initView();                       
+                        con.initView();
                         con.checkForUnloadedFiles();
-                        
+
                     } catch (IOException | SQLException ex) {
-                        ExceptionHandler.handleException(ex,model.getResourceBundle());
+                        ExceptionHandler.handleException(ex, model.getResourceBundle());
                     }
                 });
             }
         };
-
         executor.schedule(openView, 2, TimeUnit.SECONDS);
-
     }
 
     public void setGraphics() {
@@ -155,5 +146,4 @@ public class LoginController implements Initializable {
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
     }
-
 }

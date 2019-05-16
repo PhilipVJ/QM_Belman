@@ -5,18 +5,19 @@
  */
 package quickmaff_belman.gui.model;
 
+import java.util.Calendar;
+import java.util.Date;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Toggle;
+import quickmaff_belman.be.BoardTask;
 
-public final class Utility
-{
+public final class Utility {
 
-    private Utility()
-    {
+    private Utility() {
     }
 
-    public static void createAlert(AlertType type, String title, String header, String content)
-    {
+    public static void createAlert(AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -24,5 +25,27 @@ public final class Utility
         alert.showAndWait();
     }
 
-  
+    public static String getFXIDfromToggle(Toggle newVal) {
+        int indexOfEquals = newVal.toString().indexOf("=");
+        int indexOfComma = newVal.toString().indexOf(",");
+        String fxId = newVal.toString().substring(indexOfEquals + 1, indexOfComma);
+        return fxId;
+    }
+
+    public static double getPercentageTimeLeft(BoardTask bTask) {
+        double startTime = bTask.getStartDate().getTime();
+        Date endDate = bTask.getEndDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(endDate.getTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+
+        double endTime = calendar.getTimeInMillis();
+        double totalTime = endTime - startTime;
+        double currentTime = System.currentTimeMillis();
+        double timePassedSinceStart = currentTime - startTime;
+        double percantage = (timePassedSinceStart / totalTime);
+        return percantage;
+    }
+
 }

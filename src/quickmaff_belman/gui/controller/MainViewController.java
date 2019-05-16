@@ -72,6 +72,7 @@ import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
+import quickmaff_belman.gui.model.Utility;
 import quickmaff_belman.gui.model.WorkerFilterOption;
 
 /**
@@ -501,7 +502,7 @@ public class MainViewController implements Initializable
 
     private void changeWorkerFilterOption(Toggle newVal)
     {
-        String fxId = getFXIDfromToggle(newVal);
+        String fxId = Utility.getFXIDfromToggle(newVal);
 
         switch (fxId)
         {
@@ -517,15 +518,7 @@ public class MainViewController implements Initializable
         }
     }
 
-    private String getFXIDfromToggle(Toggle newVal)
-    {
-        int indexOfEquals = newVal.toString().indexOf("=");
-        int indexOfComma = newVal.toString().indexOf(",");
-        String fxId = newVal.toString().substring(indexOfEquals + 1, indexOfComma);
-        return fxId;
-    }
-
-    
+   
     private void makeLogTv() throws SQLException{
        
         logIDCol.setText("Log ID");       
