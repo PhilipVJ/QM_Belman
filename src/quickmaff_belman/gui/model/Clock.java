@@ -27,24 +27,13 @@ public class Clock implements Runnable {
         while (true) {
             cal = Calendar.getInstance();
 
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int sec = cal.get(Calendar.SECOND);
-            int minutes = cal.get(Calendar.MINUTE);
-            String seconds = "";
-            if (sec < 10) {
-                seconds= "0" + sec;
-            } else {
-                seconds += sec;
-            }
-            String time = hour + ":" + minutes + ":"+seconds;
-
+            String hour = getDigitString(cal.get(Calendar.HOUR_OF_DAY));
+            String sec = getDigitString(cal.get(Calendar.SECOND));
+            String minutes = getDigitString(cal.get(Calendar.MINUTE));
+            String time = hour + ":" + minutes + ":" + sec;
             String weekAndDay = Utility.dateConverter(cal.getTime());
 
-            Platform.runLater(()
-                    -> {
-                clockLabel.setText(time + "\n" + weekAndDay);
-            }
-            );
+            Platform.runLater(()-> {clockLabel.setText(time + "\n" + weekAndDay);});
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -52,4 +41,16 @@ public class Clock implements Runnable {
             }
         }
     }
+
+    private String getDigitString(int digit) {
+        String time;
+        if (digit < 10) {
+            time = "0" + digit;
+        } else {
+            time = "" + digit;
+        }
+        return time;
+    }
+
 }
+
