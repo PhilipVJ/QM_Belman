@@ -33,7 +33,7 @@ public class QuickMaff_Belman extends Application {
             LoginController con = loader.getController();
             con.setStage(stage);
             Scene scene = new Scene(root);
-            stage.setFullScreen(true);
+            stage.setFullScreen(false);
             stage.setScene(scene);
             // Makes sure all threads are closed upon exit
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

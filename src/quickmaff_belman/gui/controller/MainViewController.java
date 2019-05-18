@@ -236,7 +236,7 @@ public class MainViewController implements Initializable {
 
     public void initView() {
         try {
-            stage.setFullScreen(true);
+            stage.setFullScreen(false);
             setGraphics();
             setAllText();
             // Setting up the board

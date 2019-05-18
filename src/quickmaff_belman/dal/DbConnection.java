@@ -30,7 +30,7 @@ public class DbConnection
     }
 
     public Connection getConnection() throws SQLServerException
-    {
+    {    
         return ds.getConnection();
     }
     

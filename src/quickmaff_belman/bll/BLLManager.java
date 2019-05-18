@@ -45,5 +45,9 @@ public class BLLManager
     public ArrayList<Log> getAllLogs() throws SQLException{
         return dFacade.getAllLogs();
     }
+
+    public boolean checkForDatabaseConnection() {
+        return dFacade.checkForDatabaseConnection();
+    }
            
 }
