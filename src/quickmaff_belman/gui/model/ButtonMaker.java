@@ -23,7 +23,7 @@ public class ButtonMaker {
     
     
 
-    public Button makeCompleteTaskButton() {
+    public Button getCompleteTaskButton() {
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));
         completeTask.setTranslateY(250);
@@ -36,7 +36,7 @@ public class ButtonMaker {
         return completeTask;
     }
 
-    public Button makeCancelButton() {
+    public Button getCancelButton() {
         Button cancelBtn = new Button(model.getResourceBundle().getString("no"));
         cancelBtn.setFont(new Font("Ariel", 25));
         cancelBtn.setTranslateY(158);
@@ -49,7 +49,7 @@ public class ButtonMaker {
         return cancelBtn;
     }
 
-    public Button makeAcceptButton() {
+    public Button getAcceptButton() {
         Button acceptBtn = new Button(model.getResourceBundle().getString("yes"));
         acceptBtn.setFont(new Font("Ariel", 25));
         acceptBtn.setTranslateY(110);

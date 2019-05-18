@@ -139,13 +139,13 @@ public class BoardMaker implements Runnable {
                             bigPostIt.prefWidthProperty().bind(aPane.widthProperty());
                             bigPostIt.prefHeightProperty().bind(aPane.heightProperty());
 
-                            Label customerName = labelMaker.createCustomerLabel(bTask);
-                            Label orderLabel = labelMaker.createOrderLabel(bTask);
-                            Label endDateLabel = labelMaker.createEndDateLabel(bTask);
+                            Label customerName = labelMaker.makeLabelForBigPostIt("customerName",bTask.getCustomerName(),-100);
+                            Label orderLabel = labelMaker.makeLabelForBigPostIt("order",bTask.getOrderNumber(),-300);
+                            Label endDateLabel = labelMaker.makeLabelForBigPostIt("endDate",Utility.dateConverter(bTask.getEndDate()),-200);
 
                             Label activeWorker = null;
                             if (bTask.getActiveWorker() != null) {
-                                activeWorker = labelMaker.createActiveWorkerLabel(bTask);
+                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker",bTask.getActiveWorker().toString(),0);
                             }
 
                             // Makes the area where you can see the other departments process
@@ -164,7 +164,7 @@ public class BoardMaker implements Runnable {
                             Button completeTask = null;
 
                             if (con.getColor() == PostItColor.GREEN) {
-                                completeTask = bMaker.makeCompleteTaskButton();
+                                completeTask = bMaker.getCompleteTaskButton();
                                 completeTask.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, k
                                         -> {
                                     StackPane popUp = popUp(bTask, bigPostIt);
@@ -238,9 +238,8 @@ public class BoardMaker implements Runnable {
         progressPane.setPrefHeight(250);
         progressPane.setPrefWidth(180);
 
-        Label lblStart = labelMaker.makeStartLabel();
-
-        Label lblSlut = labelMaker.makeEndLabel();
+        Label lblStart = labelMaker.makeLabelForProgressBar("start", -1458);
+        Label lblSlut = labelMaker.makeLabelForProgressBar("end",-1257);
         lblSlut.setTranslateX(-1240);
 
         double percantage = Utility.getPercentageTimeLeft(bTask);
@@ -327,11 +326,11 @@ public class BoardMaker implements Runnable {
         view.setFitWidth(530);
         view.setRotate(10);
 
-        Label txt = labelMaker.makeWarningTxtLabel();
-        Label header = labelMaker.makeWarningHeader();
+        Label txt = labelMaker.getWarningTxtLabel();
+        Label header = labelMaker.getWarningHeaderLabel();
 
-        Button cancelBtn = bMaker.makeCancelButton();
-        Button acceptBtn = bMaker.makeAcceptButton();
+        Button cancelBtn = bMaker.getCancelButton();
+        Button acceptBtn = bMaker.getAcceptButton();
 
         popUp.getChildren().addAll(view, txt, cancelBtn, acceptBtn, header);
 

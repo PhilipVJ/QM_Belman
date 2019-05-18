@@ -15,63 +15,35 @@ import quickmaff_belman.be.BoardTask;
  * @author Philip
  */
 public class LabelMaker {
-    
+
     private Model model;
 
     public LabelMaker(Model model) {
         this.model = model;
     }
-    
-    public Label createCustomerLabel(BoardTask bTask) {
-        Label customerName = new Label(model.getResourceBundle().getString("CustomerName") + ": " + bTask.getCustomerName());
-        customerName.setFont(new Font("Arial", 30));
-        customerName.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        customerName.setPrefWidth(350);
-        customerName.setTranslateY(-100);
-        customerName.setTranslateX(-150);
-        return customerName;
+
+    public Label makeLabelForBigPostIt(String key, String text, int translateY) {
+        Label label = new Label(model.getResourceBundle().getString(key) + ": " + text);
+        label.setFont(new Font("Arial", 30));
+        label.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
+        label.setPrefWidth(350);
+        label.setTranslateY(translateY);
+        label.setTranslateX(-150);
+        return label;
     }
 
-    public Label createOrderLabel(BoardTask bTask) {
-        Label orderLabel = new Label(model.getResourceBundle().getString("order") + ": " + bTask.getOrderNumber());
-        orderLabel.setFont(new Font("Arial", 30));
-        orderLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        orderLabel.setPrefWidth(350);
-        orderLabel.setTranslateY(-300);
-        orderLabel.setTranslateX(-150);
-        return orderLabel;
+    public Label makeLabelForProgressBar(String key, int translateX) {
+        Label label = new Label();
+        label.setText(model.getResourceBundle().getString(key));
+        label.setFont(new Font("Arial", 16));
+        label.setTranslateX(translateX);
+        label.setTranslateY(75);
+        return label;
     }
 
-    public Label createEndDateLabel(BoardTask bTask) {
-        Label endDateLabel = new Label(model.getResourceBundle().getString("endDate") + ": " + Utility.dateConverter(bTask.getEndDate()));
-        endDateLabel.setFont(new Font("Arial", 30));
-        endDateLabel.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        endDateLabel.setPrefWidth(350);
-        endDateLabel.setTranslateY(-200);
-        endDateLabel.setTranslateX(-150);
-        return endDateLabel;
-    }
 
-    public Label makeEndLabel() {
-        Label lblSlut = new Label();
-        lblSlut.setText(model.getResourceBundle().getString("end"));
-        lblSlut.setFont(new Font("Arial", 16));
-        lblSlut.setTranslateX(-1257);
-        lblSlut.setTranslateY(75);
-        return lblSlut;
-    }
 
-    public Label makeStartLabel() {
-        Label lblStart = new Label();
-        lblStart.setText("Start");
-        lblStart.setFont(new Font("Arial", 16));
-        lblStart.setTranslateX(-1458);
-        lblStart.setTranslateY(75);
-        return lblStart;
-    }
-    
-    public Label makeWarningTxtLabel()
-    {
+    public Label getWarningTxtLabel() {
         Label lblWarning = new Label(model.getResourceBundle().getString("warning"));
         lblWarning.setFont(new Font("Arial", 20));
         lblWarning.setWrapText(true);
@@ -84,9 +56,8 @@ public class LabelMaker {
         lblWarning.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItLabel.png);");
         return lblWarning;
     }
-    
-    public Label makeWarningHeader()
-    {
+
+    public Label getWarningHeaderLabel() {
         Label lblHeader = new Label(model.getResourceBundle().getString("warnHeader"));
         lblHeader.setFont(new Font("Arial", 50));
         lblHeader.setStyle("-fx-font-weight: bold");
@@ -94,17 +65,6 @@ public class LabelMaker {
         lblHeader.setTranslateY(-160);
         lblHeader.setRotate(10);
         return lblHeader;
-    }
-
-    public Label createActiveWorkerLabel(BoardTask bTask) {
-        Label activeWorker = new Label();
-        activeWorker.setText(model.getResourceBundle().getString("activeWorker") + ": " + bTask.getActiveWorker().toString());
-        activeWorker.setFont(new Font("Arial", 30));
-        activeWorker.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItUnderline.png);");
-        activeWorker.setPrefWidth(350);
-        activeWorker.setTranslateY(0);
-        activeWorker.setTranslateX(-150);
-        return activeWorker;
     }
 
 }
