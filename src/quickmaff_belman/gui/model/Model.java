@@ -17,6 +17,7 @@ import java.util.Set;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.bll.BLLManager;
 
@@ -94,7 +95,7 @@ public class Model {
         return departmentName;
     }
 
-    public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
+    public FolderCheckResult checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException {
         return bMan.checkForUnLoadedFiles();
     }
     public void setCompleteTask(int taskID) throws SQLException{

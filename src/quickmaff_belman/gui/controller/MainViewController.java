@@ -24,11 +24,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
@@ -39,15 +42,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.taskpainter.BluePainter;
@@ -121,6 +127,7 @@ public class MainViewController implements Initializable {
     private ExecutorService clockExecutor;
     private ExecutorService bMakerExecutor;
     private ScheduledExecutorService labelWatcher;
+    private volatile BooleanProperty connectionLost;
 
     private WorkerFilterOption wOption;
     private StackPane stackPane;
@@ -149,7 +156,19 @@ public class MainViewController implements Initializable {
         // Sets the filters to default
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
-        
+        connectionLost = new SimpleBooleanProperty();
+        connectionLost.set(false);
+        connectionLost.addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (connectionLost.get() == true) {
+                    Platform.runLater(() -> {
+                        connectionLost();
+                    });
+                }
+            }
+        });
+
         startLabelResetter();
         //set Images
         greenFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
@@ -241,10 +260,10 @@ public class MainViewController implements Initializable {
             setAllText();
             // Setting up the board
             Filter filter = new Filter(WorkerFilterOption.SHOWALL);
-            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter);
+            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
             bMakerExecutor.submit(bMaker);
             // Start the FolderWatcher looking for changes in the JSON folder
-            FolderWatcher fWatcher = new FolderWatcher(model, infoBar);
+            FolderWatcher fWatcher = new FolderWatcher(model, infoBar,connectionLost);
             fWatcherExecutor.submit(fWatcher);
 
             Clock clockSetter = new Clock(clock);
@@ -311,20 +330,56 @@ public class MainViewController implements Initializable {
 
     public void checkForUnloadedFiles() {
         int numberOfAddedFiles;
+        int numberOfCorruptFiles;
         try {
-            numberOfAddedFiles = model.checkForUnLoadedFiles();
-            if (numberOfAddedFiles > 0) {
-                infoBar.setText(model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles);
+            numberOfAddedFiles = model.checkForUnLoadedFiles().getNumberOfNewlyAddedFiles();
+            numberOfCorruptFiles = model.checkForUnLoadedFiles().getNumberOfCorruptFiles();
+            if (numberOfAddedFiles > 0 || numberOfCorruptFiles>0) {
+                String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;
+                showLoadResults(toSet);
             }
         } catch (IOException ex) {
-            infoBar.setText(model.getResourceBundle().getString("fileMissingHeader"));
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
 
         } catch (SQLException ex) {
-            infoBar.setText(model.getResourceBundle().getString("sqlExceptionHeader"));
-
-        } catch (ParseException ex) {
-            infoBar.setText(model.getResourceBundle().getString("parseExceptionHeader"));
+            connectionLost();
         }
+    }
+
+    public void showLoadResults(String text) {
+        ObservableList<Node> allNodes = anchorPane.getChildren();
+        BoxBlur blur = new BoxBlur();
+        blur.setWidth(25);
+        blur.setHeight(25);
+        for (Node child : allNodes) {
+            child.setEffect(blur);
+        }
+        Label header = new Label(model.getResourceBundle().getString("newFiles"));
+        header.setTranslateY(-300);
+        header.setFont(new Font("Arial",30));
+        Label label = new Label(text);
+            label.setFont(new Font("Arial",25));
+        Image information = new Image("/quickmaff_belman/gui/view/images/information.png");
+        ImageView view = new ImageView(information);
+        Image file = new Image("/quickmaff_belman/gui/view/images/file.png");
+        ImageView fileView = new ImageView(file);
+        fileView.setTranslateY(-150);
+        
+        StackPane pane = new StackPane();
+        pane.prefHeightProperty().bind(anchorPane.heightProperty());
+        pane.prefWidthProperty().bind(anchorPane.widthProperty());
+        pane.getChildren().addAll(view,fileView, header, label);
+        pane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
+                -> {
+            if (q.getButton() == MouseButton.SECONDARY) {
+                anchorPane.getChildren().remove(pane);
+
+                for (Node child : allNodes) {
+                    child.setEffect(null);
+                }
+            }
+        });
+        anchorPane.getChildren().add(pane);
     }
 
     @FXML
@@ -359,6 +414,30 @@ public class MainViewController implements Initializable {
         }
     }
 
+    public void connectionLost() {
+        int elements = anchorPane.getChildren().size();
+        anchorPane.getChildren().remove(2, elements);
+        Label noConnection = new Label(model.getResourceBundle().getString("connectionLost"));
+        noConnection.setFont(new Font("Arial", 24));
+        noConnection.setTranslateY(150);
+        Image image = new Image("/quickmaff_belman/gui/view/images/noconnection.png");
+        ImageView view = new ImageView(image);
+        StackPane pane = new StackPane();
+        pane.prefWidthProperty().bind(anchorPane.widthProperty());
+        pane.prefHeightProperty().bind(anchorPane.heightProperty());
+        Button logOut = new Button(model.getResourceBundle().getString("logOut"));
+        logOut.setFont(new Font("Arial", 24));
+        logOut.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logOut();
+            }
+        });
+        logOut.setTranslateY(300);
+        pane.getChildren().addAll(view, noConnection, logOut);
+        anchorPane.getChildren().add(pane);
+    }
+
     private void restartBoardMaker() {
 
         // Shut down the current thread
@@ -369,7 +448,7 @@ public class MainViewController implements Initializable {
 
         flowPane.getChildren().clear();
         infoBar.setText(model.getResourceBundle().getString("loading"));
-        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, chosenFilter);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, chosenFilter, connectionLost);
         bMakerExecutor.submit(bMaker);
     }
 
@@ -388,12 +467,10 @@ public class MainViewController implements Initializable {
                     filterSwitch.setImage(filterGlowOff);
                 }
                 );
-
             }
         };
         thread.schedule(run, 1, TimeUnit.SECONDS);
         restartBoardMaker();
-
     }
 
     private void changeWorkerFilterOption(Toggle newVal) {
@@ -449,12 +526,8 @@ public class MainViewController implements Initializable {
             stackPane.prefWidthProperty().bind(anchorPane.widthProperty());
             anchorPane.getChildren().add(stackPane);
         } catch (SQLException ex) {
-            ExceptionHandler.handleException(ex, model.getResourceBundle());
+            connectionLost();
         }
-    }
-
-    public void clearLogView() {
-        anchorPane.getChildren().remove(stackPane);
     }
 
     private void addKeybindToLogView() {
@@ -466,7 +539,7 @@ public class MainViewController implements Initializable {
                             break;
                         }
                         case F12:
-                            clearLogView();
+                            anchorPane.getChildren().remove(stackPane);
                             break;
                     }
                 }

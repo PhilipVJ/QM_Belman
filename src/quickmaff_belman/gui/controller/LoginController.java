@@ -13,13 +13,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -66,10 +63,6 @@ public class LoginController implements Initializable {
     private Model model;
     private Stage stage;
 
-    private String chosenDepartment;
-
-    private ScheduledExecutorService executor;
-
     private Label loadingLabel;
 
     private IntegerProperty connected;
@@ -77,8 +70,6 @@ public class LoginController implements Initializable {
     private ExecutorService service;
     @FXML
     private AnchorPane anPane;
-    @FXML
-    private VBox vebox;
 
     private StackPane loadingPane;
 
@@ -104,7 +95,6 @@ public class LoginController implements Initializable {
                     }
                 }
             });
-
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
@@ -164,7 +154,6 @@ public class LoginController implements Initializable {
                 newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
                         -> {
                     try {
-                        chosenDepartment = depName;
                         model.setDepartment(depName);
                         newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2On.png);");
                         Timer timer = new Timer();
@@ -174,9 +163,7 @@ public class LoginController implements Initializable {
                                 Platform.runLater(()->{flowPane.getChildren().clear();connectToDatabase();});
                             };
                         };
-                        timer.schedule(task, 1000);
-                        
-                        
+                        timer.schedule(task, 1000);     
                     } catch (IOException ex) {
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     }
@@ -205,11 +192,9 @@ public class LoginController implements Initializable {
         anPane.getChildren().add(loadingPane);
         DatabaseConnector connector = new DatabaseConnector(model, connected);
         service.submit(connector);
-
     }
 
     public void openMainView() {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/MainView.fxml"));
             Parent root = loader.load();
@@ -224,7 +209,6 @@ public class LoginController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     public void setGraphics() {

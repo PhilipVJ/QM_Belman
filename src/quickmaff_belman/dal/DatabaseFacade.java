@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.be.Worker;
 
@@ -55,17 +56,23 @@ public class DatabaseFacade {
         return allBoardTasks;
     }
 
-    public int checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
+    public FolderCheckResult checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException {
         int numberOfNewFilesAdded = 0;
+        int numberOfCorruptFiles = 0;
         ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
         for (FileWrapper file : allFiles) {
             if (!uDAO.checkForDuplicateFile(file)) {
-                loadJSONFile(file);
+                try {
+                    loadJSONFile(file);
+                } catch (ParseException ex) {
+                    numberOfCorruptFiles++; 
+                    continue;
+                }
                 numberOfNewFilesAdded++;
             }
         }
-
-        return numberOfNewFilesAdded;
+        FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded,numberOfCorruptFiles);
+        return result;
     }
 
     public void setCompleteTask(int taskID, String departmentName) throws SQLException {

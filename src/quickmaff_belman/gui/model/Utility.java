@@ -7,6 +7,7 @@ package quickmaff_belman.gui.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Toggle;
@@ -18,11 +19,16 @@ public final class Utility {
     }
 
     public static void createAlert(AlertType type, String title, String header, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
+        Platform.runLater(()
+                -> {
+            Alert alert = new Alert(type);
+            alert.setTitle(title);
+            alert.setHeaderText(header);
+            alert.setContentText(content);
+            alert.showAndWait();
+        }
+        );
+
     }
 
     public static String getFXIDfromToggle(Toggle newVal) {

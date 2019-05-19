@@ -56,10 +56,11 @@ public class BoardMaker implements Runnable {
     private final Filter filter;
     private final ButtonMaker bMaker;
     private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+    private final BooleanProperty connectionLost;
 
     private HBox toRemove = null;
 
-    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter) {
+    public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter, BooleanProperty connectionLost) {
         this.fPane = fPane;
         this.model = model;
         this.aPane = aPane;
@@ -67,6 +68,7 @@ public class BoardMaker implements Runnable {
         this.isLoading = isLoading;
         this.display = display;
         this.filter = filter;
+        this.connectionLost = connectionLost;
 
         bMaker = new ButtonMaker(model);
         labelMaker = new LabelMaker(model);
@@ -220,7 +222,8 @@ public class BoardMaker implements Runnable {
                 roundCounter++;
 
             } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex, model.getResourceBundle());
+                System.out.println("here");
+                connectionLost.set(true);
             }
             try {
                 Thread.sleep(5000);
@@ -346,7 +349,7 @@ public class BoardMaker implements Runnable {
                 removeSmallTask(bTask.getOrderNumber());
                 writeOnDisplay(model.getResourceBundle().getString("completeTask"));
             } catch (SQLException ex) {
-                ExceptionHandler.handleException(ex, model.getResourceBundle());
+              connectionLost.set(true);
             }
         });
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.dal.DatabaseFacade;
 
@@ -36,7 +37,7 @@ public class BLLManager
         return dFacade.getAllBoardTasks(departmentName, offset);
     }
 
-    public int checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException, ParseException {
+    public FolderCheckResult checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException {
         return dFacade.checkForUnloadedFiles();
     }
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{

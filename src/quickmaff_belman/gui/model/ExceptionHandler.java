@@ -36,10 +36,12 @@ public class ExceptionHandler {
     }
 
     private static void handleSqlServerException(ResourceBundle lang) {
+        System.out.println("test1");
         Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("sqlServerException"), lang.getString("contactSupport"));
     }
 
     private static void handleSqlException(ResourceBundle lang) {
+        System.out.println("test2");
         Utility.createAlert(AlertType.ERROR, lang.getString("error"), lang.getString("sqlExceptionHeader"), lang.getString("contactSupport"));
     }
 

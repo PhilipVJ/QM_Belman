@@ -16,6 +16,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.sql.SQLException;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.FileWrapper;
@@ -32,13 +33,15 @@ public class FolderWatcher implements Runnable {
     private final String FOLDER_PATH = "JSON";
     private final Model model;
     private final Label infoBar;
+    private final BooleanProperty connectionLost;
 
-    public FolderWatcher(Model model, Label infoBar) throws IOException {
+    public FolderWatcher(Model model, Label infoBar, BooleanProperty connectionLost) throws IOException {
         this.wService = FileSystems.getDefault().newWatchService();
         this.path = Paths.get(FOLDER_PATH);
         watchKey = path.register(wService, StandardWatchEventKinds.ENTRY_CREATE);
         this.model = model;
         this.infoBar = infoBar;
+        this.connectionLost=connectionLost;
     }
 
     @Override
@@ -59,9 +62,9 @@ public class FolderWatcher implements Runnable {
                             setLabel(model.getResourceBundle().getString("duplicateFile"));
                         }
                     } catch (IOException ex) {
-                        setLabel(model.getResourceBundle().getString("fileMissingHeader"));
+                        ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {
-                        setLabel(model.getResourceBundle().getString("sqlExceptionHeader"));
+                        connectionLost.set(true);
                     } catch (ParseException ex) {
                         setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
                     }
