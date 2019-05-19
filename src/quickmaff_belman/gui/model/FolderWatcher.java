@@ -18,7 +18,6 @@ import java.sql.SQLException;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.FileWrapper;
 
@@ -38,11 +37,9 @@ public class FolderWatcher implements Runnable {
 
     public FolderWatcher(Model model, Label infoBar, BooleanProperty connectionLost) {
         try {
-            System.out.println("test");
             this.wService = FileSystems.getDefault().newWatchService();
             this.path = Paths.get(FOLDER_PATH);
             watchKey = path.register(wService, StandardWatchEventKinds.ENTRY_CREATE);
-
             this.model = model;
             this.infoBar = infoBar;
             this.connectionLost = connectionLost;

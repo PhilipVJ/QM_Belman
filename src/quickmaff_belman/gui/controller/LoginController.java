@@ -138,14 +138,7 @@ public class LoginController implements Initializable {
             for (String depName : depNames) {
                 Button newButton = new Button();
                 VBox vbox = new VBox();
-                //sets size of text and position
-                Label lbl = new Label();
-                lbl.setText("" + depName);
-                lbl.setMinWidth(173);
-                lbl.setTranslateX(10);
-                lbl.setTranslateY(-267);
-                lbl.setFont(new Font("Arial", 24));
-                lbl.setAlignment(Pos.CENTER);
+                Label lbl = makeLabel(depName);
                 //sets prefered size of button to size of pictures
                 newButton.setPrefHeight(300);
                 newButton.setPrefWidth(191);
@@ -177,6 +170,17 @@ public class LoginController implements Initializable {
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
+    }
+
+    private Label makeLabel(String depName) {
+        Label lbl = new Label();
+        lbl.setText("" + depName);
+        lbl.setMinWidth(173);
+        lbl.setTranslateX(10);
+        lbl.setTranslateY(-267);
+        lbl.setFont(new Font("Arial", 24));
+        lbl.setAlignment(Pos.CENTER);
+        return lbl;
     }
 
     private void connectToDatabase() {
