@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quickmaff_belman.gui.controller.LoginController;
-import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.Utility;
 
 /**
@@ -33,7 +32,7 @@ public class QuickMaff_Belman extends Application {
             LoginController con = loader.getController();
             con.setStage(stage);
             Scene scene = new Scene(root);
-            stage.setFullScreen(false);
+            stage.setFullScreen(true);
             stage.setScene(scene);
             // Makes sure all threads are closed upon exit
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

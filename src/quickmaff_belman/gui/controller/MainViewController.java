@@ -254,8 +254,7 @@ public class MainViewController implements Initializable {
     }
 
     public void initView() {
-        try {
-            stage.setFullScreen(false);
+            stage.setFullScreen(true);
             setGraphics();
             setAllText();
             // Setting up the board
@@ -276,10 +275,6 @@ public class MainViewController implements Initializable {
                     logOut();
                 }
             });
-
-        } catch (IOException ex) {
-            ExceptionHandler.handleException(ex, model.getResourceBundle());
-        }
     }
 
     private void logOut() {

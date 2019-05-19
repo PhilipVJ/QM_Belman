@@ -94,9 +94,11 @@ public class FileDAO {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
         ArrayList<FileWrapper> allWrappedFiles = new ArrayList<>();
+        if(allFiles!=null){
         for (File file : allFiles) {
             FileWrapper fWrap = new FileWrapper(file);
             allWrappedFiles.add(fWrap);         
+        }
         }
         return allWrappedFiles;
     }
