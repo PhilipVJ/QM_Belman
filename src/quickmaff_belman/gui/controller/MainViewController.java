@@ -55,15 +55,17 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.taskpainter.BluePainter;
 import quickmaff_belman.be.taskpainter.ColorfulPainter;
 import quickmaff_belman.be.Filter;
+import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.taskpainter.GreenPainter;
 import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.be.taskpainter.RedPainter;
 import quickmaff_belman.be.taskpainter.YellowPainter;
+import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.Clock;
 import quickmaff_belman.gui.model.ExceptionHandler;
@@ -137,7 +139,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         searchbar.setFocusTraversable(false);
         // Make the filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
@@ -148,7 +150,7 @@ public class MainViewController implements Initializable {
 
         //Adds a listener to the group
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
-
+        
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
@@ -157,7 +159,7 @@ public class MainViewController implements Initializable {
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
         connectionLost = new SimpleBooleanProperty();
-        connectionLost.set(false);
+        connectionLost.set(false);       
         connectionLost.addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -177,8 +179,7 @@ public class MainViewController implements Initializable {
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
-        filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
-
+        filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");      
         addKeybindToLogView();
         isLoading = new SimpleBooleanProperty(false);
 
@@ -213,8 +214,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void changeLanguage(MouseEvent event) {
-
+        
         Language language = model.changeLanguage();
+        
         switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
@@ -227,6 +229,21 @@ public class MainViewController implements Initializable {
 
         }
         setAllText();
+    }
+    
+    @FXML
+    private void setLanguage() {
+        Language language = model.getLanguage();
+        
+        if(language == Language.ENGLISH){
+            Image engImage = new Image("/quickmaff_belman/gui/view/images/knapSprogENG.png");
+            languageSwitch.setImage(engImage);
+        }
+         if(language == Language.DANISH){
+            Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
+            languageSwitch.setImage(daImage);
+        }
+        
     }
 
     /**
@@ -253,28 +270,29 @@ public class MainViewController implements Initializable {
         });
     }
 
-    public void initView() {
-            stage.setFullScreen(true);
-            setGraphics();
-            setAllText();
-            // Setting up the board
-            Filter filter = new Filter(WorkerFilterOption.SHOWALL);
-            BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
-            bMakerExecutor.submit(bMaker);
-            // Start the FolderWatcher looking for changes in the JSON folder
-            FolderWatcher fWatcher = new FolderWatcher(model, infoBar,connectionLost);
-            fWatcherExecutor.submit(fWatcher);
+    public void initView() {       
+        stage.setFullScreen(true);
+        setLanguage();
+        setGraphics();
+        setAllText(); 
+        // Setting up the board
+        Filter filter = new Filter(WorkerFilterOption.SHOWALL);
+        BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
+        bMakerExecutor.submit(bMaker);
+        // Start the FolderWatcher looking for changes in the JSON folder
+        FolderWatcher fWatcher = new FolderWatcher(model, infoBar, connectionLost);
+        fWatcherExecutor.submit(fWatcher);
 
-            Clock clockSetter = new Clock(clock);
-            clockExecutor.submit(clockSetter);
+        Clock clockSetter = new Clock(clock);
+        clockExecutor.submit(clockSetter);
 
-            // Makes the application go back to the login screen with a certain key combination
-            stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
-                @Override
-                public void run() {
-                    logOut();
-                }
-            });
+        // Makes the application go back to the login screen with a certain key combination
+        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.L, KeyCombination.ALT_DOWN), new Runnable() {
+            @Override
+            public void run() {
+                logOut();
+            }
+        });
     }
 
     private void logOut() {
@@ -283,10 +301,12 @@ public class MainViewController implements Initializable {
             Parent root = loader.load();
             LoginController con = loader.getController();
             con.setStage(stage);
+            con.setModel(model);
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setFullScreen(true);
+            stage.setFullScreen(true);           
             con.setGraphics();
+            con.createButtons();
             shutDownThreads();
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
@@ -328,10 +348,12 @@ public class MainViewController implements Initializable {
         int numberOfAddedFiles;
         int numberOfCorruptFiles;
         try {
-            numberOfAddedFiles = model.checkForUnLoadedFiles().getNumberOfNewlyAddedFiles();
-            numberOfCorruptFiles = model.checkForUnLoadedFiles().getNumberOfCorruptFiles();
-            if (numberOfAddedFiles > 0 || numberOfCorruptFiles>0) {
-                String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;
+            FolderCheckResult result = model.checkForUnLoadedFiles();
+            numberOfAddedFiles =  result.getNumberOfNewlyAddedFiles();
+            numberOfCorruptFiles = result.getNumberOfCorruptFiles();
+            if (numberOfAddedFiles > 0 || numberOfCorruptFiles > 0) {
+                String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
+                        + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;
                 showLoadResults(toSet);
             }
         } catch (IOException ex) {
@@ -352,19 +374,19 @@ public class MainViewController implements Initializable {
         }
         Label header = new Label(model.getResourceBundle().getString("newFiles"));
         header.setTranslateY(-300);
-        header.setFont(new Font("Arial",30));
+        header.setFont(new Font("Arial", 30));
         Label label = new Label(text);
-            label.setFont(new Font("Arial",25));
+        label.setFont(new Font("Arial", 25));
         Image information = new Image("/quickmaff_belman/gui/view/images/information.png");
         ImageView view = new ImageView(information);
         Image file = new Image("/quickmaff_belman/gui/view/images/file.png");
         ImageView fileView = new ImageView(file);
         fileView.setTranslateY(-150);
-        
+
         StackPane pane = new StackPane();
         pane.prefHeightProperty().bind(anchorPane.heightProperty());
         pane.prefWidthProperty().bind(anchorPane.widthProperty());
-        pane.getChildren().addAll(view,fileView, header, label);
+        pane.getChildren().addAll(view, fileView, header, label);
         pane.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, q
                 -> {
             if (q.getButton() == MouseButton.SECONDARY) {

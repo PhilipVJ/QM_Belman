@@ -24,8 +24,8 @@ public class BLLManager
         this.dFacade = dFacade;
     }
     
-    public void loadJSONfile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
-        dFacade.loadJSONFile(file);
+    public void loadJSONfile(FileWrapper file, String departmentName) throws IOException, FileNotFoundException, ParseException, SQLException {
+        dFacade.loadJSONFile(file, departmentName);
     }
     
     public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException 
@@ -37,8 +37,8 @@ public class BLLManager
         return dFacade.getAllBoardTasks(departmentName, offset);
     }
 
-    public FolderCheckResult checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException {
-        return dFacade.checkForUnloadedFiles();
+    public FolderCheckResult checkForUnLoadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
+        return dFacade.checkForUnloadedFiles(department);
     }
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{
          dFacade.setCompleteTask(taskID, departmentName);
@@ -47,8 +47,12 @@ public class BLLManager
         return dFacade.getAllLogs();
     }
 
-    public boolean checkForDatabaseConnection() {
+    public boolean checkForDatabaseConnection()  {
         return dFacade.checkForDatabaseConnection();
+    }
+
+    public void addCorruptFileToLog(String department) throws SQLException {
+       dFacade.addCorruptFileToLog(department);
     }
            
 }

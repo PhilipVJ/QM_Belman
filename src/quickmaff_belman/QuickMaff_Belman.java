@@ -15,7 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.controller.LoginController;
+import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
 
 /**
@@ -26,14 +29,20 @@ public class QuickMaff_Belman extends Application {
 
     @Override
     public void start(Stage stage) {
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
             Parent root = loader.load();
             LoginController con = loader.getController();
+            Model model = new Model(new BLLManager(new DatabaseFacade()));
             con.setStage(stage);
+            con.setModel(model);
+            con.createButtons();
+            
             Scene scene = new Scene(root);
             stage.setFullScreen(true);
             stage.setScene(scene);
+            
             // Makes sure all threads are closed upon exit
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override

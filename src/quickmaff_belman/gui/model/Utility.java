@@ -35,7 +35,6 @@ public final class Utility {
 
         }
         );
-
     }
 
     public static String getFXIDfromToggle(Toggle newVal) {
@@ -73,5 +72,4 @@ public final class Utility {
         }
         return output;
     }
-
 }
