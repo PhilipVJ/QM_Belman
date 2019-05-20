@@ -42,6 +42,7 @@ import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.DatabaseConnector;
 import quickmaff_belman.gui.model.ExceptionHandler;
+import quickmaff_belman.gui.model.Language;
 
 import quickmaff_belman.gui.model.Model;
 
@@ -219,5 +220,8 @@ public class LoginController implements Initializable {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
+    }
+    public void setLanguage(){
+        Language language = model.changeLanguage();
     }
 }
