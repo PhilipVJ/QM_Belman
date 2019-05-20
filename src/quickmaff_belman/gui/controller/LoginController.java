@@ -79,27 +79,22 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            service = Executors.newSingleThreadExecutor();
-            model = new Model(new BLLManager(new DatabaseFacade()));
-            connected = new SimpleIntegerProperty();
-            connected.set(0);
-            connected.addListener(new ChangeListener() {
-                @Override
-                public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-
-                    int value = (int) newValue;
-                    if (value == 2) {
-                        Platform.runLater(()-> {openMainView();});
-                    } else if (value == 1) {
-                        Platform.runLater(()-> {connected.set(0);setClickToRetry();});
-                    }
+        service = Executors.newSingleThreadExecutor();
+        connected = new SimpleIntegerProperty();
+        connected.set(0);
+        connected.addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
+                int value = (int) newValue;
+                if (value == 2) {
+                    Platform.runLater(()-> {openMainView();});
+                } else if (value == 1) {
+                    Platform.runLater(()-> {connected.set(0);setClickToRetry();});
                 }
-            });
-        } catch (IOException ex) {
-            ExceptionHandler.handleException(ex, model.getResourceBundle());
-        }
-        createButtons();
+            }
+        });
+        
     }
 
     private void setClickToRetry() {
@@ -132,7 +127,7 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    
     public void createButtons() {
         try {
             ArrayList<String> depNames = model.getDepartmentNames();
@@ -211,6 +206,7 @@ public class LoginController implements Initializable {
             stage.show();
             con.initView();
             con.checkForUnloadedFiles();
+            
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -221,7 +217,9 @@ public class LoginController implements Initializable {
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
     }
-    public void setLanguage(){
-        Language language = model.changeLanguage();
+
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

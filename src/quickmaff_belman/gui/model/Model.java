@@ -30,6 +30,7 @@ public class Model {
     private static final String PROP_FILE = "src/resources/config.properties";
     private final Properties properties;
     private int timeOffset;
+    private Language language;
 
     public Model(BLLManager bMan) throws FileNotFoundException, IOException {
         this.bMan = bMan;
@@ -37,6 +38,7 @@ public class Model {
         properties.load(new FileInputStream(PROP_FILE));
         // Setting the language to Danish by default
         locale = new Locale("da", "DK");
+        language = Language.DANISH;
         rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
     }
 
@@ -68,14 +70,20 @@ public class Model {
     public Language changeLanguage() {
 
         if (locale.getLanguage() == "da") {
+            language = Language.ENGLISH;
             locale = new Locale("en", "EN");
             rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
             return Language.ENGLISH;
         } else {
+            language = Language.DANISH;
             locale = new Locale("da", "DK");
             rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
             return Language.DANISH;
         }
+    }
+    
+    public Language getLanguage(){
+        return language;
     }
 
     public ResourceBundle getResourceBundle() {
