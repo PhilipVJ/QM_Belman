@@ -5,14 +5,11 @@
  */
 package quickmaff_belman.dal;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;

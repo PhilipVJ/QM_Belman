@@ -105,7 +105,7 @@ public class Model {
         return bMan.getAllLogs();
     }
     
-    public boolean checkForDatabaseConnection()
+    public boolean checkForDatabaseConnection() 
     {
         return bMan.checkForDatabaseConnection();
     }

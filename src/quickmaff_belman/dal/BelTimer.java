@@ -16,7 +16,7 @@ import quickmaff_belman.be.Worker;
  *
  * @author Philip
  */
-class BelTimer
+public class BelTimer
 {
 
     private final Worker john = new Worker(1500, "JP", "John Poulsen");
@@ -24,9 +24,9 @@ class BelTimer
     private final Worker kirsten = new Worker(1502, "KH", "Kirsten Hansen");
     private final Worker johanne = new Worker(1503, "JM", "Johanne Michaelsen");
     private final Worker preben = new Worker(1504, "PC", "Preben Christiansen");
-    private ArrayList<Worker> allWorkers = new ArrayList<>();
+    private final ArrayList<Worker> allWorkers = new ArrayList<>();
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public BelTimer()
     {
@@ -37,9 +37,9 @@ class BelTimer
         allWorkers.add(preben);
     }
 
-    public Worker getActiveWorker(String taskNumber)
+    public Worker getActiveWorker(String orderNumber)
     {
-        if (taskNumber.contains("3"))
+        if (orderNumber.contains("3"))
         {
             return null;
         }

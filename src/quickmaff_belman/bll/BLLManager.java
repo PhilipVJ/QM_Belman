@@ -47,7 +47,7 @@ public class BLLManager
         return dFacade.getAllLogs();
     }
 
-    public boolean checkForDatabaseConnection() {
+    public boolean checkForDatabaseConnection()  {
         return dFacade.checkForDatabaseConnection();
     }
            
