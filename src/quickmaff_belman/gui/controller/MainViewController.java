@@ -284,6 +284,7 @@ public class MainViewController implements Initializable {
             stage.setScene(scene);
             stage.setFullScreen(true);
             con.setGraphics();
+            con.setLanguage();
             shutDownThreads();
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
