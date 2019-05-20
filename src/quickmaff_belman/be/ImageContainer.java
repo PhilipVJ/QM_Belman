@@ -29,10 +29,4 @@ public class ImageContainer {
     public PostItColor getColor() {
         return color;
     }
-    
-
-    
-    
-    
-
 }

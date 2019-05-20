@@ -5,7 +5,6 @@
  */
 package quickmaff_belman.gui.model;
 
-import java.io.IOException;
 import javafx.beans.property.IntegerProperty;
 
 /**

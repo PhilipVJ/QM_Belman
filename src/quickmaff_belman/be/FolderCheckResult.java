@@ -25,10 +25,5 @@ public class FolderCheckResult {
 
     public int getNumberOfCorruptFiles() {
         return numberOfCorruptFiles;
-    }
-    
-   
-    
-    
-    
+    }   
 }

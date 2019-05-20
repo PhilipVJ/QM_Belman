@@ -34,8 +34,5 @@ public class TaskStatus {
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
-    
-    
-    
-    
+      
 }

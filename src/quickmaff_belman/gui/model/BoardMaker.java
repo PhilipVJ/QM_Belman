@@ -314,13 +314,22 @@ public class BoardMaker implements Runnable {
         toRemove=null;
 
     }
-
+    /**
+     * Writes on the main views display
+     * @param toWrite 
+     */
     private void writeOnDisplay(String toWrite) {
         Platform.runLater(() -> {
             display.setText(toWrite);
 
         });
     }
+    /**
+     * Makes the safety pop-up before completing a task
+     * @param bTask
+     * @param stackPane
+     * @return 
+     */
 
     private StackPane popUp(BoardTask bTask, StackPane stackPane) {
         StackPane popUp = new StackPane();
@@ -362,7 +371,11 @@ public class BoardMaker implements Runnable {
         });
         return popUp;
     }
-    
+   /**
+    * Removes a node on the given Pane in the JavaFX thread
+    * @param container
+    * @param toRemove 
+    */ 
     public void removeNodeInJavaFXThread(Pane container, Node toRemove)
     {
         Platform.runLater(()->
@@ -370,7 +383,10 @@ public class BoardMaker implements Runnable {
             container.getChildren().remove(toRemove);
         });
     }
-
+/**
+ * This method makes sure that a task can't reappear briefly after it has been marked as done
+ * @param boxes 
+ */
     private void checkForDeletedTask(ArrayList<HBox> boxes) {
         HBox boxToRemove = null;
         for (HBox box : boxes) {

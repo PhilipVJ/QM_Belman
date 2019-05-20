@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class OrderOverview {
     ArrayList<TaskStatus> allTasks;
-    private boolean readyToWork;
+    private final boolean readyToWork;
 
     public OrderOverview(ArrayList<TaskStatus> allTasks, boolean readyToWork) {
         this.allTasks = allTasks;

@@ -24,7 +24,7 @@ public class DatabaseFacade {
     private final OrderDAO oDAO;
     private final DbUpdateDAO uDAO;
     private final BelTimer bTimer;
-    private DbConnection con;
+    private final DbConnection con;
 
     public DatabaseFacade() throws IOException {
         con = DbConnection.getInstance();
