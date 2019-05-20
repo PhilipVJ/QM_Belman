@@ -59,6 +59,7 @@ public class BoardMaker implements Runnable {
     private final BooleanProperty connectionLost;
 
     private HBox toRemove = null;
+    private String lastRemoved = null;
 
     public BoardMaker(FlowPane fPane, Model model, AnchorPane aPane, ITaskPainter strategy, BooleanProperty isLoading, Label display, Filter filter, BooleanProperty connectionLost) {
         this.fPane = fPane;
@@ -209,6 +210,8 @@ public class BoardMaker implements Runnable {
                     box.setAlignment(Pos.CENTER);
                     boxes.add(box);
                 }
+                
+                checkForDeletedTask(boxes);
 
                 Platform.runLater(()
                         -> {
@@ -307,7 +310,7 @@ public class BoardMaker implements Runnable {
         }
 
         removeNodeInJavaFXThread(fPane, toRemove);
-        
+        lastRemoved = orderNumber;
         toRemove=null;
 
     }
@@ -366,5 +369,22 @@ public class BoardMaker implements Runnable {
         {
             container.getChildren().remove(toRemove);
         });
+    }
+
+    private void checkForDeletedTask(ArrayList<HBox> boxes) {
+        HBox boxToRemove = null;
+        for (HBox box : boxes) {
+            StackPane pane =(StackPane) box.getChildren().get(0);
+            Label label =(Label)pane.getChildren().get(1);
+           String orderNumber = label.getText();
+           if(orderNumber.equals(lastRemoved))
+           {
+            boxToRemove=box;  
+           } 
+        }
+        if(boxToRemove!=null)
+        {
+            boxes.remove(boxToRemove);
+        }
     }
 }
