@@ -39,9 +39,9 @@ public class DatabaseFacade {
         return uDAO.checkForDuplicateFile(file);
     }
 
-    public void loadJSONFile(FileWrapper file) throws IOException, SQLException, FileNotFoundException, ParseException {
+    public void loadJSONFile(FileWrapper file, String departmentName) throws IOException, SQLException, FileNotFoundException, ParseException {
         DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
-        uDAO.updateDatabaseWithJSON(con, file);
+        uDAO.updateDatabaseWithJSON(con, file, departmentName);
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
@@ -53,14 +53,16 @@ public class DatabaseFacade {
         return allBoardTasks;
     }
 
-    public FolderCheckResult checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException {
+    public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
+        
+        System.out.println("running");
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
         for (FileWrapper file : allFiles) {
             if (!uDAO.checkForDuplicateFile(file)) {
                 try {
-                    loadJSONFile(file);
+                    loadJSONFile(file, department);
                 } catch (ParseException ex) {
                     numberOfCorruptFiles++; 
                     continue;
@@ -69,6 +71,10 @@ public class DatabaseFacade {
             }
         }
         FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded,numberOfCorruptFiles);
+        if(numberOfCorruptFiles>0)
+        {
+            uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
+        }
         return result;
     }
 
@@ -88,5 +94,9 @@ public class DatabaseFacade {
             return false;
         }
 
+    }
+
+    public void addCorruptFileToLog(String department) throws SQLException {
+      uDAO.addCorruptFilesToLog(1, department);
     }
 }

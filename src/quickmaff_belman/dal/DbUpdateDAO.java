@@ -46,7 +46,7 @@ public class DbUpdateDAO {
         return false;
     }
 
-    public void updateDatabaseWithJSON(DataContainer container, FileWrapper fileW) throws SQLException {
+    public void updateDatabaseWithJSON(DataContainer container, FileWrapper fileW, String departmentName) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
         String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?,?);";
@@ -107,10 +107,10 @@ public class DbUpdateDAO {
             java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
 
             pstLog.setDate(1, sqlDateLog);
-            pstLog.setString(2, "updateActivity");
-            pstLog.setString(3, "" + fileW.hashCode());
-            pstLog.setString(4, null);
-            
+            pstLog.setString(2, "AddedNewOrders");
+            pstLog.setString(3, "FileCode: " + fileW.hashCode());
+            pstLog.setString(4, departmentName);
+
             pstWorker.executeBatch();
             pstLog.executeUpdate();
             pstOrder.executeBatch();
@@ -129,6 +129,26 @@ public class DbUpdateDAO {
             }
         }
 
+    }
+
+    public void addCorruptFilesToLog(int numberOfFiles, String department) throws SQLException {
+        String sqlLog = "INSERT INTO Log VALUES (?,?,?,?);";
+        try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sqlLog);) {
+            Date date = new Date();
+            java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
+            pst.setDate(1, sqlDateLog);
+            pst.setString(2, "CorruptFiles");
+            if(numberOfFiles>1)
+            {
+            pst.setString(3, numberOfFiles+" corrupt files found");
+            }
+            else
+            {
+            pst.setString(3, numberOfFiles+" corrupt file found");
+            }
+            pst.setString(4, department);
+            pst.execute();
+        }
     }
 
 }

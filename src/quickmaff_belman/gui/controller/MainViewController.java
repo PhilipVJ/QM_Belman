@@ -58,6 +58,7 @@ import javafx.stage.Stage;
 import quickmaff_belman.be.taskpainter.BluePainter;
 import quickmaff_belman.be.taskpainter.ColorfulPainter;
 import quickmaff_belman.be.Filter;
+import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.taskpainter.GreenPainter;
 import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.Log;
@@ -347,8 +348,9 @@ public class MainViewController implements Initializable {
         int numberOfAddedFiles;
         int numberOfCorruptFiles;
         try {
-            numberOfAddedFiles = model.checkForUnLoadedFiles().getNumberOfNewlyAddedFiles();
-            numberOfCorruptFiles = model.checkForUnLoadedFiles().getNumberOfCorruptFiles();
+            FolderCheckResult result = model.checkForUnLoadedFiles();
+            numberOfAddedFiles =  result.getNumberOfNewlyAddedFiles();
+            numberOfCorruptFiles = result.getNumberOfCorruptFiles();
             if (numberOfAddedFiles > 0 || numberOfCorruptFiles > 0) {
                 String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
                         + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;
