@@ -63,13 +63,15 @@ public class DatabaseFacade {
             if (!uDAO.checkForDuplicateFile(file)) {
                 try {
                     loadJSONFile(file, department);
+                    numberOfNewFilesAdded++;
                 } catch (ParseException ex) {
                     numberOfCorruptFiles++; 
                     continue;
                 }
-                numberOfNewFilesAdded++;
+              
             }
         }
+        
         FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded,numberOfCorruptFiles);
         if(numberOfCorruptFiles>0)
         {

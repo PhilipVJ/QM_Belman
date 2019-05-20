@@ -274,8 +274,7 @@ public class MainViewController implements Initializable {
         stage.setFullScreen(true);
         setLanguage();
         setGraphics();
-        setAllText();
-        
+        setAllText(); 
         // Setting up the board
         Filter filter = new Filter(WorkerFilterOption.SHOWALL);
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);

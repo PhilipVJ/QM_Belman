@@ -34,7 +34,7 @@ public class DbUpdateDAO {
         PreparedStatement pStatement = null;
         try (Connection connection = con.getConnection();) {
             pStatement = connection.prepareStatement(sqlGetInfo);
-            pStatement.setString(1, "" + fW.hashCode());
+            pStatement.setString(1, "FileCode: " + fW.hashCode());
             ResultSet set = pStatement.executeQuery();
 
             if (set.next()) {
