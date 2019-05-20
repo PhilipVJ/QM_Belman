@@ -62,7 +62,7 @@ public class Model {
     }
 
     public void loadJSONfile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
-        bMan.loadJSONfile(file);
+        bMan.loadJSONfile(file, departmentName);
     }
 
     public Language changeLanguage() {
@@ -96,7 +96,7 @@ public class Model {
     }
 
     public FolderCheckResult checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException {
-        return bMan.checkForUnLoadedFiles();
+        return bMan.checkForUnLoadedFiles(departmentName);
     }
     public void setCompleteTask(int taskID) throws SQLException{
          bMan.setCompleteTask(taskID, departmentName);
@@ -108,6 +108,10 @@ public class Model {
     public boolean checkForDatabaseConnection() 
     {
         return bMan.checkForDatabaseConnection();
+    }
+
+   public void addCorruptFileToLog() throws SQLException {
+        bMan.addCorruptFileToLog(departmentName);
     }
     
 }
