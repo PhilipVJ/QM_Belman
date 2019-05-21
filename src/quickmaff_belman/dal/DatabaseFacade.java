@@ -5,18 +5,21 @@
  */
 package quickmaff_belman.dal;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
-import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.be.Worker;
+import quickmaff_belman.gui.model.Utility;
 
 public class DatabaseFacade {
 
@@ -34,16 +37,11 @@ public class DatabaseFacade {
         bTimer = new BelTimer();
     }
 
-    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException {
-
-        return uDAO.checkForDuplicateFile(file);
-    }
-
-    public void loadJSONFile(FileWrapper file, String departmentName) throws IOException, SQLException, FileNotFoundException, ParseException {
-        DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
-        uDAO.updateDatabaseWithJSON(con, file, departmentName);
-    }
-
+//
+//    public void loadJSONFile(FileWrapper file, String departmentName) throws IOException, SQLException, FileNotFoundException, ParseException {
+//        DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
+//        uDAO.updateDatabaseWithFile(con, file, departmentName);
+//    }
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         ArrayList<BoardTask> allBoardTasks = oDAO.getAllBoardTasks(departmentName, offset);
         for (BoardTask boardTask : allBoardTasks) {
@@ -54,28 +52,9 @@ public class DatabaseFacade {
     }
 
     public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
-        
-        int numberOfNewFilesAdded = 0;
-        int numberOfCorruptFiles = 0;
-        ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
-        for (FileWrapper file : allFiles) {
-            if (!uDAO.checkForDuplicateFile(file)) {
-                try {
-                    loadJSONFile(file, department);
-                    numberOfNewFilesAdded++;
-                } catch (ParseException ex) {
-                    numberOfCorruptFiles++; 
-                    continue;
-                }
-              
-            }
-        }
-        
-        FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded,numberOfCorruptFiles);
-        if(numberOfCorruptFiles>0)
-        {
-            uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
-        }
+
+        File[] allFiles = fDAO.getAllFolderFiles();
+        FolderCheckResult result = loadFile(department, allFiles);
         return result;
     }
 
@@ -98,6 +77,55 @@ public class DatabaseFacade {
     }
 
     public void addCorruptFileToLog(String department) throws SQLException {
-      uDAO.addCorruptFilesToLog(1, department);
+        uDAO.addCorruptFilesToLog(1, department);
+    }
+
+    public FolderCheckResult loadFile(String department, File... files) throws IOException, SQLException {
+        int numberOfNewFilesAdded = 0;
+        int numberOfCorruptFiles = 0;
+        int numberOfDuplicates = 0;
+
+        for (File file : files) {
+
+            if (Utility.getFileExtension(file.getPath()).equals("txt")) {
+                try {
+                    DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
+                    if (!uDAO.checkForDuplicateFile(jFile.hashCode())) {
+                        System.out.println("Updatingg with json");
+
+                        uDAO.updateDatabaseWithFile(jFile, department);
+                        numberOfNewFilesAdded++;
+                    } else {
+                        numberOfDuplicates++;
+                    }
+                } catch (ParseException ex) {
+                    numberOfCorruptFiles++;
+                    ;
+                }
+            }
+            if (Utility.getFileExtension(file.getPath()).equals("csv")) {
+                DataContainer cFile;
+                try {
+                    cFile = fDAO.getDataFromCSV(file.getPath());
+
+                    if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
+                        System.out.println("Updating with csv");
+
+                        uDAO.updateDatabaseWithFile(cFile, department);
+                        numberOfNewFilesAdded++;
+                    } else {
+                        numberOfDuplicates++;
+                    }
+                } catch (Exception ex) {
+                    numberOfCorruptFiles++;
+                }
+            }
+        }
+
+        FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded, numberOfCorruptFiles, numberOfDuplicates);
+        if (numberOfCorruptFiles > 0) {
+            uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
+        }
+        return result;
     }
 }

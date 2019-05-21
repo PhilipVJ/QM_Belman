@@ -61,6 +61,12 @@ public class FileWrapper {
     {
         return file.getPath();
     }
+    
+    public String getFileExtension()
+    {
+        int lastIndexOfDot = file.getPath().lastIndexOf(".");
+        return file.getPath().substring(lastIndexOfDot);
+    }
 
     public void setMetaData() throws IOException {
 

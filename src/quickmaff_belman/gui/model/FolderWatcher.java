@@ -22,6 +22,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.FileWrapper;
+import quickmaff_belman.be.FolderCheckResult;
 
 /**
  *
@@ -32,7 +33,7 @@ public class FolderWatcher implements Runnable {
     private WatchService wService = null;
     private Path path = null;
     private WatchKey watchKey;
-    private String FOLDER_PATH = "JSON";
+    private String FOLDER_PATH = "DatabaseFiles";
     private Model model;
     private Label infoBar;
     private BooleanProperty connectionLost;
@@ -58,34 +59,31 @@ public class FolderWatcher implements Runnable {
                 for (WatchEvent<?> event : watchKey.pollEvents()) {
                     String filePath = event.context().toString();
                     File file = new File(FOLDER_PATH + "/" + filePath);
-                    FileWrapper wrappedFile;
                     try {
-                        wrappedFile = new FileWrapper(file);
-                        boolean checkStatus = model.checkForDuplicateFile(wrappedFile);
-                        if (checkStatus == false) {
-                            model.loadJSONfile(wrappedFile);
+                        FolderCheckResult result = model.loadFile(file);
+                        if (result.getNumberOfNewlyAddedFiles() > 0) {
                             setLabel(model.getResourceBundle().getString("loadfile"));
-                        } else {
+                        } else if (result.getNumberOfDuplicates() > 0) {
                             setLabel(model.getResourceBundle().getString("duplicateFile"));
                         }
+                        else if(result.getNumberOfCorruptFiles()>0)
+                        {
+                          setLabel(model.getResourceBundle().getString("parseExceptionHeader"));  
+                        }
+                                
+
                     } catch (IOException ex) {
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {
                         connectionLost.set(true);
-                    } catch (ParseException ex) {
-                        try {
-                            model.addCorruptFileToLog();
-                            setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
-                        } catch (SQLException ex1) {
-                            connectionLost.set(true);
-                        }
                     }
+                    watchKey.reset();
                 }
-                watchKey.reset();
             }
 
         } catch (InterruptedException ex) {
             return;
+
         }
     }
 

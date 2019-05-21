@@ -72,4 +72,10 @@ public final class Utility {
         }
         return output;
     }
+
+    public static String getFileExtension(String file) {
+        int lastIndexOfDot = file.lastIndexOf(".");
+        return file.substring(lastIndexOfDot+1);
+    }
+
 }

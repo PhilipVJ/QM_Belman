@@ -38,11 +38,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import quickmaff_belman.bll.BLLManager;
-import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.DatabaseConnector;
 import quickmaff_belman.gui.model.ExceptionHandler;
-import quickmaff_belman.gui.model.Language;
 
 import quickmaff_belman.gui.model.Model;
 

@@ -13,10 +13,12 @@ public class FolderCheckResult {
     
     private final int numberOfNewlyAddedFiles;
     private final int numberOfCorruptFiles;
+    private final int numberOfDuplicates;
 
-    public FolderCheckResult(int numberOfNewlyAddedFiles, int numberOfCorruptFiles) {
+    public FolderCheckResult(int numberOfNewlyAddedFiles, int numberOfCorruptFiles, int numberOfDuplicates) {
         this.numberOfNewlyAddedFiles = numberOfNewlyAddedFiles;
         this.numberOfCorruptFiles = numberOfCorruptFiles;
+        this.numberOfDuplicates = numberOfDuplicates;
     }
 
     public int getNumberOfNewlyAddedFiles() {
@@ -26,4 +28,10 @@ public class FolderCheckResult {
     public int getNumberOfCorruptFiles() {
         return numberOfCorruptFiles;
     }   
+
+    public int getNumberOfDuplicates() {
+        return numberOfDuplicates;
+    }
+    
+    
 }

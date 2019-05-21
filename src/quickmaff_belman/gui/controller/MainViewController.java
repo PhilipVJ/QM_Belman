@@ -15,8 +15,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -64,8 +62,6 @@ import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.Log;
 import quickmaff_belman.be.taskpainter.RedPainter;
 import quickmaff_belman.be.taskpainter.YellowPainter;
-import quickmaff_belman.bll.BLLManager;
-import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.BoardMaker;
 import quickmaff_belman.gui.model.Clock;
 import quickmaff_belman.gui.model.ExceptionHandler;
@@ -346,15 +342,17 @@ public class MainViewController implements Initializable {
 
     public void checkForUnloadedFiles() {
 
-        try {                      
+        try {
             FolderCheckResult result = model.checkForUnLoadedFiles();
             int numberOfAddedFiles = result.getNumberOfNewlyAddedFiles();
             int numberOfCorruptFiles = result.getNumberOfCorruptFiles();
-            if (numberOfAddedFiles > 0 || numberOfCorruptFiles > 0) {
-                String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
-                        + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;
-                showLoadResults(toSet);
-            }
+            int numberOfDuplicates = result.getNumberOfDuplicates();
+
+            String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
+                    + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles
+                    + "\n" + model.getResourceBundle().getString("foundDuplicateFiles") + numberOfDuplicates;
+            showLoadResults(toSet);
+
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
 
@@ -371,6 +369,7 @@ public class MainViewController implements Initializable {
         for (Node child : allNodes) {
             child.setEffect(blur);
         }
+
         Label header = new Label(model.getResourceBundle().getString("newFiles"));
         header.setTranslateY(-300);
         header.setFont(new Font("Arial", 30));

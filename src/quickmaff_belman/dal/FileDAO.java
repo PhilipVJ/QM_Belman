@@ -5,34 +5,35 @@
  */
 package quickmaff_belman.dal;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import javafx.beans.property.IntegerProperty;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.DepartmentTask;
-import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 
 public class FileDAO {
-    
+
     private Worker wor;
-    private static final String PATH = "JSON";
+    private static final String PATH = "DatabaseFiles";
 
     public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
-        
+
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
         DataContainer dCon;
@@ -56,7 +57,7 @@ public class FileDAO {
             JSONObject pObj = (JSONObject) object;
             JSONObject cObj = (JSONObject) pObj.get("Customer");
             String customerName = (String) cObj.get("Name");
-            
+
             JSONObject dObj = (JSONObject) pObj.get("Delivery");
             String dDate = (String) dObj.get("DeliveryTime");
             Date deliveryTime = makeDateObject(dDate);
@@ -74,7 +75,7 @@ public class FileDAO {
                 boolean finished = (boolean) dTask.get("FinishedOrder");
                 String startDate = (String) dTask.get("StartDate");
                 Date startDateObj = makeDateObject(startDate);
-                DepartmentTask taskToAdd = new DepartmentTask(startDateObj, endDateObj, finished,departmentName);
+                DepartmentTask taskToAdd = new DepartmentTask(startDateObj, endDateObj, finished, departmentName);
                 allDepartmentTasks.add(taskToAdd);
             }
 
@@ -87,72 +88,8 @@ public class FileDAO {
         return dCon;
     }
 
-    public DataContainer readCSVFile(String path) throws FileNotFoundException, IOException, java.text.ParseException
-    {
-        System.out.println("reading csv file.");
-        ArrayList<Worker> allWorkers = new ArrayList<>();
-        ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
-        ArrayList<DepartmentTask> allDepartmentTasks = new ArrayList<>();
-        DataContainer dCon;
-        
-        String line = "";
-        String split = ",";
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.readLine();
-            while ((line = br.readLine()) != null)
-            {
-                System.out.println("inside whileloop");
-                
-                String[] fileInfo = line.replace("\"", "").split(split);
+  
 
-                if (!fileInfo[1].equals(line))
-                {
-                    System.out.println("salary number: " + fileInfo[3]);
-                    System.out.println("initialer: " + fileInfo[1]);
-                    System.out.println("Name: " + fileInfo[2]);
-                    
-                    Worker work = new Worker(Long.parseLong(fileInfo[3]), fileInfo[1], fileInfo[2]);
-                    allWorkers.add(work);
-                    System.out.println("Worker er lavet nu");
-                }
-                    
-                if (!fileInfo[14].equals(line))
-                {
-                    System.out.println("deliveryTime: " + fileInfo[8]);
-                    System.out.println("startDate: " + fileInfo[14]);
-                    System.out.println("endDate: " + fileInfo[12]);
-                    System.out.println("departmentName: " + fileInfo[11]);
-                    System.out.println("finish order true/false: " + fileInfo[13]);
-                    System.out.println("CostumerName :" + fileInfo[6]);
-                    System.out.println("orderNumber :" + fileInfo[16]);
-                    
-                    Date delvTime = dateForCSV(fileInfo[8]);
-                    Date startDate = dateForCSV(fileInfo[14]);
-                    Date endDate = dateForCSV(fileInfo[12]);
-
-                    System.out.println("delvTime efter string til date object: " + delvTime);
-                    System.out.println("startDate efter string til date object: " + startDate);
-                    System.out.println("endDate efter string til date object: " + endDate);
-                    
-                    DepartmentTask taskToAdd = new DepartmentTask(startDate, endDate, Boolean.parseBoolean(fileInfo[13]), fileInfo[11]);
-                    allDepartmentTasks.add(taskToAdd);
-
-                    ProductionOrder procOrder = new ProductionOrder(fileInfo[6], delvTime, fileInfo[16], allDepartmentTasks);
-                    allProductionOrders.add(procOrder);
-                    System.out.println("færdig med order og task");
-                    System.out.println("");
-                    System.out.println("");
-                }
-                }
-                
-            System.out.println("test2");
-            }
-        
-        dCon = new DataContainer(allWorkers, allProductionOrders);
-        return dCon;
-    }
-    
     private Date makeDateObject(String dDate) {
         int indexOfPlus = dDate.indexOf("+");
         String subString = dDate.substring(6, indexOfPlus);
@@ -160,32 +97,79 @@ public class FileDAO {
         Date date = new Date(sinceEpoch);
         return date;
     }
-    
-    private Date dateForCSV(String date) throws java.text.ParseException
-    {
-        String[] split1 = date.split(" ");
-        String[] split2 = split1[0].split("/|\\-");
-        Long year = Long.parseLong(split2[2]);
-        Long month = Long.parseLong(split2[1]);
-        Long day = Long.parseLong(split2[0]);
-        Long dato = day + month + year;
-//        Date test = new Date(dato);
-        
-        return Date.from(Instant.ofEpochSecond(dato));
-    }
-    
-    public ArrayList<FileWrapper> getAllFolderFiles() throws IOException
-    {
+
+
+    public File[] getAllFolderFiles() throws IOException {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
-        ArrayList<FileWrapper> allWrappedFiles = new ArrayList<>();
-        if(allFiles!=null){
-        for (File file : allFiles) {
-            FileWrapper fWrap = new FileWrapper(file);
-            allWrappedFiles.add(fWrap);         
-        }
-        }
-        return allWrappedFiles;
+      
+        return allFiles;
     }
-    
+
+    public DataContainer getDataFromCSV(String path) throws IOException, Exception {
+
+        Reader reader = Files.newBufferedReader(Paths.get(path));
+        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
+        ArrayList<Worker> allWorkers = new ArrayList<>();
+        ArrayList<ProductionOrder> allOrders = new ArrayList<>();
+        ProductionOrder order = null;
+
+        boolean skippedFirstLine = false;
+        for (CSVRecord csvRecord : csvParser) {
+            if (skippedFirstLine == false) {
+                skippedFirstLine = true;
+                continue;
+            }
+            // Worker is found
+            if (!csvRecord.get(1).equals("")) {
+                String initials = csvRecord.get(1);
+                String name = csvRecord.get(2);
+                long salaryNumber = Long.parseLong(csvRecord.get(3));
+                Worker worker = new Worker(salaryNumber, initials, name);
+                allWorkers.add(worker);
+            }
+            
+            
+            // Production order is found
+            if (!csvRecord.get(04).equals("")) {
+                if(order!=null)
+                {
+                    allOrders.add(order);
+                    order=null;
+                }
+                String deliveryTime = csvRecord.get(8);
+                String customerName = csvRecord.get(6);
+                String orderNumber = csvRecord.get(16);
+                Date date = csvStringToDate(deliveryTime);
+                order=new ProductionOrder(date, orderNumber, customerName);
+            }
+            
+            
+            Date startDate = csvStringToDate(csvRecord.get(14));
+            Date endDate = csvStringToDate(csvRecord.get(12));
+            String departmentName = csvRecord.get(11);
+            boolean finished = Boolean.valueOf(csvRecord.get(13));
+            DepartmentTask task = new DepartmentTask(startDate, endDate, finished, departmentName);
+            order.addTask(task);
+        }
+        allOrders.add(order);
+        DataContainer con = new DataContainer(allWorkers, allOrders);
+        return con;
+    }
+
+    private Date csvStringToDate(String deliveryTime) {
+        int lastIndexOfSlash = deliveryTime.lastIndexOf("/");
+        String subString = deliveryTime.substring(0, lastIndexOfSlash+5);
+        String[] split = subString.split("/");
+        int month = Integer.parseInt(split[0]);
+        int day = Integer.parseInt(split[1]);
+        int year = Integer.parseInt(split[2]);
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.DAY_OF_MONTH, day);
+        date.set(Calendar.MONTH,month-1);
+        date.set(Calendar.YEAR, year);
+        Date toReturn = date.getTime();
+        return toReturn;
+    }
+
 }

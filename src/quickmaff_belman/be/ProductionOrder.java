@@ -12,7 +12,7 @@ public class ProductionOrder {
     private String customerName;
     private final Date deliveryTime;
     private final String orderNumber;
-    private final ArrayList<DepartmentTask> dTasks;
+    private ArrayList<DepartmentTask> dTasks;
 
     public ProductionOrder(String customerName, Date deliveryTime, String orderNumber, ArrayList<DepartmentTask> dTasks) {
         this.customerName = customerName;
@@ -20,6 +20,15 @@ public class ProductionOrder {
         this.orderNumber = orderNumber;
         this.dTasks = dTasks;
     }
+
+    public ProductionOrder(Date deliveryTime, String orderNumber, String customerName) {
+        this.deliveryTime = deliveryTime;
+        this.orderNumber = orderNumber;
+        this.customerName = customerName;
+        dTasks = new ArrayList<>();
+    }
+    
+    
 
     public String getCustomerName() {
         return customerName;
@@ -41,6 +50,11 @@ public class ProductionOrder {
 
     public ArrayList<DepartmentTask> getDepartmentTasks() {
         return dTasks;
+    }
+    
+    public void addTask(DepartmentTask task)
+    {
+        dTasks.add(task);
     }
 
 

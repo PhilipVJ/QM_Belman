@@ -225,7 +225,6 @@ public class BoardMaker implements Runnable {
                 roundCounter++;
 
             } catch (SQLException ex) {
-                System.out.println("here");
                 connectionLost.set(true);
             }
             try {

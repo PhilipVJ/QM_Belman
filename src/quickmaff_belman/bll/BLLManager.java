@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.bll;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -24,14 +25,9 @@ public class BLLManager
         this.dFacade = dFacade;
     }
     
-    public void loadJSONfile(FileWrapper file, String departmentName) throws IOException, FileNotFoundException, ParseException, SQLException {
-        dFacade.loadJSONFile(file, departmentName);
-    }
+
     
-    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException 
-    {
-        return dFacade.checkForDuplicateFile(file);
-    }
+
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         return dFacade.getAllBoardTasks(departmentName, offset);
@@ -53,6 +49,10 @@ public class BLLManager
 
     public void addCorruptFileToLog(String department) throws SQLException {
        dFacade.addCorruptFileToLog(department);
+    }
+
+    public FolderCheckResult loadFile(String departmentName, File file) throws IOException, SQLException {
+       return dFacade.loadFile(departmentName, file);
     }
            
 }

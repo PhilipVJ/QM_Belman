@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.DepartmentTask;
-import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 
@@ -29,24 +28,24 @@ public class DbUpdateDAO {
         this.con = con;
     }
 
-    public boolean checkForDuplicateFile(FileWrapper fW) throws SQLException {
+    public boolean checkForDuplicateFile(long hashCode) throws SQLException {
         String sqlGetInfo = "SELECT * FROM [Log] WHERE description = (?)";
         PreparedStatement pStatement = null;
         try (Connection connection = con.getConnection();) {
             pStatement = connection.prepareStatement(sqlGetInfo);
-            pStatement.setString(1, "FileCode: " + fW.hashCode());
+            pStatement.setString(1, "FileCode: " + hashCode);
             ResultSet set = pStatement.executeQuery();
-
+            
             if (set.next()) {
+                System.out.println("duplicate found");
                 // Duplicate file found
                 return true;
             }
-
         }
         return false;
     }
 
-    public void updateDatabaseWithJSON(DataContainer container, FileWrapper fileW, String departmentName) throws SQLException {
+    public void updateDatabaseWithFile(DataContainer container, String departmentName) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
         String sqlDep = "INSERT INTO DepartmentTask VALUES (?,?,?,?,?);";
@@ -108,7 +107,7 @@ public class DbUpdateDAO {
 
             pstLog.setDate(1, sqlDateLog);
             pstLog.setString(2, "AddedNewOrders");
-            pstLog.setString(3, "FileCode: " + fileW.hashCode());
+            pstLog.setString(3, "FileCode: " + container.hashCode());
             pstLog.setString(4, departmentName);
 
             pstWorker.executeBatch();

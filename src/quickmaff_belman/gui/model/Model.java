@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.gui.model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -63,9 +64,7 @@ public class Model {
 
     }
 
-    public void loadJSONfile(FileWrapper file) throws IOException, FileNotFoundException, ParseException, SQLException {
-        bMan.loadJSONfile(file, departmentName);
-    }
+
 
     public Language changeLanguage() {
 
@@ -90,9 +89,6 @@ public class Model {
         return rBundle;
     }
 
-    public boolean checkForDuplicateFile(FileWrapper file) throws IOException, SQLException {
-        return bMan.checkForDuplicateFile(file);
-    }
 
     public ArrayList<BoardTask> getAllBoardTasks() throws SQLException {
         return bMan.getAllBoardTasks(departmentName, timeOffset);
@@ -120,6 +116,10 @@ public class Model {
 
    public void addCorruptFileToLog() throws SQLException {
         bMan.addCorruptFileToLog(departmentName);
+    }
+
+    public FolderCheckResult loadFile(File file) throws IOException, SQLException {
+        return bMan.loadFile(departmentName, file);
     }
     
 }
