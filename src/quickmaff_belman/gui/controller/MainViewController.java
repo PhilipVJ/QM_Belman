@@ -139,7 +139,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         searchbar.setFocusTraversable(false);
         // Make the filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
@@ -150,7 +150,7 @@ public class MainViewController implements Initializable {
 
         //Adds a listener to the group
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
-        
+
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
@@ -159,7 +159,7 @@ public class MainViewController implements Initializable {
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
         connectionLost = new SimpleBooleanProperty();
-        connectionLost.set(false);       
+        connectionLost.set(false);
         connectionLost.addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -179,7 +179,7 @@ public class MainViewController implements Initializable {
         blueFilter = new Image("/quickmaff_belman/gui/view/images/filterknap4.png");
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
-        filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");      
+        filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
         addKeybindToLogView();
         isLoading = new SimpleBooleanProperty(false);
 
@@ -214,9 +214,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void changeLanguage(MouseEvent event) {
-        
+
         Language language = model.changeLanguage();
-        
+
         switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
@@ -230,20 +230,20 @@ public class MainViewController implements Initializable {
         }
         setAllText();
     }
-    
+
     @FXML
     private void setLanguage() {
         Language language = model.getLanguage();
-        
-        if(language == Language.ENGLISH){
+
+        if (language == Language.ENGLISH) {
             Image engImage = new Image("/quickmaff_belman/gui/view/images/knapSprogENG.png");
             languageSwitch.setImage(engImage);
         }
-         if(language == Language.DANISH){
+        if (language == Language.DANISH) {
             Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
             languageSwitch.setImage(daImage);
         }
-        
+
     }
 
     /**
@@ -270,11 +270,11 @@ public class MainViewController implements Initializable {
         });
     }
 
-    public void initView() {       
+    public void initView() {
         stage.setFullScreen(true);
         setLanguage();
         setGraphics();
-        setAllText(); 
+        setAllText();
         // Setting up the board
         Filter filter = new Filter(WorkerFilterOption.SHOWALL);
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
@@ -304,7 +304,7 @@ public class MainViewController implements Initializable {
             con.setModel(model);
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            stage.setFullScreen(true);           
+            stage.setFullScreen(true);
             con.setGraphics();
             con.createButtons();
             shutDownThreads();
@@ -344,12 +344,11 @@ public class MainViewController implements Initializable {
     }
 
     public void checkForUnloadedFiles() {
-        int numberOfAddedFiles;
-        int numberOfCorruptFiles;
-        try {
+
+        try {                      
             FolderCheckResult result = model.checkForUnLoadedFiles();
-            numberOfAddedFiles =  result.getNumberOfNewlyAddedFiles();
-            numberOfCorruptFiles = result.getNumberOfCorruptFiles();
+            int numberOfAddedFiles = result.getNumberOfNewlyAddedFiles();
+            int numberOfCorruptFiles = result.getNumberOfCorruptFiles();
             if (numberOfAddedFiles > 0 || numberOfCorruptFiles > 0) {
                 String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
                         + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles;

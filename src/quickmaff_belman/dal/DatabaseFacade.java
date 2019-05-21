@@ -55,7 +55,6 @@ public class DatabaseFacade {
 
     public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
         
-        System.out.println("running");
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
