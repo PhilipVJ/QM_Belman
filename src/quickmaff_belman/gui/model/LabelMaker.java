@@ -8,15 +8,14 @@ package quickmaff_belman.gui.model;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.text.Font;
-import quickmaff_belman.be.BoardTask;
 
 /**
- *
- * @author Philip
+ * This class is an extension of the BoardMaker. Only made to make the BoardMaker class more readable
+ * 
  */
 public class LabelMaker {
 
-    private Model model;
+    private final Model model;
 
     public LabelMaker(Model model) {
         this.model = model;

@@ -42,6 +42,7 @@ import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.gui.model.DatabaseConnector;
 import quickmaff_belman.gui.model.ExceptionHandler;
+import quickmaff_belman.gui.model.Language;
 
 import quickmaff_belman.gui.model.Model;
 
@@ -78,27 +79,22 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        try {
-            service = Executors.newSingleThreadExecutor();
-            model = new Model(new BLLManager(new DatabaseFacade()));
-            connected = new SimpleIntegerProperty();
-            connected.set(0);
-            connected.addListener(new ChangeListener() {
-                @Override
-                public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-
-                    int value = (int) newValue;
-                    if (value == 2) {
-                        Platform.runLater(()-> {openMainView();});
-                    } else if (value == 1) {
-                        Platform.runLater(()-> {connected.set(0);setClickToRetry();});
-                    }
+        service = Executors.newSingleThreadExecutor();
+        connected = new SimpleIntegerProperty();
+        connected.set(0);
+        connected.addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
+                int value = (int) newValue;
+                if (value == 2) {
+                    Platform.runLater(()-> {openMainView();});
+                } else if (value == 1) {
+                    Platform.runLater(()-> {connected.set(0);setClickToRetry();});
                 }
-            });
-        } catch (IOException ex) {
-            ExceptionHandler.handleException(ex, model.getResourceBundle());
-        }
-        createButtons();
+            }
+        });
+        
     }
 
     private void setClickToRetry() {
@@ -131,21 +127,14 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    
     public void createButtons() {
         try {
             ArrayList<String> depNames = model.getDepartmentNames();
             for (String depName : depNames) {
                 Button newButton = new Button();
                 VBox vbox = new VBox();
-                //sets size of text and position
-                Label lbl = new Label();
-                lbl.setText("" + depName);
-                lbl.setMinWidth(173);
-                lbl.setTranslateX(10);
-                lbl.setTranslateY(-267);
-                lbl.setFont(new Font("Arial", 24));
-                lbl.setAlignment(Pos.CENTER);
+                Label lbl = makeLabel(depName);
                 //sets prefered size of button to size of pictures
                 newButton.setPrefHeight(300);
                 newButton.setPrefWidth(191);
@@ -179,6 +168,17 @@ public class LoginController implements Initializable {
         }
     }
 
+    private Label makeLabel(String depName) {
+        Label lbl = new Label();
+        lbl.setText("" + depName);
+        lbl.setMinWidth(173);
+        lbl.setTranslateX(10);
+        lbl.setTranslateY(-267);
+        lbl.setFont(new Font("Arial", 24));
+        lbl.setAlignment(Pos.CENTER);
+        return lbl;
+    }
+
     private void connectToDatabase() {
         Image loading = new Image("/quickmaff_belman/gui/view/images/loading.gif");
         ImageView view = new ImageView(loading);
@@ -206,6 +206,7 @@ public class LoginController implements Initializable {
             stage.show();
             con.initView();
             con.checkForUnloadedFiles();
+            
         } catch (IOException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -215,5 +216,10 @@ public class LoginController implements Initializable {
         imgBackground.fitHeightProperty().bind(stage.heightProperty());
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
+    }
+
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 }

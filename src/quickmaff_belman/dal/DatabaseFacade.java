@@ -5,14 +5,11 @@
  */
 package quickmaff_belman.dal;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
@@ -27,7 +24,7 @@ public class DatabaseFacade {
     private final OrderDAO oDAO;
     private final DbUpdateDAO uDAO;
     private final BelTimer bTimer;
-    private DbConnection con;
+    private final DbConnection con;
 
     public DatabaseFacade() throws IOException {
         con = DbConnection.getInstance();
@@ -42,9 +39,9 @@ public class DatabaseFacade {
         return uDAO.checkForDuplicateFile(file);
     }
 
-    public void loadJSONFile(FileWrapper file) throws IOException, SQLException, FileNotFoundException, ParseException {
+    public void loadJSONFile(FileWrapper file, String departmentName) throws IOException, SQLException, FileNotFoundException, ParseException {
         DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
-        uDAO.updateDatabaseWithJSON(con, file);
+        uDAO.updateDatabaseWithJSON(con, file, departmentName);
     }
 
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
@@ -56,22 +53,29 @@ public class DatabaseFacade {
         return allBoardTasks;
     }
 
-    public FolderCheckResult checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException {
+    public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
+        
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         ArrayList<FileWrapper> allFiles = fDAO.getAllFolderFiles();
         for (FileWrapper file : allFiles) {
             if (!uDAO.checkForDuplicateFile(file)) {
                 try {
-                    loadJSONFile(file);
+                    loadJSONFile(file, department);
+                    numberOfNewFilesAdded++;
                 } catch (ParseException ex) {
                     numberOfCorruptFiles++; 
                     continue;
                 }
-                numberOfNewFilesAdded++;
+              
             }
         }
+        
         FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded,numberOfCorruptFiles);
+        if(numberOfCorruptFiles>0)
+        {
+            uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
+        }
         return result;
     }
 
@@ -91,5 +95,9 @@ public class DatabaseFacade {
             return false;
         }
 
+    }
+
+    public void addCorruptFileToLog(String department) throws SQLException {
+      uDAO.addCorruptFilesToLog(1, department);
     }
 }

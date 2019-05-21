@@ -15,6 +15,8 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
@@ -27,21 +29,26 @@ import quickmaff_belman.be.FileWrapper;
  */
 public class FolderWatcher implements Runnable {
 
-    private final WatchService wService;
-    private final Path path;
+    private WatchService wService = null;
+    private Path path = null;
     private WatchKey watchKey;
-    private final String FOLDER_PATH = "JSON";
-    private final Model model;
-    private final Label infoBar;
-    private final BooleanProperty connectionLost;
+    private String FOLDER_PATH = "JSON";
+    private Model model;
+    private Label infoBar;
+    private BooleanProperty connectionLost;
 
-    public FolderWatcher(Model model, Label infoBar, BooleanProperty connectionLost) throws IOException {
-        this.wService = FileSystems.getDefault().newWatchService();
-        this.path = Paths.get(FOLDER_PATH);
-        watchKey = path.register(wService, StandardWatchEventKinds.ENTRY_CREATE);
-        this.model = model;
-        this.infoBar = infoBar;
-        this.connectionLost=connectionLost;
+    public FolderWatcher(Model model, Label infoBar, BooleanProperty connectionLost) {
+        try {
+            this.wService = FileSystems.getDefault().newWatchService();
+            this.path = Paths.get(FOLDER_PATH);
+            watchKey = path.register(wService, StandardWatchEventKinds.ENTRY_CREATE);
+            this.model = model;
+            this.infoBar = infoBar;
+            this.connectionLost = connectionLost;
+
+        } catch (IOException ex) {
+            ExceptionHandler.handleException(ex, model.getResourceBundle());
+        }
     }
 
     @Override
@@ -66,7 +73,12 @@ public class FolderWatcher implements Runnable {
                     } catch (SQLException ex) {
                         connectionLost.set(true);
                     } catch (ParseException ex) {
-                        setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
+                        try {
+                            model.addCorruptFileToLog();
+                            setLabel(model.getResourceBundle().getString("parseExceptionHeader"));
+                        } catch (SQLException ex1) {
+                            connectionLost.set(true);
+                        }
                     }
                 }
                 watchKey.reset();

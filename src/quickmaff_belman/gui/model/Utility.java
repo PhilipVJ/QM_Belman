@@ -10,6 +10,7 @@ import java.util.Date;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
 import quickmaff_belman.be.BoardTask;
 
@@ -26,9 +27,14 @@ public final class Utility {
             alert.setHeaderText(header);
             alert.setContentText(content);
             alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK && type == AlertType.ERROR) {
+                Platform.exit();
+                System.exit(0);
+            }
+
         }
         );
-
     }
 
     public static String getFXIDfromToggle(Toggle newVal) {
@@ -66,5 +72,4 @@ public final class Utility {
         }
         return output;
     }
-
 }
