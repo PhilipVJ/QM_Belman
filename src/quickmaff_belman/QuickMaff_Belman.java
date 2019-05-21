@@ -18,11 +18,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quickmaff_belman.bll.BLLManager;
-import quickmaff_belman.dal.DatabaseFacade;
-=======
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
->>>>>>> f631eeb33c227af150b1469e516c0ce84c7a6878
+import quickmaff_belman.dal.FileDAO;
 import quickmaff_belman.gui.controller.LoginController;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
@@ -75,10 +73,10 @@ public class QuickMaff_Belman extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException, FileNotFoundException, ParseException {
-//        launch(args);
+        launch(args);
 
-        FileDAO test = new FileDAO();
-        test.readCSVFile("C:/Users/Bruger/Documents/GitHub/QM_Belman/JSON/result.csv");
+//        FileDAO test = new FileDAO();
+//        test.readCSVFile("C:/Users/Bruger/Documents/GitHub/QM_Belman/JSON/result.csv");
     }
 
 }
