@@ -326,6 +326,7 @@ public class MainViewController implements Initializable {
 
     private void setAllText() {
         departmentName.setText(model.getDepartmentName());
+        departmentName.setStyle("-fx-font-weight: bold");
         activeWorkers.setText(model.getResourceBundle().getString("activeWorkersRadio"));
         nonActiveWorkers.setText(model.getResourceBundle().getString("nonActiveWorkersRadio"));
         showAll.setText(model.getResourceBundle().getString("disable"));
