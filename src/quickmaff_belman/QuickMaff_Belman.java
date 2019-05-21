@@ -17,8 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-<<<<<<< HEAD
-import quickmaff_belman.dal.FileDAO;
+import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.dal.DatabaseFacade;
 =======
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
@@ -35,7 +35,7 @@ public class QuickMaff_Belman extends Application {
 
     @Override
     public void start(Stage stage) {
-        
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
             Parent root = loader.load();
@@ -44,11 +44,11 @@ public class QuickMaff_Belman extends Application {
             con.setStage(stage);
             con.setModel(model);
             con.createButtons();
-            
+
             Scene scene = new Scene(root);
             stage.setFullScreen(true);
             stage.setScene(scene);
-            
+
             // Makes sure all threads are closed upon exit
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -63,7 +63,7 @@ public class QuickMaff_Belman extends Application {
 
             stage.show();
             con.setGraphics();
-            
+
 
         } catch (IOException ex) {
             Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil");
