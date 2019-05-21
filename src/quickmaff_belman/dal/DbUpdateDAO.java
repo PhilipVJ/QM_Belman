@@ -37,7 +37,6 @@ public class DbUpdateDAO {
             ResultSet set = pStatement.executeQuery();
             
             if (set.next()) {
-                System.out.println("duplicate found");
                 // Duplicate file found
                 return true;
             }

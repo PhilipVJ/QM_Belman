@@ -15,13 +15,9 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.Label;
-import org.json.simple.parser.ParseException;
-import quickmaff_belman.be.FileWrapper;
 import quickmaff_belman.be.FolderCheckResult;
 
 /**
@@ -69,9 +65,7 @@ public class FolderWatcher implements Runnable {
                         else if(result.getNumberOfCorruptFiles()>0)
                         {
                           setLabel(model.getResourceBundle().getString("parseExceptionHeader"));  
-                        }
-                                
-
+                        }                        
                     } catch (IOException ex) {
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {

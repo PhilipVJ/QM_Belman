@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
@@ -37,11 +35,6 @@ public class DatabaseFacade {
         bTimer = new BelTimer();
     }
 
-//
-//    public void loadJSONFile(FileWrapper file, String departmentName) throws IOException, SQLException, FileNotFoundException, ParseException {
-//        DataContainer con = fDAO.getDataFromJSON(file.getFilePath());
-//        uDAO.updateDatabaseWithFile(con, file, departmentName);
-//    }
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         ArrayList<BoardTask> allBoardTasks = oDAO.getAllBoardTasks(departmentName, offset);
         for (BoardTask boardTask : allBoardTasks) {
@@ -91,8 +84,6 @@ public class DatabaseFacade {
                 try {
                     DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
                     if (!uDAO.checkForDuplicateFile(jFile.hashCode())) {
-                        System.out.println("Updatingg with json");
-
                         uDAO.updateDatabaseWithFile(jFile, department);
                         numberOfNewFilesAdded++;
                     } else {
@@ -109,8 +100,6 @@ public class DatabaseFacade {
                     cFile = fDAO.getDataFromCSV(file.getPath());
 
                     if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
-                        System.out.println("Updating with csv");
-
                         uDAO.updateDatabaseWithFile(cFile, department);
                         numberOfNewFilesAdded++;
                     } else {
