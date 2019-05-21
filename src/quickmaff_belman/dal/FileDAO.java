@@ -26,6 +26,7 @@ import quickmaff_belman.be.DataContainer;
 import quickmaff_belman.be.DepartmentTask;
 import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
+import quickmaff_belman.gui.model.Utility;
 
 public class FileDAO {
 
@@ -140,13 +141,12 @@ public class FileDAO {
                 String deliveryTime = csvRecord.get(8);
                 String customerName = csvRecord.get(6);
                 String orderNumber = csvRecord.get(16);
-                Date date = csvStringToDate(deliveryTime);
+                Date date = Utility.csvStringToDate(deliveryTime);
                 order=new ProductionOrder(date, orderNumber, customerName);
             }
-            
-            
-            Date startDate = csvStringToDate(csvRecord.get(14));
-            Date endDate = csvStringToDate(csvRecord.get(12));
+                     
+            Date startDate = Utility.csvStringToDate(csvRecord.get(14));
+            Date endDate = Utility.csvStringToDate(csvRecord.get(12));
             String departmentName = csvRecord.get(11);
             boolean finished = Boolean.valueOf(csvRecord.get(13));
             DepartmentTask task = new DepartmentTask(startDate, endDate, finished, departmentName);
@@ -157,19 +157,6 @@ public class FileDAO {
         return con;
     }
 
-    private Date csvStringToDate(String deliveryTime) {
-        int lastIndexOfSlash = deliveryTime.lastIndexOf("/");
-        String subString = deliveryTime.substring(0, lastIndexOfSlash+5);
-        String[] split = subString.split("/");
-        int month = Integer.parseInt(split[0]);
-        int day = Integer.parseInt(split[1]);
-        int year = Integer.parseInt(split[2]);
-        Calendar date = Calendar.getInstance();
-        date.set(Calendar.DAY_OF_MONTH, day);
-        date.set(Calendar.MONTH,month-1);
-        date.set(Calendar.YEAR, year);
-        Date toReturn = date.getTime();
-        return toReturn;
-    }
+
 
 }

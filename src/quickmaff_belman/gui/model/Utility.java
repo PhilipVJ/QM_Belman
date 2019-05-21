@@ -27,12 +27,11 @@ public final class Utility {
             alert.setHeaderText(header);
             alert.setContentText(content);
             alert.showAndWait();
-
+            
             if (alert.getResult() == ButtonType.OK && type == AlertType.ERROR) {
                 Platform.exit();
                 System.exit(0);
             }
-
         }
         );
     }
@@ -75,7 +74,22 @@ public final class Utility {
 
     public static String getFileExtension(String file) {
         int lastIndexOfDot = file.lastIndexOf(".");
-        return file.substring(lastIndexOfDot+1);
+        return file.substring(lastIndexOfDot + 1);
+    }
+
+    public static Date csvStringToDate(String deliveryTime) {
+        int lastIndexOfSlash = deliveryTime.lastIndexOf("/");
+        String subString = deliveryTime.substring(0, lastIndexOfSlash + 5);
+        String[] split = subString.split("/");
+        int month = Integer.parseInt(split[0]);
+        int day = Integer.parseInt(split[1]);
+        int year = Integer.parseInt(split[2]);
+        Calendar date = Calendar.getInstance();
+        date.set(Calendar.DAY_OF_MONTH, day);
+        date.set(Calendar.MONTH, month - 1);
+        date.set(Calendar.YEAR, year);
+        Date toReturn = date.getTime();
+        return toReturn;
     }
 
 }

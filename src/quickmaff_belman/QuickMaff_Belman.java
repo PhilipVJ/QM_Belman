@@ -5,9 +5,7 @@
  */
 package quickmaff_belman;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.ParseException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -17,15 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import quickmaff_belman.bll.BLLManager;
-
-import quickmaff_belman.dal.DatabaseFacade;
-import quickmaff_belman.dal.FileDAO;
-
 import quickmaff_belman.bll.BLLManager;
 import quickmaff_belman.dal.DatabaseFacade;
-import quickmaff_belman.dal.FileDAO;
 import quickmaff_belman.gui.controller.LoginController;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
