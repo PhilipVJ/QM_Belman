@@ -19,9 +19,13 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import quickmaff_belman.bll.BLLManager;
+
 import quickmaff_belman.dal.DatabaseFacade;
 import quickmaff_belman.dal.FileDAO;
 
+import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.dal.DatabaseFacade;
+import quickmaff_belman.dal.FileDAO;
 import quickmaff_belman.gui.controller.LoginController;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
@@ -69,4 +73,5 @@ public class QuickMaff_Belman extends Application {
         }
 
     }
+
 }
