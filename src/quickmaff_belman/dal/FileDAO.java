@@ -13,7 +13,6 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -30,7 +29,6 @@ import quickmaff_belman.gui.model.Utility;
 
 public class FileDAO {
 
-    private Worker wor;
     private static final String PATH = "DatabaseFiles";
 
     public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
@@ -114,24 +112,23 @@ public class FileDAO {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allOrders = new ArrayList<>();
         ProductionOrder order = null;
-
         boolean skippedFirstLine = false;
+        
+        
         for (CSVRecord csvRecord : csvParser) {
             if (skippedFirstLine == false) {
                 skippedFirstLine = true;
                 continue;
             }
-            // Worker is found
+            // Checks if a Worker-object is available
             if (!csvRecord.get(1).equals("")) {
                 String initials = csvRecord.get(1);
                 String name = csvRecord.get(2);
                 long salaryNumber = Long.parseLong(csvRecord.get(3));
                 Worker worker = new Worker(salaryNumber, initials, name);
                 allWorkers.add(worker);
-            }
-            
-            
-            // Production order is found
+            }        
+            // Checks if a ProductionOrder is available
             if (!csvRecord.get(04).equals("")) {
                 if(order!=null)
                 {
@@ -141,10 +138,10 @@ public class FileDAO {
                 String deliveryTime = csvRecord.get(8);
                 String customerName = csvRecord.get(6);
                 String orderNumber = csvRecord.get(16);
-                Date date = Utility.csvStringToDate(deliveryTime);
-                order=new ProductionOrder(date, orderNumber, customerName);
+                Date deliveryDate = Utility.csvStringToDate(deliveryTime);
+                order=new ProductionOrder(deliveryDate, orderNumber, customerName);
             }
-                     
+            // Here are DepartmentTask objects generated        
             Date startDate = Utility.csvStringToDate(csvRecord.get(14));
             Date endDate = Utility.csvStringToDate(csvRecord.get(12));
             String departmentName = csvRecord.get(11);

@@ -30,12 +30,10 @@ public class DbUpdateDAO {
 
     public boolean checkForDuplicateFile(long hashCode) throws SQLException {
         String sqlGetInfo = "SELECT * FROM [Log] WHERE description = (?)";
-        PreparedStatement pStatement = null;
-        try (Connection connection = con.getConnection();) {
-            pStatement = connection.prepareStatement(sqlGetInfo);
+       
+        try (Connection connection = con.getConnection(); PreparedStatement pStatement = connection.prepareStatement(sqlGetInfo);) {    
             pStatement.setString(1, "FileCode: " + hashCode);
-            ResultSet set = pStatement.executeQuery();
-            
+            ResultSet set = pStatement.executeQuery();     
             if (set.next()) {
                 // Duplicate file found
                 return true;
@@ -98,9 +96,7 @@ public class DbUpdateDAO {
                     pstDep.addBatch();
 
                 }
-
             }
-
             Date date = new Date();
             java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
 
@@ -124,6 +120,7 @@ public class DbUpdateDAO {
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
+                
             }
         }
 

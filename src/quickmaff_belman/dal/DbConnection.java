@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.util.Properties;
 
 public class DbConnection
-
 {
     private static final String PROP_FILE = "data/database.info";
     private final SQLServerDataSource ds;

@@ -23,15 +23,11 @@ public class BLLManager
         this.dFacade = dFacade;
     }
     
-
-    
-
-
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         return dFacade.getAllBoardTasks(departmentName, offset);
     }
 
-    public FolderCheckResult checkForUnLoadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
+    public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
         return dFacade.checkForUnloadedFiles(department);
     }
     public void setCompleteTask(int taskID, String departmentName) throws SQLException{

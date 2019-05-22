@@ -66,7 +66,7 @@ public class Model {
 
     public Language changeLanguage() {
 
-        if (locale.getLanguage() == "da") {
+        if (locale.getLanguage().equals("da")) {
             language = Language.ENGLISH;
             locale = new Locale("en", "EN");
             rBundle = ResourceBundle.getBundle("resources.languagepack", locale);
@@ -97,8 +97,8 @@ public class Model {
         return departmentName;
     }
 
-    public FolderCheckResult checkForUnLoadedFiles() throws IOException, SQLException, FileNotFoundException {
-        return bMan.checkForUnLoadedFiles(departmentName);
+    public FolderCheckResult checkForUnloadedFiles() throws IOException, SQLException, FileNotFoundException {
+        return bMan.checkForUnloadedFiles(departmentName);
     }
     public void setCompleteTask(int taskID) throws SQLException{
          bMan.setCompleteTask(taskID, departmentName);

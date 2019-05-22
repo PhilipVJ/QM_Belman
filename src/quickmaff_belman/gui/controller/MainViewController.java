@@ -343,7 +343,7 @@ public class MainViewController implements Initializable {
     public void checkForUnloadedFiles() {
 
         try {
-            FolderCheckResult result = model.checkForUnLoadedFiles();
+            FolderCheckResult result = model.checkForUnloadedFiles();
             int numberOfAddedFiles = result.getNumberOfNewlyAddedFiles();
             int numberOfCorruptFiles = result.getNumberOfCorruptFiles();
             int numberOfDuplicates = result.getNumberOfDuplicates();

@@ -13,10 +13,10 @@ import java.util.Date;
  */
 public class BoardTask {
 
-    private String orderNumber;
-    private Date endDate;
+    private final String orderNumber;
+    private final Date endDate;
     private final Date startDate;
-    private int taskID;
+    private final int taskID;
     private final OrderOverview overview;
     private final String customerName;
     private Worker activeWorker;
@@ -30,9 +30,6 @@ public class BoardTask {
         this.customerName = customerName;
     }
 
-    public void setTaskID(int taskID) {
-        this.taskID = taskID;
-    }
 
     public int getTaskID() {
         return taskID;
@@ -42,17 +39,11 @@ public class BoardTask {
         return orderNumber;
     }
 
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
 
     public Date getStartDate() {
         return startDate;

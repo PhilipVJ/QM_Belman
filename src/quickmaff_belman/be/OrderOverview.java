@@ -7,10 +7,6 @@ package quickmaff_belman.be;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Philip
- */
 public class OrderOverview {
     ArrayList<TaskStatus> allTasks;
     private final boolean readyToWork;
