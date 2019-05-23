@@ -17,7 +17,9 @@ public class TesterClass {
     public static void main(String[] args) throws Exception 
     {
 
-
+        FileDAO excel = new FileDAO();
+        
+        excel.getDataFromExcel();
     
     }
     

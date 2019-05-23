@@ -6,17 +6,24 @@
 package quickmaff_belman.dal;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -154,6 +161,68 @@ public class FileDAO {
         return con;
     }
 
+    public void getDataFromExcel() throws FileNotFoundException, IOException
+    {
+        ArrayList<Worker> allWorkers = new ArrayList<>();
+        ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
+        
+        InputStream excel = new FileInputStream("C:\\Users\\Caspe\\Documents\\result.xlsx");
+        XSSFWorkbook book = new XSSFWorkbook(excel);
+        Sheet sheet = book.getSheetAt(0);
+        
+        Iterator<Row> rowIterator = sheet.iterator();
+        
+        for (Row row : sheet)
+        {
+            for(Cell cell : row)
+            {
+                if(row.getRowNum() == 0)
+                {
+                    continue;
+                }
 
+                
+                Cell initials = row.getCell(1);
+                Cell name = row.getCell(2);
+                Cell salaryNumber = row.getCell(3);
+            
+                Long sNumberValue = (long) salaryNumber.getNumericCellValue();
+                
+                Worker worker = new Worker(sNumberValue, initials.getStringCellValue(), name.getStringCellValue());
+                allWorkers.add(worker);
+                System.out.println(allWorkers);
+                break;
+                }
+
+            }
+            
+
+        }
+        
+//        for (Row row : sheet)
+//        {
+//            Cell customerName = row.getCell(6);
+//            Cell deliveryTime = row.getCell(8);
+//            Cell orderNumber = row.getCell(16);
+//            
+//            ProductionOrder order = new ProductionOrder(deliveryTime.getDateCellValue(), orderNumber.getStringCellValue(), customerName.getStringCellValue());
+//            
+//            Cell endDate = row.getCell(12);
+//            Cell finished = row.getCell(13);
+//            Cell startDate = row.getCell(14);
+//            Cell departmentName = row.getCell(11);
+//                    
+//            DepartmentTask task = new DepartmentTask(startDate.getDateCellValue(), endDate.getDateCellValue(), finished.getBooleanCellValue(), departmentName.getStringCellValue());
+//            order.addTask(task);
+//            
+//            allProductionOrders.add(order);
+//            System.out.println(allProductionOrders);
+//        }
+//    }    
+            
+            
+        
+        
+ 
 
 }
