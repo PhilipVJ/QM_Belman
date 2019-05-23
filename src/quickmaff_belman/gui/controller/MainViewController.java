@@ -347,10 +347,12 @@ public class MainViewController implements Initializable {
             int numberOfAddedFiles = result.getNumberOfNewlyAddedFiles();
             int numberOfCorruptFiles = result.getNumberOfCorruptFiles();
             int numberOfDuplicates = result.getNumberOfDuplicates();
+            int numberOfUnknownFiles = result.getNumberOfUnknownFiles();
 
             String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
                     + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles
-                    + "\n" + model.getResourceBundle().getString("foundDuplicateFiles") + numberOfDuplicates;
+                    + "\n" + model.getResourceBundle().getString("foundDuplicateFiles") + numberOfDuplicates
+                    + "\n" + model.getResourceBundle().getString("numberOfUnknownFiles") + numberOfUnknownFiles;
             showLoadResults(toSet);
 
         } catch (IOException ex) {
@@ -375,6 +377,7 @@ public class MainViewController implements Initializable {
         header.setFont(new Font("Arial", 30));
         Label label = new Label(text);
         label.setFont(new Font("Arial", 25));
+        
         Image information = new Image("/quickmaff_belman/gui/view/images/information.png");
         ImageView view = new ImageView(information);
         Image file = new Image("/quickmaff_belman/gui/view/images/file.png");

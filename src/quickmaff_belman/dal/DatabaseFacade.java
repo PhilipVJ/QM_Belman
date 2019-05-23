@@ -79,57 +79,62 @@ public class DatabaseFacade {
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         int numberOfDuplicates = 0;
+        int numberOfUnknownFiles = 0;
 
         for (File file : files) {
-
-            if (Utility.getFileExtension(file.getPath()).equals("txt")) {
-                try {
-                    DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
-                    if (!uDAO.checkForDuplicateFile(jFile.hashCode())) {
-                        uDAO.updateDatabaseWithFile(jFile, department);
-                        numberOfNewFilesAdded++;
-                    } else {
-                        numberOfDuplicates++;
+            String extension = Utility.getFileExtension(file.getPath());
+            switch (extension) {
+                case "txt":
+                    try {
+                        DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
+                        if (!uDAO.checkForDuplicateFile(jFile.hashCode())) {
+                            uDAO.updateDatabaseWithFile(jFile, department);
+                            numberOfNewFilesAdded++;
+                        } else {
+                            numberOfDuplicates++;
+                        }
+                    } catch (ParseException ex) {
+                        numberOfCorruptFiles++;
+                        ;
                     }
-                } catch (ParseException ex) {
-                    numberOfCorruptFiles++;
-                    ;
-                }
-            }
-            if (Utility.getFileExtension(file.getPath()).equals("csv")) {
-                DataContainer cFile;
-                try {
-                    cFile = fDAO.getDataFromCSV(file.getPath());
+                    break;
 
-                    if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
-                        uDAO.updateDatabaseWithFile(cFile, department);
-                        numberOfNewFilesAdded++;
-                    } else {
-                        numberOfDuplicates++;
+                case "csv": {
+                    try {
+                        DataContainer cFile = fDAO.getDataFromCSV(file.getPath());
+                        if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
+                            uDAO.updateDatabaseWithFile(cFile, department);
+                            numberOfNewFilesAdded++;
+                        } else {
+                            numberOfDuplicates++;
+                        }
+                    } catch (Exception ex) {
+                        numberOfCorruptFiles++;
                     }
-                } catch (Exception ex) {
-                    numberOfCorruptFiles++;
+                    break;
                 }
-            }
+                case "xlsx":
+                    try {
+                        DataContainer xFile = fDAO.getDataFromExcel(file.getPath());
+                        if (!uDAO.checkForDuplicateFile(xFile.hashCode())) {
+                            uDAO.updateDatabaseWithFile(xFile, department);
+                            numberOfNewFilesAdded++;
+                        } else {
+                            numberOfDuplicates++;
+                        }
+                    } catch (Exception ex) {
+                        numberOfCorruptFiles++;
+                    }
+                    break;
 
-            if (Utility.getFileExtension(file.getPath()).equals("xlsx")) {
-                DataContainer xFile;
-                try {
-                    xFile = fDAO.getDataFromExcel(file.getPath());
-               
-                if (!uDAO.checkForDuplicateFile(xFile.hashCode())) {
-                    uDAO.updateDatabaseWithFile(xFile, department);
-                    numberOfNewFilesAdded++;
-                } else {
-                    numberOfDuplicates++;
-                }
-                 } catch (Exception ex) {
-                    numberOfCorruptFiles++;
-                }
+                default:
+                    numberOfUnknownFiles++;
+                    break;
+
             }
 
         }
-        FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded, numberOfCorruptFiles, numberOfDuplicates);
+        FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded, numberOfCorruptFiles, numberOfDuplicates, numberOfUnknownFiles);
         if (numberOfCorruptFiles > 0) {
             uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
         }

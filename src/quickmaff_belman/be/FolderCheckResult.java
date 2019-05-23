@@ -14,11 +14,17 @@ public class FolderCheckResult {
     private final int numberOfNewlyAddedFiles;
     private final int numberOfCorruptFiles;
     private final int numberOfDuplicates;
+    private final int numberOfUnknownFiles;
 
-    public FolderCheckResult(int numberOfNewlyAddedFiles, int numberOfCorruptFiles, int numberOfDuplicates) {
+    public FolderCheckResult(int numberOfNewlyAddedFiles, int numberOfCorruptFiles, int numberOfDuplicates, int numberOfUnknownFiles) {
         this.numberOfNewlyAddedFiles = numberOfNewlyAddedFiles;
         this.numberOfCorruptFiles = numberOfCorruptFiles;
         this.numberOfDuplicates = numberOfDuplicates;
+        this.numberOfUnknownFiles = numberOfUnknownFiles;
+    }
+
+    public int getNumberOfUnknownFiles() {
+        return numberOfUnknownFiles;
     }
 
     public int getNumberOfNewlyAddedFiles() {

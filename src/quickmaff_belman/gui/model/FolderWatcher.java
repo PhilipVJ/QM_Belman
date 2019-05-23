@@ -65,7 +65,11 @@ public class FolderWatcher implements Runnable {
                         else if(result.getNumberOfCorruptFiles()>0)
                         {
                           setLabel(model.getResourceBundle().getString("parseExceptionHeader"));  
-                        }                        
+                        }
+                        else if(result.getNumberOfUnknownFiles()>0)
+                        {
+                            setLabel(model.getResourceBundle().getString("unknownFile"));  
+                        }
                     } catch (IOException ex) {
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {
