@@ -78,7 +78,7 @@ public class FolderWatcher implements Runnable {
                     watchKey.reset();
                 }
             }
-
+            
         } catch (InterruptedException ex) {
             return;
 

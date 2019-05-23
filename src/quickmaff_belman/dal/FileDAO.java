@@ -110,7 +110,7 @@ public class FileDAO {
         return allFiles;
     }
 
-    public DataContainer getDataFromCSV(String path) throws IOException, Exception {
+    public DataContainer getDataFromCSV(String path) throws IOException {
 
         Reader reader = Files.newBufferedReader(Paths.get(path));
         CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
@@ -157,7 +157,7 @@ public class FileDAO {
         return con;
     }
 
-    public DataContainer getDataFromExcel(String path) throws FileNotFoundException, IOException, Exception
+    public DataContainer getDataFromExcel(String path) throws FileNotFoundException, IOException
     {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
@@ -180,7 +180,6 @@ public class FileDAO {
 
                 Worker worker = new Worker(salaryNumber, initials, name);
                 allWorkers.add(worker);
-                System.out.println(allWorkers.size());
             }
             if (row.getCell(04) != null) {
                 if (tempOrder != null) {

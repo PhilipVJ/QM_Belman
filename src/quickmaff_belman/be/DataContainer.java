@@ -55,18 +55,14 @@ public class DataContainer {
     
    public void printData()
    {
-//       allWorkers.forEach((worker) -> {
-//           System.out.println(""+worker.toString());
-//        });
-//       
-//       allProductionOrders.forEach((pOrder) -> {
-//           System.out.println(""+pOrder.getOrderNumber());
-//       });
+       allWorkers.forEach((worker) -> {
+           System.out.println(""+worker.toString());
+        });
        
-       System.out.println("Worker size: "+allWorkers.size());
-       System.out.println("Order"+allProductionOrders.size());
-
-
+       allProductionOrders.forEach((pOrder) -> {
+           System.out.println(""+pOrder.getOrderNumber());
+       });
+       
    }
 
     private void setMetaData() {

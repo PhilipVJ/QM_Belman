@@ -75,7 +75,7 @@ public class DatabaseFacade {
         uDAO.addCorruptFilesToLog(1, department);
     }
 
-    public FolderCheckResult loadFile(String department, File... files) throws IOException, SQLException {
+    public FolderCheckResult loadFile(String department, File... files) throws SQLException, IOException  {
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         int numberOfDuplicates = 0;
@@ -84,6 +84,29 @@ public class DatabaseFacade {
         for (File file : files) {
             String extension = Utility.getFileExtension(file.getPath());
             switch (extension) {
+                case "csv": {
+                    try {
+                        DataContainer cFile = fDAO.getDataFromCSV(file.getPath());
+                        if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
+                            uDAO.updateDatabaseWithFile(cFile, department);
+                            numberOfNewFilesAdded++;
+                        } else {
+                            numberOfDuplicates++;
+                        }
+                    } catch (Exception ex) {
+                        if(ex instanceof SQLException)
+                        {
+                            throw new SQLException();
+                        }
+                        if(ex instanceof IOException)
+                        {
+                            throw new IOException();
+                        }
+                        numberOfCorruptFiles++;
+                    }
+                    break;
+                }
+                
                 case "txt":
                     try {
                         DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
@@ -99,20 +122,6 @@ public class DatabaseFacade {
                     }
                     break;
 
-                case "csv": {
-                    try {
-                        DataContainer cFile = fDAO.getDataFromCSV(file.getPath());
-                        if (!uDAO.checkForDuplicateFile(cFile.hashCode())) {
-                            uDAO.updateDatabaseWithFile(cFile, department);
-                            numberOfNewFilesAdded++;
-                        } else {
-                            numberOfDuplicates++;
-                        }
-                    } catch (Exception ex) {
-                        numberOfCorruptFiles++;
-                    }
-                    break;
-                }
                 case "xlsx":
                     try {
                         DataContainer xFile = fDAO.getDataFromExcel(file.getPath());
@@ -123,6 +132,14 @@ public class DatabaseFacade {
                             numberOfDuplicates++;
                         }
                     } catch (Exception ex) {
+                        if(ex instanceof SQLException)
+                        {
+                            throw new SQLException();
+                        }
+                        if(ex instanceof IOException)
+                        {
+                            throw new IOException();
+                        }
                         numberOfCorruptFiles++;
                     }
                     break;
@@ -132,7 +149,6 @@ public class DatabaseFacade {
                     break;
 
             }
-
         }
         FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded, numberOfCorruptFiles, numberOfDuplicates, numberOfUnknownFiles);
         if (numberOfCorruptFiles > 0) {
