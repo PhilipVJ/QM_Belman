@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Bruger
+ * @author Niklas
  */
 public class MixedMetoderTest
 {

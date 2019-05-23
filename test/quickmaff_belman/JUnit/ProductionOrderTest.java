@@ -19,7 +19,7 @@ import quickmaff_belman.be.DepartmentTask;
 
 /**
  *
- * @author Bruger
+ * @author Niklas
  */
 public class ProductionOrderTest
 {
@@ -90,65 +90,5 @@ public class ProductionOrderTest
         Date expResult = date.parse(dateToCheck);
         Date result = instance.getDeliveryTime();
         assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of getOrderNumber method, of class ProductionOrder.
-     */
-    @Test
-    public void testGetOrderNumber()
-    {
-        System.out.println("getOrderNumber");
-        ProductionOrder instance = null;
-        String expResult = "";
-        String result = instance.getOrderNumber();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getDepartmentTasks method, of class ProductionOrder.
-     */
-    @Test
-    public void testGetDepartmentTasks()
-    {
-        System.out.println("getDepartmentTasks");
-        ProductionOrder instance = null;
-        ArrayList<DepartmentTask> expResult = null;
-        ArrayList<DepartmentTask> result = instance.getDepartmentTasks();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of addTask method, of class ProductionOrder.
-     */
-    @Test
-    public void testAddTask()
-    {
-        System.out.println("addTask");
-        DepartmentTask task = null;
-        ProductionOrder instance = null;
-        instance.addTask(task);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of toString method, of class ProductionOrder.
-     */
-    @Test
-    public void testToString()
-    {
-        System.out.println("toString");
-        ProductionOrder instance = null;
-        String expResult = "";
-        String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
+    }    
 }
