@@ -58,7 +58,7 @@ public class LogTest
     @Test
     public void testGetActivityDate() throws ParseException
     {
-        String dateToCheck = "31/06/2019";
+        String dateToCheck = "11/08/2019";
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
         Date activityDate = date.parse(dateToCheck);
         Log instance = new Log(1, activityDate, "Klippe", "description", "NonProfit");
