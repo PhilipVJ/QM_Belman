@@ -9,20 +9,20 @@ import quickmaff_belman.be.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ProductionOrder {
+public class ProdOrder {
     private String customerName;
     private final Date deliveryTime;
     private final String orderNumber;
     private ArrayList<DepartmentTask> dTasks;
 
-    public ProductionOrder(String customerName, Date deliveryTime, String orderNumber, ArrayList<DepartmentTask> dTasks) {
+    public ProdOrder(String customerName, Date deliveryTime, String orderNumber, ArrayList<DepartmentTask> dTasks) {
         this.customerName = customerName;
         this.deliveryTime = deliveryTime;
         this.orderNumber = orderNumber;
         this.dTasks = dTasks;
     }
 
-    public ProductionOrder(Date deliveryTime, String orderNumber, String customerName) {
+    public ProdOrder(Date deliveryTime, String orderNumber, String customerName) {
         this.deliveryTime = deliveryTime;
         this.orderNumber = orderNumber;
         this.customerName = customerName;

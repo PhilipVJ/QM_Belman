@@ -57,7 +57,7 @@ public class ProductionOrderTest
         String dateToCheck = "31/06/2019";
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
         Date delvTime = date.parse(dateToCheck);
-        ProductionOrder instance = new ProductionOrder(delvTime, "555555", "Bilka");
+        ProdOrder instance = new ProdOrder(delvTime, "555555", "Bilka");
         String expResult = "Bilka";
         String result = instance.getCustomerName();
         assertEquals(expResult, result);
@@ -73,7 +73,7 @@ public class ProductionOrderTest
         String dateToCheck = "31/06/2019";
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
         Date delvTime = date.parse(dateToCheck);
-        ProductionOrder instance = new ProductionOrder(delvTime, "55555", customerName);
+        ProdOrder instance = new ProdOrder(delvTime, "55555", customerName);
         instance.setCustomerName(customerName);
     }
 
@@ -86,7 +86,7 @@ public class ProductionOrderTest
         String dateToCheck = "31/06/2019";
         SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
         Date delvTime = date.parse(dateToCheck);
-        ProductionOrder instance = new ProductionOrder(delvTime, "55555", "ToyRus");
+        ProdOrder instance = new ProdOrder(delvTime, "55555", "ToyRus");
         Date expResult = date.parse(dateToCheck);
         Date result = instance.getDeliveryTime();
         assertEquals(expResult, result);
