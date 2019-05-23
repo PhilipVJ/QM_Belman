@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
@@ -109,12 +111,29 @@ public class DatabaseFacade {
                     numberOfCorruptFiles++;
                 }
             }
-        }
 
+            if (Utility.getFileExtension(file.getPath()).equals("xlsx")) {
+                DataContainer xFile;
+                try {
+                    xFile = fDAO.getDataFromExcel(file.getPath());
+               
+                if (!uDAO.checkForDuplicateFile(xFile.hashCode())) {
+                    uDAO.updateDatabaseWithFile(xFile, department);
+                    numberOfNewFilesAdded++;
+                } else {
+                    numberOfDuplicates++;
+                }
+                 } catch (Exception ex) {
+                    numberOfCorruptFiles++;
+                }
+            }
+
+        }
         FolderCheckResult result = new FolderCheckResult(numberOfNewFilesAdded, numberOfCorruptFiles, numberOfDuplicates);
         if (numberOfCorruptFiles > 0) {
             uDAO.addCorruptFilesToLog(numberOfCorruptFiles, department);
         }
         return result;
     }
+
 }

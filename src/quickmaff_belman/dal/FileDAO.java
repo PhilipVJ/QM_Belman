@@ -21,6 +21,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -94,8 +95,6 @@ public class FileDAO {
         return dCon;
     }
 
-  
-
     private Date makeDateObject(String dDate) {
         int indexOfPlus = dDate.indexOf("+");
         String subString = dDate.substring(6, indexOfPlus);
@@ -104,11 +103,10 @@ public class FileDAO {
         return date;
     }
 
-
     public File[] getAllFolderFiles() throws IOException {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
-      
+
         return allFiles;
     }
 
@@ -120,8 +118,7 @@ public class FileDAO {
         ArrayList<ProductionOrder> allOrders = new ArrayList<>();
         ProductionOrder order = null;
         boolean skippedFirstLine = false;
-        
-        
+
         for (CSVRecord csvRecord : csvParser) {
             if (skippedFirstLine == false) {
                 skippedFirstLine = true;
@@ -134,19 +131,18 @@ public class FileDAO {
                 long salaryNumber = Long.parseLong(csvRecord.get(3));
                 Worker worker = new Worker(salaryNumber, initials, name);
                 allWorkers.add(worker);
-            }        
+            }
             // Checks if a ProductionOrder is available
             if (!csvRecord.get(04).equals("")) {
-                if(order!=null)
-                {
+                if (order != null) {
                     allOrders.add(order);
-                    order=null;
+                    order = null;
                 }
                 String deliveryTime = csvRecord.get(8);
                 String customerName = csvRecord.get(6);
                 String orderNumber = csvRecord.get(16);
                 Date deliveryDate = Utility.csvStringToDate(deliveryTime);
-                order=new ProductionOrder(deliveryDate, orderNumber, customerName);
+                order = new ProductionOrder(deliveryDate, orderNumber, customerName);
             }
             // Here are DepartmentTask objects generated        
             Date startDate = Utility.csvStringToDate(csvRecord.get(14));
@@ -161,68 +157,52 @@ public class FileDAO {
         return con;
     }
 
-    public void getDataFromExcel() throws FileNotFoundException, IOException
+    public DataContainer getDataFromExcel(String path) throws FileNotFoundException, IOException, Exception
     {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
-        
-        InputStream excel = new FileInputStream("C:\\Users\\Caspe\\Documents\\result.xlsx");
+        ProductionOrder tempOrder = null;
+        DataContainer con = null;
+
+        InputStream excel = new FileInputStream(path);
         XSSFWorkbook book = new XSSFWorkbook(excel);
         Sheet sheet = book.getSheetAt(0);
-        
-        Iterator<Row> rowIterator = sheet.iterator();
-        
-        for (Row row : sheet)
-        {
-            for(Cell cell : row)
-            {
-                if(row.getRowNum() == 0)
-                {
-                    continue;
-                }
 
-                
-                Cell initials = row.getCell(1);
-                Cell name = row.getCell(2);
-                Cell salaryNumber = row.getCell(3);
-            
-                Long sNumberValue = (long) salaryNumber.getNumericCellValue();
-                
-                Worker worker = new Worker(sNumberValue, initials.getStringCellValue(), name.getStringCellValue());
-                allWorkers.add(worker);
-                System.out.println(allWorkers);
-                break;
-                }
+        for (Row row : sheet) {
 
+            if (row.getRowNum() == 0) {
+                continue;
             }
-            
+            if (row.getCell(0) != null) {
+                String initials = row.getCell(1).getStringCellValue();
+                String name = row.getCell(2).getStringCellValue();
+                long salaryNumber = (long) row.getCell(3).getNumericCellValue();
+
+                Worker worker = new Worker(salaryNumber, initials, name);
+                allWorkers.add(worker);
+                System.out.println(allWorkers.size());
+            }
+            if (row.getCell(04) != null) {
+                if (tempOrder != null) {
+                    allProductionOrders.add(tempOrder);
+                    tempOrder = null;
+                }
+                Date deliveryTime = row.getCell(8).getDateCellValue();
+                String customerName = row.getCell(6).getStringCellValue();
+                String orderNumber = row.getCell(16).getStringCellValue();
+                tempOrder = new ProductionOrder(deliveryTime, orderNumber, customerName);
+            }
+            // Here are DepartmentTask objects generated        
+            Date startDate = row.getCell(14).getDateCellValue();
+            Date endDate = row.getCell(12).getDateCellValue();
+            String departmentName = row.getCell(11).getStringCellValue();
+            boolean finished = row.getCell(13).getBooleanCellValue();
+            DepartmentTask task = new DepartmentTask(startDate, endDate, finished, departmentName);
+            tempOrder.addTask(task);
 
         }
-        
-//        for (Row row : sheet)
-//        {
-//            Cell customerName = row.getCell(6);
-//            Cell deliveryTime = row.getCell(8);
-//            Cell orderNumber = row.getCell(16);
-//            
-//            ProductionOrder order = new ProductionOrder(deliveryTime.getDateCellValue(), orderNumber.getStringCellValue(), customerName.getStringCellValue());
-//            
-//            Cell endDate = row.getCell(12);
-//            Cell finished = row.getCell(13);
-//            Cell startDate = row.getCell(14);
-//            Cell departmentName = row.getCell(11);
-//                    
-//            DepartmentTask task = new DepartmentTask(startDate.getDateCellValue(), endDate.getDateCellValue(), finished.getBooleanCellValue(), departmentName.getStringCellValue());
-//            order.addTask(task);
-//            
-//            allProductionOrders.add(order);
-//            System.out.println(allProductionOrders);
-//        }
-//    }    
-            
-            
-        
-        
- 
-
+        allProductionOrders.add(tempOrder);
+        con = new DataContainer(allWorkers, allProductionOrders);
+        return con;
+    }
 }
