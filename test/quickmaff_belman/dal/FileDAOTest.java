@@ -17,31 +17,28 @@ import quickmaff_belman.be.DataContainer;
  * @author Philip
  */
 public class FileDAOTest {
-    
+
     public FileDAOTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-
-
-
 
     /**
      * Test of getDataFromCSV method, of class FileDAO.
      */
     @Test
     public void testGetDataFromCSV() throws Exception {
-    FileDAO fDAO = new FileDAO();
-    DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
-    DataContainer con2 = fDAO.getDataFromCSV("DatabaseFiles/database.csv");
-     assertEquals(con, con2);
-    
+        FileDAO fDAO = new FileDAO();
+        DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
+        DataContainer con2 = fDAO.getDataFromCSV("DatabaseFiles/database.csv");
+        assertEquals(con, con2);
+
     }
 
     /**
@@ -49,10 +46,10 @@ public class FileDAOTest {
      */
     @Test
     public void testGetDataFromExcel() throws Exception {
-            FileDAO fDAO = new FileDAO();
-    DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
-    DataContainer con2 = fDAO.getDataFromExcel("DatabaseFiles/database.xlsx");
-     assertEquals(con, con2);
+        FileDAO fDAO = new FileDAO();
+        DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
+        DataContainer con2 = fDAO.getDataFromExcel("DatabaseFiles/database.xlsx");
+        assertEquals(con, con2);
     }
-    
+
 }

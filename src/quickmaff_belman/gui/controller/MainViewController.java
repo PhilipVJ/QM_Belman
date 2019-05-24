@@ -464,7 +464,6 @@ public class MainViewController implements Initializable {
         bMakerExecutor.shutdownNow();
         // Make a new thread with a new runnable
         bMakerExecutor = Executors.newSingleThreadExecutor();
-
         flowPane.getChildren().clear();
         infoBar.setText(model.getResourceBundle().getString("loading"));
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, chosenFilter, connectionLost);

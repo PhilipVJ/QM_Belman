@@ -212,7 +212,10 @@ public class BoardMaker implements Runnable {
                 }
                 
                 checkForDeletedTask(boxes);
-
+               if(Thread.interrupted()==true)
+               {
+                   return;
+               }
                 Platform.runLater(()
                         -> {
                     fPane.getChildren().clear();
