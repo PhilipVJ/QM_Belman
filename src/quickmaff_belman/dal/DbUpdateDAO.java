@@ -101,7 +101,7 @@ public class DbUpdateDAO {
             java.sql.Date sqlDateLog = new java.sql.Date(date.getTime());
 
             pstLog.setDate(1, sqlDateLog);
-            pstLog.setString(2, "AddedNewOrders");
+            pstLog.setString(2, "AddedNewDatabaseFile");
             pstLog.setString(3, "FileCode: " + container.hashCode());
             pstLog.setString(4, departmentName);
 

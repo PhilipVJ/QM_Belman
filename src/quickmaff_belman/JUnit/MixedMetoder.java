@@ -54,6 +54,28 @@ public class MixedMetoder
         }
         return time;
     }
+    
+        public static double getPercentageTimeLeft(BoardTask bTask) {
+        double startTime = bTask.getStartDate().getTime();
+        Date endDate = bTask.getEndDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(endDate.getTime());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        double endTime = calendar.getTimeInMillis();
+        double totalTime = endTime - startTime;
+        double currentTime = System.currentTimeMillis();
+        double timePassedSinceStart = currentTime - startTime;
+        double percantage = (timePassedSinceStart / totalTime);
+        return percantage;
+    }
+        
+            public static String getFileExtension(String file) {
+        int lastIndexOfDot = file.lastIndexOf(".");
+        return file.substring(lastIndexOfDot + 1);
+    }
+            
+            
  
     
     

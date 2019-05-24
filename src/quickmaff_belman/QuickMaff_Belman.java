@@ -13,6 +13,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quickmaff_belman.bll.BLLManager;
@@ -54,6 +58,14 @@ public class QuickMaff_Belman extends Application {
             {
 
             }
+            
+            
+        stage.getScene().getAccelerators().put(new KeyCodeCombination(KeyCode.ENTER, KeyCombination.ALT_DOWN), new Runnable() {
+            @Override
+            public void run() {
+                stage.setFullScreen(true);
+            }
+        });
 
             stage.show();
             con.setGraphics();
