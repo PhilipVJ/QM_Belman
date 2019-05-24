@@ -6,6 +6,7 @@
 package quickmaff_belman.JUnit;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import org.junit.After;
@@ -72,17 +73,19 @@ public class MixedMetoderTest
     }
 
     /**
-     * Insert the date for today inside the String deliveryTime as month/day/year
-     * 
      * Test of csvStringToDate method, of class MixedMetoder.
      * @throws java.text.ParseException
      */
     @Test
     public void testCsvStringToDate() throws ParseException
     {
-        String deliveryTime = "05/23/2019";
-        Date expResult = Calendar.getInstance().getTime();
+        String deliveryTime = "05/25/2019";
+        SimpleDateFormat expectedResult = new SimpleDateFormat(deliveryTime);
+        Date expResult = expectedResult.parse(deliveryTime);
         Date result = MixedMetoder.csvStringToDate(deliveryTime);
+        String subResult = deliveryTime.substring(0, 9);
+        SimpleDateFormat sub = new SimpleDateFormat(subResult);
+        result = sub.parse(subResult);
         assertEquals(expResult, result);
     }
     
