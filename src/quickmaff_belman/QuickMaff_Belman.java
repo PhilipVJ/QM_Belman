@@ -31,6 +31,11 @@ import quickmaff_belman.gui.model.Utility;
  */
 public class QuickMaff_Belman extends Application {
 
+    public static void main(String[] args)
+    {
+        Application.launch(QuickMaff_Belman.class, args);
+    }
+    
     @Override
     public void start(Stage stage) {
 
@@ -55,6 +60,7 @@ public class QuickMaff_Belman extends Application {
                     System.exit(0);
                 }
             });
+
             {
 
             }
@@ -72,7 +78,7 @@ public class QuickMaff_Belman extends Application {
 
 
         } catch (IOException ex) {
-            Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil");
+            Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil " + ex.getMessage());
         }
 
     }
