@@ -7,44 +7,47 @@ package quickmaff_belman.JUnit;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Niklas
+ * @author Philip
  */
 public class MixedMetoderTest
 {
-    
+
     public MixedMetoderTest()
     {
     }
-    
+
     @BeforeClass
     public static void setUpClass()
     {
     }
-    
+
     @AfterClass
     public static void tearDownClass()
     {
     }
-    
-    @Before
-    public void setUp()
+
+    /**
+     * Test of csvStringToDate method, of class MixedMetoder.
+     */
+    @Test
+    public void testCsvStringToDate() throws ParseException
     {
-    }
-    
-    @After
-    public void tearDown()
-    {
+        String deliveryTime = "05/25/2019";
+        
+        SimpleDateFormat expectedResult = new SimpleDateFormat(deliveryTime);
+        Date expResult = expectedResult.parse(deliveryTime);
+        
+        Date result = MixedMetoder.csvStringToDate(deliveryTime);
+        
+        assertEquals(expResult, result);
     }
 
     /**
@@ -73,20 +76,19 @@ public class MixedMetoderTest
     }
 
     /**
-     * Test of csvStringToDate method, of class MixedMetoder.
-     * @throws java.text.ParseException
+     * Test of getPercentageTimeLeft method, of class MixedMetoder.
      */
     @Test
-    public void testCsvStringToDate() throws ParseException
+    public void testGetPercentageTimeLeft()
     {
-        String deliveryTime = "05/25/2019";
-        SimpleDateFormat expectedResult = new SimpleDateFormat(deliveryTime);
-        Date expResult = expectedResult.parse(deliveryTime);
-        Date result = MixedMetoder.csvStringToDate(deliveryTime);
-        String subResult = deliveryTime.substring(0, 9);
-        SimpleDateFormat sub = new SimpleDateFormat(subResult);
-        result = sub.parse(subResult);
-        assertEquals(expResult, result);
     }
-    
+
+    /**
+     * Test of getFileExtension method, of class MixedMetoder.
+     */
+    @Test
+    public void testGetFileExtension()
+    {
+    }
+
 }
