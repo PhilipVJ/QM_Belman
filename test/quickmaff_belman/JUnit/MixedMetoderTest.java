@@ -80,12 +80,12 @@ public class MixedMetoderTest
     public void testCsvStringToDate() throws ParseException
     {
         String deliveryTime = "05/25/2019";
-        SimpleDateFormat expR = new SimpleDateFormat(deliveryTime);
-        Date expResult = expR.parse(deliveryTime);
-        Date resultBefore = MixedMetoder.csvStringToDate(deliveryTime);
+        SimpleDateFormat expectedResult = new SimpleDateFormat(deliveryTime);
+        Date expResult = expectedResult.parse(deliveryTime);
+        Date result = MixedMetoder.csvStringToDate(deliveryTime);
         String subResult = deliveryTime.substring(0, 9);
         SimpleDateFormat sub = new SimpleDateFormat(subResult);
-        Date result = sub.parse(subResult);
+        result = sub.parse(subResult);
         assertEquals(expResult, result);
     }
     
