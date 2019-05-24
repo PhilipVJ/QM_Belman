@@ -126,7 +126,6 @@ public class MainViewController implements Initializable {
     private ExecutorService bMakerExecutor;
     private ScheduledExecutorService labelWatcher;
     private volatile BooleanProperty connectionLost;
-
     private WorkerFilterOption wOption;
     private StackPane stackPane;
 
