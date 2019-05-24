@@ -27,10 +27,6 @@ import quickmaff_belman.gui.model.Utility;
  */
 public class QuickMaff_Belman extends Application {
 
-    public static void main(String[] args)
-    {
-        Application.launch(QuickMaff_Belman.class, args);
-    }
     
     @Override
     public void start(Stage stage) {
