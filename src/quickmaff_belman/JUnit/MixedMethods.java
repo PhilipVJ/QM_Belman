@@ -13,9 +13,8 @@ import quickmaff_belman.be.BoardTask;
  *
  * @author Bruger
  */
-public class MixedMetoder
-{
-    
+public class MixedMethods {
+
     public static Date csvStringToDate(String deliveryTime) {
         int lastIndexOfSlash = deliveryTime.lastIndexOf("/");
         String subString = deliveryTime.substring(0, lastIndexOfSlash + 5);
@@ -30,7 +29,7 @@ public class MixedMetoder
         Date toReturn = date.getTime();
         return toReturn;
     }
-    
+
     public static String dateConverter(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -44,7 +43,7 @@ public class MixedMetoder
         }
         return output;
     }
-    
+
     public static String getDigitString(int digit) {
         String time;
         if (digit < 10) {
@@ -54,29 +53,10 @@ public class MixedMetoder
         }
         return time;
     }
-    
-        public static double getPercentageTimeLeft(BoardTask bTask) {
-        double startTime = bTask.getStartDate().getTime();
-        Date endDate = bTask.getEndDate();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(endDate.getTime());
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        double endTime = calendar.getTimeInMillis();
-        double totalTime = endTime - startTime;
-        double currentTime = System.currentTimeMillis();
-        double timePassedSinceStart = currentTime - startTime;
-        double percantage = (timePassedSinceStart / totalTime);
-        return percantage;
-    }
-        
-            public static String getFileExtension(String file) {
+
+    public static String getFileExtension(String file) {
         int lastIndexOfDot = file.lastIndexOf(".");
         return file.substring(lastIndexOfDot + 1);
     }
-            
-            
- 
-    
-    
+
 }
