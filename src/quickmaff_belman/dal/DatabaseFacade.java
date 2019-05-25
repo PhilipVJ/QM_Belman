@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.parser.ParseException;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.DataContainer;
@@ -21,22 +19,23 @@ import quickmaff_belman.be.Log;
 import quickmaff_belman.be.Worker;
 import quickmaff_belman.gui.model.Utility;
 
-public class DatabaseFacade {
+public class DatabaseFacade implements IDatabaseFacade {
 
-    private final FileDAO fDAO;
-    private final OrderDAO oDAO;
-    private final DbUpdateDAO uDAO;
-    private final BelTimer bTimer;
+    private final IFileDAO fDAO;
+    private final IOrderDAO oDAO;
+    private final IDbUpdateDAO uDAO;
+    private final IBelTimer bTimer;
     private final DbConnection con;
 
-    public DatabaseFacade() throws IOException {
-        con = DbConnection.getInstance();
-        fDAO = new FileDAO();
-        oDAO = new OrderDAO(con);
-        uDAO = new DbUpdateDAO(con);
-        bTimer = new BelTimer();
+    public DatabaseFacade(DbConnection con, IFileDAO fDAO, IOrderDAO oDAO, IDbUpdateDAO uDAO, IBelTimer bTimer) throws IOException {
+        this.con = con;
+        this.fDAO = fDAO;
+        this.oDAO = oDAO;
+        this.uDAO = uDAO;
+        this.bTimer = bTimer;
     }
 
+    @Override
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         ArrayList<BoardTask> allBoardTasks = oDAO.getAllBoardTasks(departmentName, offset);
         for (BoardTask boardTask : allBoardTasks) {
@@ -46,6 +45,7 @@ public class DatabaseFacade {
         return allBoardTasks;
     }
 
+    @Override
     public FolderCheckResult checkForUnloadedFiles(String department) throws IOException, SQLException, FileNotFoundException {
 
         File[] allFiles = fDAO.getAllFolderFiles();
@@ -53,14 +53,17 @@ public class DatabaseFacade {
         return result;
     }
 
+    @Override
     public void setCompleteTask(int taskID, String departmentName) throws SQLException {
         oDAO.setCompleteTask(taskID, departmentName);
     }
 
+    @Override
     public ArrayList<Log> getAllLogs() throws SQLException {
         return oDAO.getAllLogs();
     }
 
+    @Override
     public boolean checkForDatabaseConnection() {
 
         try (Connection connection = con.getConnection()) {
@@ -71,10 +74,12 @@ public class DatabaseFacade {
 
     }
 
+    @Override
     public void addCorruptFileToLog(String department) throws SQLException {
         uDAO.addCorruptFilesToLog(1, department);
     }
 
+    @Override
     public FolderCheckResult loadFile(String department, File... files) throws SQLException, IOException  {
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;

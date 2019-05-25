@@ -55,7 +55,6 @@ public final class Utility {
         double currentTime = System.currentTimeMillis();
         double timePassedSinceStart = currentTime - startTime;
         double percantage = (timePassedSinceStart / totalTime);
-        System.out.println(""+percantage);
         return percantage;
     }
 

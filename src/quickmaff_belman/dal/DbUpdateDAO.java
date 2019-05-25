@@ -20,7 +20,7 @@ import quickmaff_belman.be.Worker;
  *
  * @author Philip
  */
-public class DbUpdateDAO {
+public class DbUpdateDAO implements IDbUpdateDAO {
 
     private final DbConnection con;
 
@@ -28,6 +28,7 @@ public class DbUpdateDAO {
         this.con = con;
     }
 
+    @Override
     public boolean checkForDuplicateFile(long hashCode) throws SQLException {
         String sqlGetInfo = "SELECT * FROM [Log] WHERE description = (?)";
        
@@ -42,6 +43,7 @@ public class DbUpdateDAO {
         return false;
     }
 
+    @Override
     public void updateDatabaseWithFile(DataContainer container, String departmentName) throws SQLException {
         String sqlWorker = "INSERT INTO Worker VALUES (?,?,?);";
         String sqlOrder = "INSERT INTO ProductionOrder VALUES (?,?,?);";
@@ -126,6 +128,7 @@ public class DbUpdateDAO {
 
     }
 
+    @Override
     public void addCorruptFilesToLog(int numberOfFiles, String department) throws SQLException {
         String sqlLog = "INSERT INTO Log VALUES (?,?,?,?);";
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sqlLog);) {

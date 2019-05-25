@@ -14,13 +14,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.dal.BelTimer;
 import quickmaff_belman.dal.DatabaseFacade;
+import quickmaff_belman.dal.DbConnection;
+import quickmaff_belman.dal.DbUpdateDAO;
+import quickmaff_belman.dal.FileDAO;
+import quickmaff_belman.dal.OrderDAO;
 import quickmaff_belman.gui.controller.LoginController;
 import quickmaff_belman.gui.model.Model;
 import quickmaff_belman.gui.model.Utility;
@@ -39,7 +42,14 @@ public class QuickMaff_Belman extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/quickmaff_belman/gui/view/Login.fxml"));
             Parent root = loader.load();
             LoginController con = loader.getController();
-            Model model = new Model(new BLLManager(new DatabaseFacade()));
+            // Set up layers
+            DbConnection connection = DbConnection.getInstance();
+            FileDAO fDAO = new FileDAO();
+            OrderDAO oDAO = new OrderDAO(connection);
+            DbUpdateDAO uDAO = new DbUpdateDAO(connection);
+            BelTimer timer = new BelTimer();
+            Model model = new Model(new BLLManager(new DatabaseFacade(connection, fDAO, oDAO, uDAO, timer)));
+            
             con.setStage(stage);
             con.setModel(model);
             con.createButtons();

@@ -16,7 +16,7 @@ import quickmaff_belman.be.Worker;
  *
  * @author Philip
  */
-public class BelTimer
+public class BelTimer implements IBelTimer
 {
 
     private final Worker john = new Worker(1500, "JP", "John Poulsen");
@@ -37,6 +37,7 @@ public class BelTimer
         allWorkers.add(preben);
     }
 
+    @Override
     public Worker getActiveWorker(String orderNumber)
     {
         if (orderNumber.contains("3"))

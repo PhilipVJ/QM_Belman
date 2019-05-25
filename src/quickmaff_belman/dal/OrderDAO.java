@@ -19,7 +19,7 @@ import quickmaff_belman.be.Log;
 import quickmaff_belman.be.OrderOverview;
 import quickmaff_belman.be.TaskStatus;
 
-public class OrderDAO
+public class OrderDAO implements IOrderDAO
 {
 
     private final DbConnection con;
@@ -29,6 +29,7 @@ public class OrderDAO
         this.con = con;
     }
 
+    @Override
     public ArrayList<BoardTask> getAllBoardTasks(String department, int offset) throws SQLServerException, SQLException
     {
         ArrayList<BoardTask> allTasks = new ArrayList<>();
@@ -60,6 +61,7 @@ public class OrderDAO
     }
 
 
+    @Override
     public OrderOverview getOverview(String orderNumber, String departmentName, Date startDate) throws SQLServerException, SQLException {
         boolean readyForWork = true;
         boolean foundThisDepartment=false;
@@ -110,6 +112,7 @@ public class OrderDAO
         return overview;
     }
 
+    @Override
     public void setCompleteTask(int taskID, String departmentName) throws SQLServerException, SQLException
     {
         Connection connection = null;
@@ -160,6 +163,7 @@ public class OrderDAO
         }
     }
 
+    @Override
     public String getCustomerName(String orderNumber) throws SQLServerException, SQLException
     {
         String sql = "Select customerName from ProductionOrder Where orderNumber = (?);";
@@ -178,6 +182,7 @@ public class OrderDAO
         return name;
     }
     
+    @Override
     public ArrayList<Log> getAllLogs() throws SQLServerException, SQLException
     {
         ArrayList<Log> allLogs = new ArrayList<>();

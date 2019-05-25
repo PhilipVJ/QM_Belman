@@ -32,10 +32,11 @@ import quickmaff_belman.be.ProductionOrder;
 import quickmaff_belman.be.Worker;
 import quickmaff_belman.gui.model.Utility;
 
-public class FileDAO {
+public class FileDAO implements IFileDAO {
 
     private static final String PATH = "DatabaseFiles";
 
+    @Override
     public DataContainer getDataFromJSON(String filepath) throws FileNotFoundException, IOException, ParseException {
 
         ArrayList<Worker> allWorkers = new ArrayList<>();
@@ -100,6 +101,7 @@ public class FileDAO {
         return date;
     }
 
+    @Override
     public File[] getAllFolderFiles() throws IOException {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
@@ -107,6 +109,7 @@ public class FileDAO {
         return allFiles;
     }
 
+    @Override
     public DataContainer getDataFromCSV(String path) throws IOException {
 
         Reader reader = Files.newBufferedReader(Paths.get(path));
@@ -154,6 +157,7 @@ public class FileDAO {
         return con;
     }
 
+    @Override
     public DataContainer getDataFromExcel(String path) throws FileNotFoundException, IOException
     {
         ArrayList<Worker> allWorkers = new ArrayList<>();

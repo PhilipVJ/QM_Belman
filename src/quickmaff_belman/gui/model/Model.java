@@ -18,11 +18,11 @@ import java.util.Set;
 import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.FolderCheckResult;
 import quickmaff_belman.be.Log;
-import quickmaff_belman.bll.BLLManager;
+import quickmaff_belman.bll.IBLLManager;
 
 public class Model {
 
-    private final BLLManager bMan;
+    private final IBLLManager bMan;
     private Locale locale;
     private ResourceBundle rBundle;
     private String departmentName;
@@ -31,7 +31,7 @@ public class Model {
     private int timeOffset;
     private Language language;
 
-    public Model(BLLManager bMan) throws FileNotFoundException, IOException {
+    public Model(IBLLManager bMan) throws FileNotFoundException, IOException {
         this.bMan = bMan;
         properties = new Properties();
         properties.load(new FileInputStream(PROP_FILE));
