@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.dal;
 
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.Worker;
 
 /**
@@ -14,5 +15,6 @@ import quickmaff_belman.be.Worker;
 public interface IBelTimer {
 
     Worker getActiveWorker(String orderNumber);
+    double getRealProgress(BoardTask task);
     
 }

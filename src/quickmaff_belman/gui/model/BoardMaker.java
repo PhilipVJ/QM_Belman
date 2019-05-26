@@ -142,13 +142,13 @@ public class BoardMaker implements Runnable {
                             bigPostIt.prefWidthProperty().bind(aPane.widthProperty());
                             bigPostIt.prefHeightProperty().bind(aPane.heightProperty());
 
-                            Label customerName = labelMaker.makeLabelForBigPostIt("customerName",bTask.getCustomerName(),-100);
-                            Label orderLabel = labelMaker.makeLabelForBigPostIt("order",bTask.getOrderNumber(),-300);
-                            Label endDateLabel = labelMaker.makeLabelForBigPostIt("endDate",Utility.dateConverter(bTask.getEndDate()),-200);
+                            Label customerName = labelMaker.makeLabelForBigPostIt("customerName", bTask.getCustomerName(), -100);
+                            Label orderLabel = labelMaker.makeLabelForBigPostIt("order", bTask.getOrderNumber(), -300);
+                            Label endDateLabel = labelMaker.makeLabelForBigPostIt("endDate", Utility.dateConverter(bTask.getEndDate()), -200);
 
                             Label activeWorker = null;
                             if (bTask.getActiveWorker() != null) {
-                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker",bTask.getActiveWorker().toString(),0);
+                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker", bTask.getActiveWorker().toString(), 0);
                             }
 
                             // Makes the area where you can see the other departments process
@@ -183,6 +183,11 @@ public class BoardMaker implements Runnable {
                                 StackPane progressPane = makeProgressBar(bTask);
                                 bigPostIt.getChildren().add(progressPane);
                             }
+                            // Insert real-progress bar into green post-its
+                            if (con.getColor() == PostItColor.GREEN) {
+                                StackPane realProgress = makeRealProgressBar(bTask);
+                                bigPostIt.getChildren().add(realProgress);
+                            }
 
                             // If a complete button has been made - it will be added
                             if (completeTask != null) {
@@ -196,7 +201,7 @@ public class BoardMaker implements Runnable {
                                     -> {
                                 if (q.getButton() == MouseButton.SECONDARY) {
                                     removeNodeInJavaFXThread(aPane, bigPostIt);
-                                
+
                                     for (Node child : allNodes) {
                                         child.setEffect(null);
                                     }
@@ -210,12 +215,11 @@ public class BoardMaker implements Runnable {
                     box.setAlignment(Pos.CENTER);
                     boxes.add(box);
                 }
-                
+
                 checkForDeletedTask(boxes);
-               if(Thread.interrupted()==true)
-               {
-                   return;
-               }
+                if (Thread.interrupted() == true) {
+                    return;
+                }
                 Platform.runLater(()
                         -> {
                     fPane.getChildren().clear();
@@ -245,11 +249,7 @@ public class BoardMaker implements Runnable {
         progressPane.setTranslateY(200);
         progressPane.setPrefHeight(250);
         progressPane.setPrefWidth(180);
-
-        Label lblStart = labelMaker.makeLabelForProgressBar("start", -1458);
-        Label lblSlut = labelMaker.makeLabelForProgressBar("end",-1257);
-        lblSlut.setTranslateX(-1240);
-
+        Label lbl = labelMaker.makeLabelForProgressBar("estimateTime", 26, -1410);
         double percantage = Utility.getPercentageTimeLeft(bTask);
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
@@ -258,7 +258,26 @@ public class BoardMaker implements Runnable {
         pBar.setPrefWidth(250);
         pBar.setTranslateX(-1350);
         pBar.setTranslateY(50);
-        progressPane.getChildren().addAll(lblStart, lblSlut, pBar);
+        progressPane.getChildren().addAll(pBar, lbl);
+        return progressPane;
+    }
+
+    private StackPane makeRealProgressBar(BoardTask bTask) {
+        StackPane progressPane = new StackPane();
+        Label realProgress = labelMaker.makeLabelForProgressBar("realProgress", 22, -1415);
+        progressPane.setTranslateX(1150);
+        progressPane.setTranslateY(150);
+        progressPane.setPrefHeight(250);
+        progressPane.setPrefWidth(180);
+        
+        ProgressBar pBar = new ProgressBar();
+        pBar.setProgress(bTask.getRealProgress());
+
+        pBar.setPrefHeight(25);
+        pBar.setPrefWidth(250);
+        pBar.setTranslateX(-1350);
+        pBar.setTranslateY(50);
+        progressPane.getChildren().addAll(pBar,realProgress);
         return progressPane;
     }
 
@@ -313,12 +332,14 @@ public class BoardMaker implements Runnable {
 
         removeNodeInJavaFXThread(fPane, toRemove);
         lastRemoved = orderNumber;
-        toRemove=null;
+        toRemove = null;
 
     }
+
     /**
      * Writes on the main views display
-     * @param toWrite 
+     *
+     * @param toWrite
      */
     private void writeOnDisplay(String toWrite) {
         Platform.runLater(() -> {
@@ -326,11 +347,13 @@ public class BoardMaker implements Runnable {
 
         });
     }
+
     /**
      * Makes the safety pop-up before completing a task
+     *
      * @param bTask
      * @param stackPane
-     * @return 
+     * @return
      */
 
     private StackPane popUp(BoardTask bTask, StackPane stackPane) {
@@ -355,15 +378,15 @@ public class BoardMaker implements Runnable {
                 -> {
             try {
                 model.setCompleteTask(bTask.getTaskID());
-                removeNodeInJavaFXThread(aPane,stackPane);
-   
+                removeNodeInJavaFXThread(aPane, stackPane);
+
                 for (Node child : allNodes) {
                     child.setEffect(null);
                 }
                 removeSmallTask(bTask.getOrderNumber());
                 writeOnDisplay(model.getResourceBundle().getString("completeTask"));
             } catch (SQLException ex) {
-              connectionLost.set(true);
+                connectionLost.set(true);
             }
         });
 
@@ -373,35 +396,37 @@ public class BoardMaker implements Runnable {
         });
         return popUp;
     }
-   /**
-    * Removes a node on the given Pane in the JavaFX thread
-    * @param container
-    * @param toRemove 
-    */ 
-    public void removeNodeInJavaFXThread(Pane container, Node toRemove)
-    {
-        Platform.runLater(()->
-        {
+
+    /**
+     * Removes a node on the given Pane in the JavaFX thread
+     *
+     * @param container
+     * @param toRemove
+     */
+    public void removeNodeInJavaFXThread(Pane container, Node toRemove) {
+        Platform.runLater(()
+                -> {
             container.getChildren().remove(toRemove);
         });
     }
-/**
- * This method makes sure that a task can't reappear briefly after it has been marked as done
- * @param boxes 
- */
+
+    /**
+     * This method makes sure that a task can't reappear briefly after it has
+     * been marked as done
+     *
+     * @param boxes
+     */
     private void checkForDeletedTask(ArrayList<HBox> boxes) {
         HBox boxToRemove = null;
         for (HBox box : boxes) {
-            StackPane pane =(StackPane) box.getChildren().get(0);
-            Label label =(Label)pane.getChildren().get(1);
-           String orderNumber = label.getText();
-           if(orderNumber.equals(lastRemoved))
-           {
-            boxToRemove=box;  
-           } 
+            StackPane pane = (StackPane) box.getChildren().get(0);
+            Label label = (Label) pane.getChildren().get(1);
+            String orderNumber = label.getText();
+            if (orderNumber.equals(lastRemoved)) {
+                boxToRemove = box;
+            }
         }
-        if(boxToRemove!=null)
-        {
+        if (boxToRemove != null) {
             boxes.remove(boxToRemove);
         }
     }

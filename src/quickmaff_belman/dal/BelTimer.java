@@ -7,6 +7,7 @@ package quickmaff_belman.dal;
 
 import java.util.ArrayList;
 import java.util.Random;
+import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.Worker;
 
 /**
@@ -46,5 +47,16 @@ public class BelTimer implements IBelTimer
         }
         int randomNumber = random.nextInt(5);
         return allWorkers.get(randomNumber);
+    }
+    @Override
+    public double getRealProgress(BoardTask task)
+    {
+        
+        if(task.getReadyForWork())
+        {
+            double percentage = random.nextDouble();
+            return percentage;
+        }
+        return 0;
     }
 }

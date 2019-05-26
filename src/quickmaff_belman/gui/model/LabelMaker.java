@@ -31,12 +31,12 @@ public class LabelMaker {
         return label;
     }
 
-    public Label makeLabelForProgressBar(String key, int translateX) {
+    public Label makeLabelForProgressBar(String key,int translateY, int translateX) {
         Label label = new Label();
         label.setText(model.getResourceBundle().getString(key));
         label.setFont(new Font("Arial", 16));
         label.setTranslateX(translateX);
-        label.setTranslateY(75);
+        label.setTranslateY(translateY);
         return label;
     }
 

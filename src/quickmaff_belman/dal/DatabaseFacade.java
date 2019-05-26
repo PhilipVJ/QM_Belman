@@ -41,6 +41,8 @@ public class DatabaseFacade implements IDatabaseFacade {
         for (BoardTask boardTask : allBoardTasks) {
             Worker worker = bTimer.getActiveWorker(boardTask.getOrderNumber());
             boardTask.setActiveWorker(worker);
+            double realProgress = bTimer.getRealProgress(boardTask);
+            boardTask.setRealProgress(realProgress);
         }
         return allBoardTasks;
     }

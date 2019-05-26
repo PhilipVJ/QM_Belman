@@ -20,6 +20,7 @@ public class BoardTask {
     private final OrderOverview overview;
     private final String customerName;
     private Worker activeWorker;
+    private double realProgress;
 
     public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID, String customerName) {
         this.orderNumber = orderNumber;
@@ -77,6 +78,15 @@ public class BoardTask {
             return true;
         }
         return false;
+    }
+    
+    public void setRealProgress(double percentage)
+    {
+        this.realProgress=percentage;
+    }
+    public double getRealProgress()
+    {
+        return realProgress;
     }
     
     public String getCustomerName()
