@@ -28,7 +28,6 @@ public class ButtonMaker {
         completeTask.setFont(new Font("Ariel", 25));
         completeTask.setTranslateY(250);
         completeTask.setTranslateX(150);
-        completeTask.setBlendMode(BlendMode.MULTIPLY);
         completeTask.setPrefHeight(60);
         completeTask.setPrefWidth(250);
         completeTask.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItButton.png);");
@@ -41,7 +40,6 @@ public class ButtonMaker {
         cancelBtn.setFont(new Font("Ariel", 25));
         cancelBtn.setTranslateY(158);
         cancelBtn.setTranslateX(60);
-        cancelBtn.setBlendMode(BlendMode.MULTIPLY);
         cancelBtn.setRotate(11);
         cancelBtn.setPrefHeight(60);
         cancelBtn.setPrefWidth(150);

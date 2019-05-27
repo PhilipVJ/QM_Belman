@@ -56,7 +56,7 @@ public class BoardMaker implements Runnable {
     private final LabelMaker labelMaker;
     private final Filter filter;
     private final ButtonMaker bMaker;
-    private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+    private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_white.png");
     private final BooleanProperty connectionLost;
 
     private HBox toRemove = null;
