@@ -54,14 +54,14 @@ public class Filter
         switch (wFilter)
         {
             case ACTIVEWORKERS:
-                if (task.getActiveWorker() != null)
+                if (task.getActiveWorkers() != null)
                 {
                     matchesWorkFilter = true;
                 }
                 break;
 
             case NONACTIVEWORKERS:
-                if (task.getActiveWorker() == null)
+                if (task.getActiveWorkers() == null)
                 {
                     matchesWorkFilter = true;
                 }
