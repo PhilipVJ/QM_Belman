@@ -468,7 +468,7 @@ public class MainViewController implements Initializable {
             if (q.getButton() == MouseButton.SECONDARY){
                 ImageView colFilterInfo = new ImageView("/quickmaff_belman/gui/view/images/filterColorInfo.png");
                 colFilterInfo.setFitHeight(250);
-                colFilterInfo.setFitWidth(300);
+                colFilterInfo.setFitWidth(350);
 
                 Label info = new Label();
                 info.setFont(new Font("Arial", 18));
