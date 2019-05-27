@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.be;
 
+import quickmaff_belman.gui.model.SortFilterOption;
 import quickmaff_belman.gui.model.WorkerFilterOption;
 
 /**
@@ -16,17 +17,20 @@ public class Filter
 
     private final WorkerFilterOption wFilter;
     private final String searchWord;
+    private final SortFilterOption sortOption;
 
-    public Filter(WorkerFilterOption filterOption)
+    public Filter(WorkerFilterOption filterOption, SortFilterOption sortOption)
     {
         this.wFilter = filterOption;
         searchWord = "";
+        this.sortOption = sortOption;
     }
 
-    public Filter(WorkerFilterOption wFilter, String searchWord)
+    public Filter(WorkerFilterOption wFilter, String searchWord, SortFilterOption sortOption)
     {
         this.wFilter = wFilter;
         this.searchWord = searchWord;
+        this.sortOption = sortOption;
     }
 
     public WorkerFilterOption getwFilter()
@@ -37,6 +41,11 @@ public class Filter
     public String getSearchWord()
     {
         return searchWord;
+    }
+    
+    public SortFilterOption getSortOption()
+    {
+        return sortOption;
     }
 
     public boolean validBoardTask(BoardTask task)

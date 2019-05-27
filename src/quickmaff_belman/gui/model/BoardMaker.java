@@ -8,6 +8,7 @@ package quickmaff_belman.gui.model;
 import quickmaff_belman.be.ImageContainer;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -87,6 +88,10 @@ public class BoardMaker implements Runnable {
                     isLoading.set(true);
                 }
                 boardTasks = model.getAllBoardTasks();
+                if(filter.getSortOption()==SortFilterOption.STARTDATE)
+                {
+                    Collections.reverse(boardTasks);
+                }
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
                 for (BoardTask bTask : boardTasks) {
