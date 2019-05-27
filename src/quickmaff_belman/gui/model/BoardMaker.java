@@ -8,6 +8,7 @@ package quickmaff_belman.gui.model;
 import quickmaff_belman.be.ImageContainer;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
@@ -35,6 +36,7 @@ import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.TaskStatus;
+import quickmaff_belman.be.Worker;
 
 /**
  *
@@ -55,7 +57,7 @@ public class BoardMaker implements Runnable {
     private final LabelMaker labelMaker;
     private final Filter filter;
     private final ButtonMaker bMaker;
-    private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_red.png");
+    private final Image pic = new Image("/quickmaff_belman/gui/view/images/postit_white.png");
     private final BooleanProperty connectionLost;
 
     private HBox toRemove = null;
@@ -86,6 +88,10 @@ public class BoardMaker implements Runnable {
                     isLoading.set(true);
                 }
                 boardTasks = model.getAllBoardTasks();
+                if(filter.getSortOption()==SortFilterOption.STARTDATE)
+                {
+                    Collections.reverse(boardTasks);
+                }
                 ArrayList<HBox> boxes = new ArrayList<>();
                 ImageView view = null;
                 for (BoardTask bTask : boardTasks) {
@@ -147,8 +153,24 @@ public class BoardMaker implements Runnable {
                             Label endDateLabel = labelMaker.makeLabelForBigPostIt("endDate", Utility.dateConverter(bTask.getEndDate()), -200);
 
                             Label activeWorker = null;
-                            if (bTask.getActiveWorker() != null) {
-                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker", bTask.getActiveWorker().toString(), 0);
+                            ArrayList<Worker> activeWorkers = bTask.getActiveWorkers();
+                            int numberOfWorkers=0;
+                            if (activeWorkers != null) {
+                                String workers="\n";
+                                
+                                for (Worker worker : activeWorkers)
+                                {
+                                    workers+=worker.toString()+", ";
+                                    numberOfWorkers++;
+                                    if(numberOfWorkers==3)
+                                    {
+                                        numberOfWorkers=0;
+                                        workers+="\n";
+                                    }
+                                }
+                                int lastIndexOfComma = workers.lastIndexOf(",");
+                                String textToShow = workers.substring(0, lastIndexOfComma);
+                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker", textToShow, 0);
                             }
 
                             // Makes the area where you can see the other departments process
@@ -248,9 +270,18 @@ public class BoardMaker implements Runnable {
         progressPane.setTranslateX(1150);
         progressPane.setTranslateY(200);
         progressPane.setPrefHeight(250);
-        progressPane.setPrefWidth(180);
+        progressPane.setPrefWidth(180); 
+        
+        Label showPercantage = new Label();
+        showPercantage.setTranslateX(-1345);
+        showPercantage.setTranslateY(50);
+        Double value = Utility.getPercentageTimeLeft(bTask) * 100;
+        String percentageSub = Double.toString(value);
+        int lastIndexOfDot = percentageSub.lastIndexOf(".");
+        showPercantage.setText(percentageSub.substring(0, lastIndexOfDot + 2) + " %");
+        
         Label lbl = labelMaker.makeLabelForProgressBar("estimateTime", 26, -1410);
-        double percantage = Utility.getPercentageTimeLeft(bTask);
+        double percantage = Utility.getPercentageTimeLeft(bTask); 
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(percantage);
 
@@ -258,7 +289,7 @@ public class BoardMaker implements Runnable {
         pBar.setPrefWidth(250);
         pBar.setTranslateX(-1350);
         pBar.setTranslateY(50);
-        progressPane.getChildren().addAll(pBar, lbl);
+        progressPane.getChildren().addAll(pBar, lbl, showPercantage);
         return progressPane;
     }
 

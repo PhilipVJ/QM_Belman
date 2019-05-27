@@ -70,6 +70,7 @@ import quickmaff_belman.gui.model.ExceptionHandler;
 import quickmaff_belman.gui.model.FolderWatcher;
 import quickmaff_belman.gui.model.Language;
 import quickmaff_belman.gui.model.Model;
+import quickmaff_belman.gui.model.SortFilterOption;
 import quickmaff_belman.gui.model.Utility;
 import quickmaff_belman.gui.model.WorkerFilterOption;
 
@@ -130,6 +131,15 @@ public class MainViewController implements Initializable {
     private volatile BooleanProperty connectionLost;
     private WorkerFilterOption wOption;
     private StackPane stackPane;
+    @FXML
+    private ImageView logo;
+    @FXML
+    private StackPane display;
+    @FXML
+    private RadioButton sortByStartDate;
+    @FXML
+    private RadioButton sortByEndDate;
+    private SortFilterOption sortOption;
 
 
     /**
@@ -145,9 +155,15 @@ public class MainViewController implements Initializable {
         nonActiveWorkers.setToggleGroup(radioGroup);
         showAll.setSelected(true);
         showAll.setToggleGroup(radioGroup);
+        // Make sort radio buttons into a group
+        ToggleGroup sortGroup = new ToggleGroup();
+        sortByStartDate.setToggleGroup(sortGroup);
+        sortByEndDate.setToggleGroup(sortGroup);
+        sortByEndDate.setSelected(true);
 
-        //Adds a listener to the group
+        //Adds a listener to the groups
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
+        sortGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeSortOption(newVal));
 
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
@@ -156,6 +172,7 @@ public class MainViewController implements Initializable {
         // Sets the filters to default
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
+        sortOption = SortFilterOption.ENDDATE;
         connectionLost = new SimpleBooleanProperty();
         connectionLost.set(false);
         connectionLost.addListener(new ChangeListener() {
@@ -229,7 +246,6 @@ public class MainViewController implements Initializable {
         setAllText();
     }
 
-    @FXML
     private void setLanguage() {
         Language language = model.getLanguage();
 
@@ -275,7 +291,7 @@ public class MainViewController implements Initializable {
         setAllText();
         showColourInfo();
         // Setting up the board
-        Filter filter = new Filter(WorkerFilterOption.SHOWALL);
+        Filter filter = new Filter(WorkerFilterOption.SHOWALL, SortFilterOption.ENDDATE);
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
         bMakerExecutor.submit(bMaker);
         // Start the FolderWatcher looking for changes in the JSON folder
@@ -330,6 +346,11 @@ public class MainViewController implements Initializable {
         nonActiveWorkers.setText(model.getResourceBundle().getString("nonActiveWorkersRadio"));
         showAll.setText(model.getResourceBundle().getString("disable"));
         searchbar.setPromptText(model.getResourceBundle().getString("search"));
+        
+        sortByEndDate.setText(model.getResourceBundle().getString("sortByEndDate"));
+        sortByStartDate.setText(model.getResourceBundle().getString("sortByStartDate"));
+        
+        
     }
 
     public void setStage(Stage stage) {
@@ -512,7 +533,7 @@ public class MainViewController implements Initializable {
     @FXML
     private void filter(MouseEvent event) {
         String searchWord = searchbar.getText();
-        chosenFilter = new Filter(wOption, searchWord);
+        chosenFilter = new Filter(wOption, searchWord, sortOption);
         filterSwitch.setImage(filterGlow);
         //Make the switch turn of its glow after 1 second
         ScheduledExecutorService thread = Executors.newScheduledThreadPool(1);
@@ -528,6 +549,21 @@ public class MainViewController implements Initializable {
         };
         thread.schedule(run, 1, TimeUnit.SECONDS);
         restartBoardMaker();
+    }
+    
+    private void changeSortOption(Toggle newVal)
+    {
+        String fxId = Utility.getFXIDfromToggle(newVal);
+          switch (fxId) {
+            case "sortByEndDate":
+                sortOption = SortFilterOption.ENDDATE;
+                System.out.println("end");
+                break;
+            case "sortByStartDate":
+                sortOption = SortFilterOption.STARTDATE;
+                System.out.println("start");
+                break;
+        }
     }
 
     private void changeWorkerFilterOption(Toggle newVal) {

@@ -6,7 +6,6 @@
 package quickmaff_belman.gui.model;
 
 import javafx.scene.control.Label;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.text.Font;
 
 /**
@@ -51,7 +50,6 @@ public class LabelMaker {
         lblWarning.setTranslateX(-5);
         lblWarning.setTranslateY(-30);
         lblWarning.setRotate(11);
-        lblWarning.setBlendMode(BlendMode.MULTIPLY);
         lblWarning.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/postItLabel.png);");
         return lblWarning;
     }

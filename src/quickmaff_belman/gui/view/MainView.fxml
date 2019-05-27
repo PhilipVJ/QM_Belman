@@ -37,9 +37,9 @@
                <children>
                   <ScrollPane fx:id="scrollPane" focusTraversable="false" prefHeight="659.0" prefWidth="1736.0" style="-fx-background-color: WHITE; -fx-background: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
-                        <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="300.0" prefWidth="1172.0" style="-fx-background-color: white;" vgap="30.0">
+                        <FlowPane fx:id="flowPane" hgap="5.0" prefHeight="300.0" prefWidth="1172.0" style="-fx-background-color: white;" vgap="5.0">
                            <padding>
-                              <Insets left="50.0" />
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                         </FlowPane>
                      </content>
@@ -82,9 +82,10 @@
                </font></Label>
          </children>
       </StackPane>
-      <HBox layoutX="1368.0" layoutY="841.0" prefHeight="133.0" prefWidth="497.0" spacing="5.0" style="-fx-background-color: grey; -fx-border-color: black;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="90.0">
+      <HBox layoutX="1368.0" layoutY="841.0" prefHeight="138.0" prefWidth="573.0" spacing="5.0" style="-fx-background-color: lightgrey; -fx-border-color: black;" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="90.0">
+
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefHeight="126.0" prefWidth="132.0">
                <children>
                   <ImageView fx:id="filter" fitHeight="117.0" fitWidth="117.0" onMouseClicked="#setFilterOption" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -93,27 +94,45 @@
                   </ImageView>
                </children>
             </StackPane>
-            <VBox prefHeight="133.0" prefWidth="356.0" spacing="10.0">
+            <VBox prefHeight="126.0" prefWidth="239.0" spacing="10.0">
                <children>
                   <TextField fx:id="searchbar" prefHeight="31.0" prefWidth="257.0">
                      <VBox.margin>
                         <Insets top="3.0" />
                      </VBox.margin>
                   </TextField>
-                  <RadioButton fx:id="activeWorkers" mnemonicParsing="false" />
-                  <RadioButton fx:id="nonActiveWorkers" mnemonicParsing="false" />
-                  <RadioButton fx:id="showAll" mnemonicParsing="false" />
+                  <RadioButton fx:id="activeWorkers" mnemonicParsing="false">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="nonActiveWorkers" mnemonicParsing="false">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="showAll" mnemonicParsing="false">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font></RadioButton>
                </children>
             </VBox>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <VBox prefHeight="126.0" prefWidth="173.0" spacing="5.0">
                <children>
-                  <ImageView fx:id="filterSwitch" fitHeight="74.0" fitWidth="82.0" onMouseClicked="#filter" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/on.png" />
-                     </image>
-                  </ImageView>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="filterSwitch" fitHeight="74.0" fitWidth="82.0" onMouseClicked="#filter" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/on.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+                  <RadioButton fx:id="sortByStartDate" mnemonicParsing="false" text="Sorter på start dato" />
+                  <RadioButton fx:id="sortByEndDate" mnemonicParsing="false" />
                </children>
-            </StackPane>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </VBox>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" top="5.0" />

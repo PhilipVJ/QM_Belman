@@ -25,6 +25,8 @@ public class BelTimer implements IBelTimer
     private final Worker kirsten = new Worker(1502, "KH", "Kirsten Hansen");
     private final Worker johanne = new Worker(1503, "JM", "Johanne Michaelsen");
     private final Worker preben = new Worker(1504, "PC", "Preben Christiansen");
+    private final Worker mogens = new Worker(1505, "MH", "Mogens Hansen");
+
     private final ArrayList<Worker> allWorkers = new ArrayList<>();
 
     private final Random random = new Random();
@@ -36,23 +38,47 @@ public class BelTimer implements IBelTimer
         allWorkers.add(kirsten);
         allWorkers.add(johanne);
         allWorkers.add(preben);
+        allWorkers.add(mogens);
     }
 
     @Override
-    public Worker getActiveWorker(String orderNumber)
+    public ArrayList<Worker> getActiveWorkers(String orderNumber)
     {
+        ArrayList<Worker> activeWorkers = new ArrayList<>();
+
         if (orderNumber.contains("3"))
         {
             return null;
         }
-        int randomNumber = random.nextInt(5);
-        return allWorkers.get(randomNumber);
+        int randomNumberOfWorkers = random.nextInt(3) + 1;
+
+        for (int i = 0; i < randomNumberOfWorkers; i++)
+        {
+            boolean foundNewWorker = false;
+            while (foundNewWorker == false)
+            {
+                Worker worker = allWorkers.get(random.nextInt(6));
+                if(activeWorkers.contains(worker))
+                {
+                    continue;
+                }
+                else
+                {
+                   activeWorkers.add(worker);
+                   foundNewWorker=true;
+                }
+            }
+
+        }
+        return activeWorkers;
     }
+
+
     @Override
     public double getRealProgress(BoardTask task)
     {
-        
-        if(task.getReadyForWork())
+
+        if (task.getReadyForWork())
         {
             double percentage = random.nextDouble();
             return percentage;
