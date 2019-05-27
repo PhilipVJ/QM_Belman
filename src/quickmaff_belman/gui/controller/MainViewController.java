@@ -23,6 +23,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -51,6 +52,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import quickmaff_belman.be.taskpainter.BluePainter;
@@ -128,6 +130,7 @@ public class MainViewController implements Initializable {
     private volatile BooleanProperty connectionLost;
     private WorkerFilterOption wOption;
     private StackPane stackPane;
+
 
     /**
      * Initializes the controller class.
@@ -270,6 +273,7 @@ public class MainViewController implements Initializable {
         setLanguage();
         setGraphics();
         setAllText();
+        showColourInfo();
         // Setting up the board
         Filter filter = new Filter(WorkerFilterOption.SHOWALL);
         BoardMaker bMaker = new BoardMaker(flowPane, model, anchorPane, paintFilter, isLoading, infoBar, filter, connectionLost);
@@ -402,12 +406,15 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void setFilterOption(MouseEvent event) {
+        if(event.getButton()== MouseButton.SECONDARY){
+            return;
+        }
         if (filterOption == 5) {
             filterOption = 1;
         } else {
             filterOption++;
         }
-
+   
         switch (filterOption) {
             case 1:
                 filter.setImage(offFilter);
@@ -430,6 +437,39 @@ public class MainViewController implements Initializable {
                 paintFilter = new BluePainter();
                 break;
         }
+    }
+    @FXML
+    public void showColourInfo(){
+        StackPane stPane = new StackPane();
+        filter.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, q
+                -> {
+            
+            if (q.getButton() == MouseButton.SECONDARY){
+                ImageView colFilterInfo = new ImageView("/quickmaff_belman/gui/view/images/filterColorInfo.png");
+                colFilterInfo.setFitHeight(250);
+                colFilterInfo.setFitWidth(300);
+
+                Label info = new Label();
+                info.setFont(new Font("Arial", 18));
+                info.setText(model.getResourceBundle().getString("colorInfo"));
+                info.setTranslateY(-40);
+
+                stPane.getChildren().addAll(colFilterInfo, info);
+                stPane.setTranslateY(700);
+                stPane.setTranslateX(20);
+                anchorPane.getChildren().addAll(stPane);
+//                System.out.println("INDE");
+            }
+        });
+        
+        filter.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_RELEASED, q
+                -> {      
+                if (q.getButton() == MouseButton.SECONDARY){
+                anchorPane.getChildren().removeAll(stPane);
+//                System.out.println("INDE");
+            }
+        });
+            
     }
 
     public void connectionLost() {
@@ -561,5 +601,9 @@ public class MainViewController implements Initializable {
                     }
                 }
         );
+    }
+
+    private StackPane StackPane() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
