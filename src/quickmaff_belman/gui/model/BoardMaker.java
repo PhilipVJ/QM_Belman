@@ -35,6 +35,7 @@ import quickmaff_belman.be.BoardTask;
 import quickmaff_belman.be.Filter;
 import quickmaff_belman.be.taskpainter.ITaskPainter;
 import quickmaff_belman.be.TaskStatus;
+import quickmaff_belman.be.Worker;
 
 /**
  *
@@ -147,8 +148,24 @@ public class BoardMaker implements Runnable {
                             Label endDateLabel = labelMaker.makeLabelForBigPostIt("endDate", Utility.dateConverter(bTask.getEndDate()), -200);
 
                             Label activeWorker = null;
-                            if (bTask.getActiveWorker() != null) {
-                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker", bTask.getActiveWorker().toString(), 0);
+                            ArrayList<Worker> activeWorkers = bTask.getActiveWorkers();
+                            int numberOfWorkers=0;
+                            if (activeWorkers != null) {
+                                String workers="\n";
+                                
+                                for (Worker worker : activeWorkers)
+                                {
+                                    workers+=worker.toString()+", ";
+                                    numberOfWorkers++;
+                                    if(numberOfWorkers==3)
+                                    {
+                                        numberOfWorkers=0;
+                                        workers+="\n";
+                                    }
+                                }
+                                int lastIndexOfComma = workers.lastIndexOf(",");
+                                String textToShow = workers.substring(0, lastIndexOfComma);
+                                activeWorker = labelMaker.makeLabelForBigPostIt("activeWorker", textToShow, 0);
                             }
 
                             // Makes the area where you can see the other departments process

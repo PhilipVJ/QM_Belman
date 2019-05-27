@@ -39,8 +39,8 @@ public class DatabaseFacade implements IDatabaseFacade {
     public ArrayList<BoardTask> getAllBoardTasks(String departmentName, int offset) throws SQLException {
         ArrayList<BoardTask> allBoardTasks = oDAO.getAllBoardTasks(departmentName, offset);
         for (BoardTask boardTask : allBoardTasks) {
-            Worker worker = bTimer.getActiveWorker(boardTask.getOrderNumber());
-            boardTask.setActiveWorker(worker);
+            ArrayList<Worker> activeWorkers = bTimer.getActiveWorkers(boardTask.getOrderNumber());
+            boardTask.setActiveWorkers(activeWorkers);
             double realProgress = bTimer.getRealProgress(boardTask);
             boardTask.setRealProgress(realProgress);
         }

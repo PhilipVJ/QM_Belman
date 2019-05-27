@@ -5,6 +5,7 @@
  */
 package quickmaff_belman.be;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ public class BoardTask {
     private final int taskID;
     private final OrderOverview overview;
     private final String customerName;
-    private Worker activeWorker;
+    private ArrayList<Worker> activeWorkers;
     private double realProgress;
 
     public BoardTask(String orderNumber, Date endDate, Date startDate, OrderOverview overview, int taskID, String customerName) {
@@ -100,14 +101,14 @@ public class BoardTask {
         return orderNumber+"," + endDate + "," + startDate + "," + customerName;
     }
 
-    public Worker getActiveWorker()
+    public ArrayList<Worker> getActiveWorkers()
     {
-        return activeWorker;
+        return activeWorkers;
     }
 
-    public void setActiveWorker(Worker activeWorker)
+    public void setActiveWorkers(ArrayList<Worker> activeWorkers)
     {
-        this.activeWorker = activeWorker;
+        this.activeWorkers = activeWorkers;
     }
     
     
