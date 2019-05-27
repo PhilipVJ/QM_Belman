@@ -41,7 +41,6 @@ public class ButtonMaker {
         cancelBtn.setFont(new Font("Ariel", 25));
         cancelBtn.setTranslateY(158);
         cancelBtn.setTranslateX(60);
-        cancelBtn.setBlendMode(BlendMode.MULTIPLY);
         cancelBtn.setRotate(11);
         cancelBtn.setPrefHeight(60);
         cancelBtn.setPrefWidth(150);
