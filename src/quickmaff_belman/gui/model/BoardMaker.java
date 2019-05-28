@@ -299,6 +299,14 @@ public class BoardMaker implements Runnable {
         progressPane.setPrefHeight(250);
         progressPane.setPrefWidth(180);
         
+        Label showRealPercantage = new Label();
+        showRealPercantage.setTranslateX(-1345);
+        showRealPercantage.setTranslateY(50);
+        Double value = bTask.getRealProgress() * 100;
+        String percentageSub = Double.toString(value);
+        int lastIndexOfDot = percentageSub.lastIndexOf(".");
+        showRealPercantage.setText(percentageSub.substring(0, lastIndexOfDot + 2) + " %");
+        
         ProgressBar pBar = new ProgressBar();
         pBar.setProgress(bTask.getRealProgress());
 
@@ -306,7 +314,7 @@ public class BoardMaker implements Runnable {
         pBar.setPrefWidth(250);
         pBar.setTranslateX(-1350);
         pBar.setTranslateY(50);
-        progressPane.getChildren().addAll(pBar,realProgress);
+        progressPane.getChildren().addAll(pBar,realProgress, showRealPercantage);
         return progressPane;
     }
 
