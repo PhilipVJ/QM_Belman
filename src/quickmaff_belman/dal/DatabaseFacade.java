@@ -68,11 +68,7 @@ public class DatabaseFacade implements IDatabaseFacade {
     @Override
     public boolean checkForDatabaseConnection() {
 
-        try (Connection connection = con.getConnection()) {
-            return true;
-        } catch (SQLException ex) {
-            return false;
-        }
+        return con.makeConnection();
 
     }
 
@@ -82,7 +78,7 @@ public class DatabaseFacade implements IDatabaseFacade {
     }
 
     @Override
-    public FolderCheckResult loadFile(String department, File... files) throws SQLException, IOException  {
+    public FolderCheckResult loadFile(String department, File... files) throws SQLException, IOException {
         int numberOfNewFilesAdded = 0;
         int numberOfCorruptFiles = 0;
         int numberOfDuplicates = 0;
@@ -101,19 +97,17 @@ public class DatabaseFacade implements IDatabaseFacade {
                             numberOfDuplicates++;
                         }
                     } catch (Exception ex) {
-                        if(ex instanceof SQLException)
-                        {
+                        if (ex instanceof SQLException) {
                             throw new SQLException();
                         }
-                        if(ex instanceof IOException)
-                        {
+                        if (ex instanceof IOException) {
                             throw new IOException();
                         }
                         numberOfCorruptFiles++;
                     }
                     break;
                 }
-                
+
                 case "txt":
                     try {
                         DataContainer jFile = fDAO.getDataFromJSON(file.getPath());
@@ -139,12 +133,10 @@ public class DatabaseFacade implements IDatabaseFacade {
                             numberOfDuplicates++;
                         }
                     } catch (Exception ex) {
-                        if(ex instanceof SQLException)
-                        {
+                        if (ex instanceof SQLException) {
                             throw new SQLException();
                         }
-                        if(ex instanceof IOException)
-                        {
+                        if (ex instanceof IOException) {
                             throw new IOException();
                         }
                         numberOfCorruptFiles++;

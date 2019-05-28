@@ -6,6 +6,7 @@
 package quickmaff_belman.dal;
 
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,9 +24,9 @@ public interface IOrderDAO {
 
     ArrayList<Log> getAllLogs() throws SQLServerException, SQLException;
 
-    String getCustomerName(String orderNumber) throws SQLServerException, SQLException;
+    String getCustomerName(String orderNumber, Connection connection) throws SQLServerException, SQLException;
 
-    OrderOverview getOverview(String orderNumber, String departmentName, Date startDate) throws SQLServerException, SQLException;
+    OrderOverview getOverview(String orderNumber, String departmentName, Date startDate, Connection connection) throws SQLServerException, SQLException;
 
     void setCompleteTask(int taskID, String departmentName) throws SQLServerException, SQLException;
     

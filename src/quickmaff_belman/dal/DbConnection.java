@@ -16,6 +16,7 @@ public class DbConnection
 {
     private static final String PROP_FILE = "data/database.info";
     private final SQLServerDataSource ds;
+    private Connection connection;
 
     private DbConnection() throws IOException
     {
@@ -27,9 +28,28 @@ public class DbConnection
         ds.setUser(databaseProperties.getProperty("User"));
         ds.setPassword(databaseProperties.getProperty("Password"));
     }
+    
+    public boolean makeConnection()
+    {
+        try {
+            connection = ds.getConnection();
+            return true;
+        } catch (SQLServerException ex) {
+            return false;
+        }
+    }
 
     public Connection getConnection() throws SQLServerException
     {    
+        Connection con = null;
+        if(connection!=null)
+        {
+            System.out.println("first");
+            con=connection;
+            connection=null;
+            return con;
+        }
+        System.out.println("after");
         return ds.getConnection();
     }
     

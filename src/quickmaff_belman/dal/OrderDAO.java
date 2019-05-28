@@ -50,9 +50,9 @@ public class OrderDAO implements IOrderDAO
                 String orderNumber = rs.getString("orderNumber");
                 Date endDate = rs.getDate("endDate");
                 Date startDate = rs.getDate("startDate");
-                OrderOverview overview = getOverview(orderNumber, department,startDate);
+                OrderOverview overview = getOverview(orderNumber, department,startDate, connection);
                 int taskID = rs.getInt("taskID");
-                String customerName = getCustomerName(orderNumber);
+                String customerName = getCustomerName(orderNumber, connection);
                 BoardTask bTask = new BoardTask(orderNumber, endDate, startDate, overview, taskID, customerName);
                 allTasks.add(bTask);
             }
@@ -62,12 +62,12 @@ public class OrderDAO implements IOrderDAO
 
 
     @Override
-    public OrderOverview getOverview(String orderNumber, String departmentName, Date startDate) throws SQLServerException, SQLException {
+    public OrderOverview getOverview(String orderNumber, String departmentName, Date startDate, Connection connection) throws SQLServerException, SQLException {
         boolean readyForWork = true;
         boolean foundThisDepartment=false;
         ArrayList<TaskStatus> allPriorTasks = new ArrayList<>();
         String sql = "select * from departmenttask where orderNumber=(?) order by startDate asc";
-        try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);)
+        try (PreparedStatement pst = connection.prepareStatement(sql);)
         {
             pst.setString(1, orderNumber);
             ResultSet rs = pst.executeQuery();
@@ -164,11 +164,11 @@ public class OrderDAO implements IOrderDAO
     }
 
     @Override
-    public String getCustomerName(String orderNumber) throws SQLServerException, SQLException
+    public String getCustomerName(String orderNumber, Connection connection) throws SQLServerException, SQLException
     {
         String sql = "Select customerName from ProductionOrder Where orderNumber = (?);";
         String name = "";
-        try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);)
+        try (PreparedStatement pst = connection.prepareStatement(sql);)
         {
             
             pst.setString(1, orderNumber);
@@ -186,10 +186,7 @@ public class OrderDAO implements IOrderDAO
     public ArrayList<Log> getAllLogs() throws SQLServerException, SQLException
     {
         ArrayList<Log> allLogs = new ArrayList<>();
-        
-
         String sql = "SELECT * FROM Log";
-
         try (Connection connection = con.getConnection(); PreparedStatement pst = connection.prepareStatement(sql);)
         {            
             ResultSet rs = pst.executeQuery();
@@ -201,8 +198,7 @@ public class OrderDAO implements IOrderDAO
                 String description = rs.getString("description");
                 String departmentName = rs.getString("departmentName");
                 Log log = new Log(logID,date,activity,description,departmentName);
-                allLogs.add(log);
-                
+                allLogs.add(log);              
             }
         }
         return allLogs;

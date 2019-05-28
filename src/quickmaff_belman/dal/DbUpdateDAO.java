@@ -121,11 +121,9 @@ public class DbUpdateDAO implements IDbUpdateDAO {
         } finally {
             if (connection != null) {
                 connection.setAutoCommit(true);
-                connection.close();
-                
+                connection.close();            
             }
         }
-
     }
 
     @Override
