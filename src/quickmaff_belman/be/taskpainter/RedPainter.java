@@ -34,8 +34,6 @@ public class RedPainter implements ITaskPainter {
         } else {
             container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
             return container;
-
         }
     }
-
 }

@@ -62,8 +62,6 @@ public class Model {
 
     }
 
-
-
     public Language changeLanguage() {
 
         if (locale.getLanguage().equals("da")) {

@@ -25,16 +25,13 @@ public class Clock implements Runnable {
     @Override
     public void run() {
         while (true) {
-            cal = Calendar.getInstance();
-            
+            cal = Calendar.getInstance();         
             clockLabel.setStyle("-fx-font-weight: bold");
-
             String hour = getDigitString(cal.get(Calendar.HOUR_OF_DAY));
             String sec = getDigitString(cal.get(Calendar.SECOND));
             String minutes = getDigitString(cal.get(Calendar.MINUTE));
             String time = hour + ":" + minutes + ":" + sec;
-            String weekAndDay = Utility.dateConverter(cal.getTime());
-            
+            String weekAndDay = Utility.dateConverter(cal.getTime()); 
             Platform.runLater(()-> {clockLabel.setText(time + "\n" + weekAndDay);});
             try {
                 Thread.sleep(1000);
@@ -53,6 +50,5 @@ public class Clock implements Runnable {
         }
         return time;
     }
-
 }
 

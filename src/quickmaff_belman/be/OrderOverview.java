@@ -22,8 +22,5 @@ public class OrderOverview {
 
     public boolean isReadyToWork() {
         return readyToWork;
-    }
-    
-    
-    
+    } 
 }

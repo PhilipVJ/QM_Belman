@@ -26,7 +26,5 @@ public class GreenPainter implements ITaskPainter {
             return container;
         }
         return null;
-
     }
-
 }

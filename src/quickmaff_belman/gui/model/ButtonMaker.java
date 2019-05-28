@@ -15,14 +15,12 @@ import javafx.scene.text.Font;
  */
 public class ButtonMaker {
     
-    private Model model;
+    private final Model model;
 
     public ButtonMaker(Model model) {
         this.model = model;
     }
     
-    
-
     public Button getCompleteTaskButton() {
         Button completeTask = new Button(model.getResourceBundle().getString("completeTask"));
         completeTask.setFont(new Font("Ariel", 25));

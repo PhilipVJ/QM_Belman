@@ -72,10 +72,8 @@ public class BoardMaker implements Runnable {
         this.display = display;
         this.filter = filter;
         this.connectionLost = connectionLost;
-
         bMaker = new ButtonMaker(model);
         labelMaker = new LabelMaker(model);
-
     }
 
     @Override

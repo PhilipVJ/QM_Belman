@@ -23,7 +23,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,7 +51,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import quickmaff_belman.be.taskpainter.BluePainter;
@@ -109,6 +107,10 @@ public class MainViewController implements Initializable {
     private RadioButton showAll;
     @FXML
     private Label clock;
+    @FXML
+    private RadioButton sortByStartDate;
+    @FXML
+    private RadioButton sortByEndDate;
 
     private Model model;
     private Stage stage;
@@ -131,16 +133,7 @@ public class MainViewController implements Initializable {
     private volatile BooleanProperty connectionLost;
     private WorkerFilterOption wOption;
     private StackPane stackPane;
-    @FXML
-    private ImageView logo;
-    @FXML
-    private StackPane display;
-    @FXML
-    private RadioButton sortByStartDate;
-    @FXML
-    private RadioButton sortByEndDate;
     private SortFilterOption sortOption;
-
 
     /**
      * Initializes the controller class.
@@ -149,7 +142,7 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         searchbar.setFocusTraversable(false);
-        // Make the filter radio buttons into a group
+        // Make the worker filter radio buttons into a group
         ToggleGroup radioGroup = new ToggleGroup();
         activeWorkers.setToggleGroup(radioGroup);
         nonActiveWorkers.setToggleGroup(radioGroup);
@@ -165,6 +158,7 @@ public class MainViewController implements Initializable {
         radioGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeWorkerFilterOption(newVal));
         sortGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> changeSortOption(newVal));
 
+        // Setup all ExecutorServices
         bMakerExecutor = Executors.newSingleThreadExecutor();
         fWatcherExecutor = Executors.newSingleThreadExecutor();
         labelWatcher = Executors.newScheduledThreadPool(1);
@@ -173,6 +167,7 @@ public class MainViewController implements Initializable {
         paintFilter = new ColorfulPainter();
         wOption = WorkerFilterOption.SHOWALL;
         sortOption = SortFilterOption.ENDDATE;
+        // Setup a BooleanProperty, which when changed to true will launch the connectionLost display
         connectionLost = new SimpleBooleanProperty();
         connectionLost.set(false);
         connectionLost.addListener(new ChangeListener() {
@@ -187,7 +182,7 @@ public class MainViewController implements Initializable {
         });
 
         startLabelResetter();
-        //set Images
+        //Set images
         greenFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1.png");
         yellowFilter = new Image("/quickmaff_belman/gui/view/images/filterknap2.png");
         redFilter = new Image("/quickmaff_belman/gui/view/images/filterknap3.png");
@@ -195,9 +190,10 @@ public class MainViewController implements Initializable {
         offFilter = new Image("/quickmaff_belman/gui/view/images/filterknap1Off.png");
         filterGlow = new Image("/quickmaff_belman/gui/view/images/on2.png");
         filterGlowOff = new Image("/quickmaff_belman/gui/view/images/on.png");
+        
         addKeybindToLogView();
+        // Makes the display show 'Loading' / 'No tasks found' accordingly
         isLoading = new SimpleBooleanProperty(false);
-
         isLoading.addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -218,9 +214,7 @@ public class MainViewController implements Initializable {
                     });
                 }
             }
-
         });
-
     }
 
     public void setModel(Model model) {
@@ -257,11 +251,10 @@ public class MainViewController implements Initializable {
             Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
             languageSwitch.setImage(daImage);
         }
-
     }
 
     /**
-     * When the info label is updated it will be reset after 5 seconds
+     * When the info label is updated it will be reset after 10 seconds
      */
     private void startLabelResetter() {
         infoBar.textProperty().addListener(new ChangeListener<String>() {
@@ -346,11 +339,10 @@ public class MainViewController implements Initializable {
         nonActiveWorkers.setText(model.getResourceBundle().getString("nonActiveWorkersRadio"));
         showAll.setText(model.getResourceBundle().getString("disable"));
         searchbar.setPromptText(model.getResourceBundle().getString("search"));
-        
+
         sortByEndDate.setText(model.getResourceBundle().getString("sortByEndDate"));
         sortByStartDate.setText(model.getResourceBundle().getString("sortByStartDate"));
-        
-        
+
     }
 
     public void setStage(Stage stage) {
@@ -401,7 +393,7 @@ public class MainViewController implements Initializable {
         header.setFont(new Font("Arial", 30));
         Label label = new Label(text);
         label.setFont(new Font("Arial", 25));
-        
+
         Image information = new Image("/quickmaff_belman/gui/view/images/information.png");
         ImageView view = new ImageView(information);
         Image file = new Image("/quickmaff_belman/gui/view/images/file.png");
@@ -427,7 +419,7 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void setFilterOption(MouseEvent event) {
-        if(event.getButton()== MouseButton.SECONDARY){
+        if (event.getButton() == MouseButton.SECONDARY) {
             return;
         }
         if (filterOption == 5) {
@@ -435,7 +427,7 @@ public class MainViewController implements Initializable {
         } else {
             filterOption++;
         }
-   
+
         switch (filterOption) {
             case 1:
                 filter.setImage(offFilter);
@@ -459,13 +451,14 @@ public class MainViewController implements Initializable {
                 break;
         }
     }
+
     @FXML
-    public void showColourInfo(){
+    public void showColourInfo() {
         StackPane stPane = new StackPane();
         filter.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_PRESSED, q
                 -> {
-            
-            if (q.getButton() == MouseButton.SECONDARY){
+
+            if (q.getButton() == MouseButton.SECONDARY) {
                 ImageView colFilterInfo = new ImageView("/quickmaff_belman/gui/view/images/filterColorInfo.png");
                 colFilterInfo.setFitHeight(250);
                 colFilterInfo.setFitWidth(350);
@@ -479,18 +472,16 @@ public class MainViewController implements Initializable {
                 stPane.setTranslateY(700);
                 stPane.setTranslateX(20);
                 anchorPane.getChildren().addAll(stPane);
-//                System.out.println("INDE");
             }
         });
-        
+
         filter.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_RELEASED, q
-                -> {      
-                if (q.getButton() == MouseButton.SECONDARY){
+                -> {
+            if (q.getButton() == MouseButton.SECONDARY) {
                 anchorPane.getChildren().removeAll(stPane);
-//                System.out.println("INDE");
             }
         });
-            
+
     }
 
     public void connectionLost() {
@@ -550,25 +541,21 @@ public class MainViewController implements Initializable {
         thread.schedule(run, 1, TimeUnit.SECONDS);
         restartBoardMaker();
     }
-    
-    private void changeSortOption(Toggle newVal)
-    {
+
+    private void changeSortOption(Toggle newVal) {
         String fxId = Utility.getFXIDfromToggle(newVal);
-          switch (fxId) {
+        switch (fxId) {
             case "sortByEndDate":
                 sortOption = SortFilterOption.ENDDATE;
-                System.out.println("end");
                 break;
             case "sortByStartDate":
                 sortOption = SortFilterOption.STARTDATE;
-                System.out.println("start");
                 break;
         }
     }
 
     private void changeWorkerFilterOption(Toggle newVal) {
         String fxId = Utility.getFXIDfromToggle(newVal);
-
         switch (fxId) {
             case "activeWorkers":
                 wOption = WorkerFilterOption.ACTIVEWORKERS;
@@ -637,9 +624,5 @@ public class MainViewController implements Initializable {
                     }
                 }
         );
-    }
-
-    private StackPane StackPane() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

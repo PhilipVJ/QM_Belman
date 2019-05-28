@@ -30,7 +30,4 @@ public class BluePainter implements ITaskPainter {
         }
         return null;
     }
-
-
-
 }

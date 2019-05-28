@@ -59,7 +59,10 @@ public class BoardTask {
     {
         return overview;
     }
-    
+    /**
+     * If the customer name is more than 12 characters long it will be shortened
+     * @return 
+     */
     public String getShortenedCustomerName()
     {
         if(customerName.length()<=12)

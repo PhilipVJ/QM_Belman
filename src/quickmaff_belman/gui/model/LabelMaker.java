@@ -39,8 +39,6 @@ public class LabelMaker {
         return label;
     }
 
-
-
     public Label getWarningTxtLabel() {
         Label lblWarning = new Label(model.getResourceBundle().getString("warning"));
         lblWarning.setFont(new Font("Arial", 20));

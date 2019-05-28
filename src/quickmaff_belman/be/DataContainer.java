@@ -23,10 +23,9 @@ public class DataContainer {
         return allWorkers;
     }
 
-
     public ArrayList<ProductionOrder> getAllProductionOrders() {
         return allProductionOrders;
-        
+
     }
 
     @Override
@@ -50,36 +49,28 @@ public class DataContainer {
         final DataContainer other = (DataContainer) obj;
         return true;
     }
-    
-    
-    
-   public void printData()
-   {
-       allWorkers.forEach((worker) -> {
-           System.out.println(""+worker.toString());
+
+    public void printData() {
+        allWorkers.forEach((worker) -> {
+            System.out.println("" + worker.toString());
         });
-       
-       allProductionOrders.forEach((pOrder) -> {
-           System.out.println(""+pOrder.getOrderNumber());
-       });
-       
-   }
+
+        allProductionOrders.forEach((pOrder) -> {
+            System.out.println("" + pOrder.getOrderNumber());
+        });
+
+    }
 
     private void setMetaData() {
-            // Set number of characters
-       
+        // Set number of characters 
         int counter = 0;
         for (Worker worker : allWorkers) {
-            counter+=worker.toString().length();
+            counter += worker.toString().length();
         }
         for (ProductionOrder order : allProductionOrders) {
-            counter+=order.toString().length();
+            counter += order.toString().length();
         }
-        containerID=counter;
+        containerID = counter;
     }
-   
-   
-
-
 
 }

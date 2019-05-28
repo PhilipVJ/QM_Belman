@@ -28,8 +28,6 @@ public class YellowPainter implements ITaskPainter{
            ImageContainer container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
            return container;
         }      
-        return null;
-        
-    }
-    
+        return null;       
+    }   
 }

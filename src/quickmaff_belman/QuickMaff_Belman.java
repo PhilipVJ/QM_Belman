@@ -34,7 +34,6 @@ import quickmaff_belman.gui.model.Utility;
  */
 public class QuickMaff_Belman extends Application {
 
-    
     @Override
     public void start(Stage stage) {
 
@@ -49,7 +48,7 @@ public class QuickMaff_Belman extends Application {
             DbUpdateDAO uDAO = new DbUpdateDAO(connection);
             BelTimer timer = new BelTimer();
             Model model = new Model(new BLLManager(new DatabaseFacade(connection, fDAO, oDAO, uDAO, timer)));
-            
+
             con.setStage(stage);
             con.setModel(model);
             con.createButtons();
@@ -66,18 +65,17 @@ public class QuickMaff_Belman extends Application {
                     System.exit(0);
                 }
             });
-
+            // Makes the Stage go fullscreen when F is pressed
             stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                    if(event.getCode()==KeyCode.F){
-                    stage.setFullScreen(true);
+                    if (event.getCode() == KeyCode.F) {
+                        stage.setFullScreen(true);
                     }
                 }
             });
             stage.show();
             con.setGraphics();
-
 
         } catch (IOException ex) {
             Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil " + ex.getMessage());

@@ -24,13 +24,11 @@ public class DatabaseConnector implements Runnable {
     @Override
     public void run() {
         boolean con;
-
         con = model.checkForDatabaseConnection();
         if (con == false) {
             connected.set(1);
         } else {
             connected.set(2);
         }
-
     }
 }

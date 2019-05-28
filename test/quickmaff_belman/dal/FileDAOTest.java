@@ -6,7 +6,6 @@
 package quickmaff_belman.dal;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;

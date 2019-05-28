@@ -39,10 +39,7 @@ public class ColorfulPainter implements ITaskPainter {
         // it will become a yellow post
         else {
             container = new ImageContainer(yellowPostIt, PostItColor.YELLOW);
-           return container;
-                  
+           return container;                
         }
-
     }
-
 }

@@ -52,23 +52,17 @@ public class LoginController implements Initializable {
 
     @FXML
     private ImageView imgBackground;
-
     @FXML
     private ImageView imgBelmanLogo;
     @FXML
     private FlowPane flowPane;
-
     private Model model;
     private Stage stage;
-
     private Label loadingLabel;
-
     private IntegerProperty connected;
-
     private ExecutorService service;
     @FXML
     private AnchorPane anPane;
-
     private StackPane loadingPane;
 
     /**
@@ -79,6 +73,8 @@ public class LoginController implements Initializable {
         service = Executors.newSingleThreadExecutor();
         connected = new SimpleIntegerProperty();
         connected.set(0);
+        // The DatabaseConnector changes the value of this IntegerProperty.
+        // If the value is changes to 2 the mainView will open
         connected.addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
@@ -93,7 +89,9 @@ public class LoginController implements Initializable {
         });
         
     }
-
+/**
+ * Makes the retry-screen where you can try to get access to the database again
+ */
     private void setClickToRetry() {
         anPane.getChildren().remove(loadingPane);
         Label noConnection = new Label(model.getResourceBundle().getString("noConnection"));
@@ -114,7 +112,6 @@ public class LoginController implements Initializable {
                 anPane.getChildren().remove(pane);
                 connectToDatabase();
             }
-
         });
         retry.setTranslateY(300);
         pane.getChildren().addAll(view, noConnection, retry);
@@ -124,7 +121,9 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+    /**
+     * Make all the log-in buttons on the screen
+     */
     public void createButtons() {
         try {
             ArrayList<String> depNames = model.getDepartmentNames();
@@ -136,7 +135,7 @@ public class LoginController implements Initializable {
                 newButton.setPrefHeight(300);
                 newButton.setPrefWidth(191);
                 newButton.setStyle("-fx-background-image: url(/quickmaff_belman/gui/view/images/button2Off.png);");
-                //adds mouse clicked event to the button
+                //adds mouse clicked eventhandler to the button
                 newButton.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, (MouseEvent e)
                         -> {
                     try {
@@ -158,13 +157,16 @@ public class LoginController implements Initializable {
                 flowPane.getChildren().addAll(vbox);
                 flowPane.setHgap(38);
                 flowPane.setVgap(-5);
-
             }
         } catch (IOException ex) {
             ExceptionHandler.handleException(ex, model.getResourceBundle());
         }
     }
-
+/**
+ * This method makes the department name label for the button
+ * @param depName
+ * @return 
+ */
     private Label makeLabel(String depName) {
         Label lbl = new Label();
         lbl.setText("" + depName);
@@ -214,7 +216,6 @@ public class LoginController implements Initializable {
         imgBackground.fitWidthProperty().bind(stage.widthProperty());
         imgBelmanLogo.translateYProperty().bind(stage.heightProperty().multiply(0.1));
     }
-
 
     public void setModel(Model model) {
         this.model = model;

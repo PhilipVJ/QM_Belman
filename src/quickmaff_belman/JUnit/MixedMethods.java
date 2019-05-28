@@ -7,11 +7,9 @@ package quickmaff_belman.JUnit;
 
 import java.util.Calendar;
 import java.util.Date;
-import quickmaff_belman.be.BoardTask;
 
 /**
- *
- * @author Bruger
+ * Mixed methods from different classes. Only collected to test.
  */
 public class MixedMethods {
 
