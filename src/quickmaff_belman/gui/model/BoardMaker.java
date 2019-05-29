@@ -392,7 +392,6 @@ public class BoardMaker implements Runnable {
      * @param stackPane
      * @return
      */
-
     private StackPane popUp(BoardTask bTask, StackPane stackPane) {
         StackPane popUp = new StackPane();
         ObservableList<Node> allNodes = aPane.getChildren();
