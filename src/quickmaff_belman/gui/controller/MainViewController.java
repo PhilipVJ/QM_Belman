@@ -364,7 +364,10 @@ public class MainViewController implements Initializable {
             int numberOfCorruptFiles = result.getNumberOfCorruptFiles();
             int numberOfDuplicates = result.getNumberOfDuplicates();
             int numberOfUnknownFiles = result.getNumberOfUnknownFiles();
-
+            if(numberOfAddedFiles + numberOfCorruptFiles + numberOfDuplicates + numberOfUnknownFiles == 0)
+            {
+                return;
+            }
             String toSet = model.getResourceBundle().getString("addedNewFiles") + numberOfAddedFiles
                     + "\n" + model.getResourceBundle().getString("foundCorruptFiles") + numberOfCorruptFiles
                     + "\n" + model.getResourceBundle().getString("foundDuplicateFiles") + numberOfDuplicates
