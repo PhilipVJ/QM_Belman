@@ -32,6 +32,6 @@ public class Worker {
 
     @Override
     public String toString() {
-        return "Salary number: "+salaryNumber+", Name: "+name;
+        return ""+salaryNumber;
     }
 }
