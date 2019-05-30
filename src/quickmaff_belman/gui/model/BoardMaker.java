@@ -198,7 +198,7 @@ public class BoardMaker implements Runnable {
 
                             bigPostIt.getChildren().addAll(orderLabel, endDateLabel, customerName, departmentArea);
 
-                            //Insert the progressbar into the post-it greens and yellows 
+                            //Insert the progressbar into the post-its if it is green or yellows 
                             if (con.getColor() != PostItColor.BLUE) {
                                 StackPane progressPane = makeProgressBar(bTask);
                                 bigPostIt.getChildren().add(progressPane);

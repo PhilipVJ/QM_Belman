@@ -44,12 +44,10 @@ public class DbConnection
         Connection con = null;
         if(connection!=null)
         {
-            System.out.println("first");
             con=connection;
             connection=null;
             return con;
         }
-        System.out.println("after");
         return ds.getConnection();
     }
     
