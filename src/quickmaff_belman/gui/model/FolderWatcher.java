@@ -72,7 +72,6 @@ public class FolderWatcher implements Runnable {
                             setLabel(model.getResourceBundle().getString("unknownFile"));  
                         }
                     } catch (IOException ex) {
-                        System.out.println(""+ex);
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {
                         connectionLost.set(true);
@@ -83,7 +82,6 @@ public class FolderWatcher implements Runnable {
             
         } catch (InterruptedException ex) {
             return;
-
         }
     }
 
