@@ -55,6 +55,7 @@ public class FolderWatcher implements Runnable {
                 for (WatchEvent<?> event : watchKey.pollEvents()) {
                     String filePath = event.context().toString();
                     File file = new File(FOLDER_PATH + "/" + filePath);
+                    Thread.sleep(1000);
                     try {
                         FolderCheckResult result = model.loadFile(file);
                         if (result.getNumberOfNewlyAddedFiles() > 0) {
@@ -71,6 +72,7 @@ public class FolderWatcher implements Runnable {
                             setLabel(model.getResourceBundle().getString("unknownFile"));  
                         }
                     } catch (IOException ex) {
+                        System.out.println(""+ex);
                         ExceptionHandler.handleException(ex, model.getResourceBundle());
                     } catch (SQLException ex) {
                         connectionLost.set(true);
