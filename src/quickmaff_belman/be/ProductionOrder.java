@@ -60,7 +60,7 @@ public class ProductionOrder {
 
     @Override
     public String toString() {
-        return "ProductionOrder{" + "customerName=" + customerName + ", deliveryTime=" + deliveryTime + ", orderNumber=" + orderNumber + ", dTasks=" + dTasks + '}';
+        return "ProductionOrder:" + "Customer=" + customerName + ", Ordernumber="+orderNumber + ",NumberOfTasks=" + dTasks.size()+'}';
     }
     
     

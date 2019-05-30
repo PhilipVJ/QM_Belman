@@ -5,10 +5,11 @@
  */
 package quickmaff_belman.dal;
 
+import java.util.Locale;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import quickmaff_belman.be.DataContainer;
 
 /**
@@ -16,23 +17,28 @@ import quickmaff_belman.be.DataContainer;
  * @author Philip
  */
 public class FileDAOTest {
-
+    
     public FileDAOTest() {
     }
-
+    
     @BeforeClass
     public static void setUpClass() {
     }
-
+    
     @AfterClass
     public static void tearDownClass() {
     }
+
+    /**
+     * Test of getDataFromJSON method, of class FileDAO.
+     */
 
     /**
      * Test of getDataFromCSV method, of class FileDAO.
      */
     @Test
     public void testGetDataFromCSV() throws Exception {
+ 
         FileDAO fDAO = new FileDAO();
         DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
         DataContainer con2 = fDAO.getDataFromCSV("DatabaseFiles/database.csv");
@@ -45,10 +51,12 @@ public class FileDAOTest {
      */
     @Test
     public void testGetDataFromExcel() throws Exception {
+ 
         FileDAO fDAO = new FileDAO();
         DataContainer con = fDAO.getDataFromJSON("DatabaseFiles/database.txt");
         DataContainer con2 = fDAO.getDataFromExcel("DatabaseFiles/database.xlsx");
         assertEquals(con, con2);
     }
 
+    
 }

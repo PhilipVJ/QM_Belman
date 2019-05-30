@@ -31,7 +31,7 @@ public class DataContainer {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + (int) (this.containerID ^ (this.containerID >>> 32));
+        hash = 59 * hash + (int) (this.containerID ^ (this.containerID >>> 32));
         return hash;
     }
 
@@ -47,6 +47,9 @@ public class DataContainer {
             return false;
         }
         final DataContainer other = (DataContainer) obj;
+        if (this.containerID != other.containerID) {
+            return false;
+        }
         return true;
     }
 
@@ -56,7 +59,7 @@ public class DataContainer {
         });
 
         allProductionOrders.forEach((pOrder) -> {
-            System.out.println("" + pOrder.getOrderNumber());
+            System.out.println("" + pOrder.toString());
         });
 
     }
@@ -72,5 +75,4 @@ public class DataContainer {
         }
         containerID = counter;
     }
-
 }

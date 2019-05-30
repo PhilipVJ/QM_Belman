@@ -5,17 +5,20 @@
  */
 package quickmaff_belman.dal;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -42,8 +45,8 @@ public class FileDAO implements IFileDAO {
         ArrayList<Worker> allWorkers = new ArrayList<>();
         ArrayList<ProductionOrder> allProductionOrders = new ArrayList<>();
         DataContainer dCon;
-
-        Object obj = new JSONParser().parse(new FileReader(filepath));
+        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), "UTF-8"));
+        Object obj = new JSONParser().parse(in);
         JSONObject jObj = (JSONObject) obj;
         // Get all AvailableWorkers
         JSONArray aWork = (JSONArray) jObj.get("AvailableWorkers");
@@ -105,7 +108,6 @@ public class FileDAO implements IFileDAO {
     public File[] getAllFolderFiles() throws IOException {
         File folder = new File(PATH);
         File[] allFiles = folder.listFiles();
-
         return allFiles;
     }
 
