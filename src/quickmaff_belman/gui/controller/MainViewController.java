@@ -225,7 +225,11 @@ public class MainViewController implements Initializable {
     private void changeLanguage(MouseEvent event) {
 
         Language language = model.changeLanguage();
+        setLanguageButton(language);
+        setAllText();
+    }
 
+    private void setLanguageButton(Language language) {
         switch (language) {
             case DANISH:
                 Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
@@ -237,20 +241,11 @@ public class MainViewController implements Initializable {
                 break;
 
         }
-        setAllText();
     }
 
     private void setLanguage() {
         Language language = model.getLanguage();
-
-        if (language == Language.ENGLISH) {
-            Image engImage = new Image("/quickmaff_belman/gui/view/images/knapSprogENG.png");
-            languageSwitch.setImage(engImage);
-        }
-        if (language == Language.DANISH) {
-            Image daImage = new Image("/quickmaff_belman/gui/view/images/knapSprogDK.png");
-            languageSwitch.setImage(daImage);
-        }
+        setLanguageButton(language);
     }
 
     /**
