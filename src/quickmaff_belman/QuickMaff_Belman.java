@@ -79,7 +79,7 @@ public class QuickMaff_Belman extends Application {
             con.setGraphics();
 
         } catch (IOException ex) {
-            Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil " + ex.getMessage());
+            Utility.createAlert(Alert.AlertType.ERROR, "Fejl", "Fil kunne ikke lokaliseres", "Programmet kunne ikke starte da der mangler en fil ");
         }
 
     }
