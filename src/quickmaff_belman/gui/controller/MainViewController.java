@@ -132,7 +132,7 @@ public class MainViewController implements Initializable {
     private ScheduledExecutorService labelWatcher;
     private volatile BooleanProperty connectionLost;
     private WorkerFilterOption wOption;
-    private StackPane stackPane;
+    private StackPane logPane;
     private SortFilterOption sortOption;
 
     /**
@@ -597,12 +597,12 @@ public class MainViewController implements Initializable {
             tvLog.getColumns().addAll(logIDCol, activityDateCol, activityCol, descriptionCol, departmentNameCol);
             tvLog.columnResizePolicyProperty().set(CONSTRAINED_RESIZE_POLICY);
 
-            stackPane = new StackPane();
-            stackPane.getChildren().add(tvLog);
+            logPane = new StackPane();
+            logPane.getChildren().add(tvLog);
 
-            stackPane.prefHeightProperty().bind(anchorPane.heightProperty());
-            stackPane.prefWidthProperty().bind(anchorPane.widthProperty());
-            anchorPane.getChildren().add(stackPane);
+            logPane.prefHeightProperty().bind(anchorPane.heightProperty());
+            logPane.prefWidthProperty().bind(anchorPane.widthProperty());
+            anchorPane.getChildren().add(logPane);
         } catch (SQLException ex) {
             connectionLost();
         }
@@ -617,7 +617,7 @@ public class MainViewController implements Initializable {
                             break;
                         }
                         case F12:
-                            anchorPane.getChildren().remove(stackPane);
+                            anchorPane.getChildren().remove(logPane);
                             break;
                     }
                 }
