@@ -573,16 +573,16 @@ public class MainViewController implements Initializable {
             TableColumn<Log, Integer> logIDCol = new TableColumn<>("Log ID");
             logIDCol.setCellValueFactory(new PropertyValueFactory("logID"));
 
-            TableColumn<Log, Date> activityDateCol = new TableColumn<>("activityDate");
+            TableColumn<Log, Date> activityDateCol = new TableColumn<>();
             activityDateCol.setCellValueFactory(new PropertyValueFactory("activityDate"));
 
-            TableColumn<Log, String> activityCol = new TableColumn<>("activity");
+            TableColumn<Log, String> activityCol = new TableColumn<>();
             activityCol.setCellValueFactory(new PropertyValueFactory("activity"));
 
-            TableColumn<Log, String> descriptionCol = new TableColumn<>("description");
+            TableColumn<Log, String> descriptionCol = new TableColumn<>();
             descriptionCol.setCellValueFactory(new PropertyValueFactory("description"));
 
-            TableColumn<Log, String> departmentNameCol = new TableColumn<>("departmentName");
+            TableColumn<Log, String> departmentNameCol = new TableColumn<>();
             departmentNameCol.setCellValueFactory(new PropertyValueFactory("departmentName"));
 
             activityDateCol.setText(model.getResourceBundle().getString("activityDate"));
